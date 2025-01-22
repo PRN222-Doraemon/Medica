@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MedicaWeb_MVC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1988f1280b421b2998332175aead6d7142806329")]
 [assembly: System.Reflection.AssemblyProductAttribute("MedicaWeb_MVC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MedicaWeb_MVC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
