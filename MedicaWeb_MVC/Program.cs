@@ -1,10 +1,12 @@
+using Infrastructure.Extensions;
+using Infrastructure.Persistence;
 using MedicaWeb_MVC.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
@@ -18,6 +20,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -28,4 +31,16 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+using var scope = app.Services.CreateScope();
+var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+var applicationSeeder = scope.ServiceProvider.GetRequiredService<ApplicationDbContextSeeder>();
+
+try
+{
+    await applicationSeeder.SeedAllAsync();
+}
+catch (Exception ex)
+{
+    logger.LogError(ex, "Error happens during migrations!");
+}
 app.Run();

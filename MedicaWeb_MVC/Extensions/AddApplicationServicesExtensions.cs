@@ -1,8 +1,4 @@
-﻿using Core.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-
-namespace MedicaWeb_MVC.Extensions
+﻿namespace MedicaWeb_MVC.Extensions
 {
     public static class AddApplicationServicesExtensions
     {

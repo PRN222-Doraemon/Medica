@@ -3,6 +3,16 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Ignore appsetttings.json
+Core/appsettings.json
+Core/appsettings*.json
+Core/bin
+Core/obj
+Infrastructure/bin
+Infrastructure/obj
+MedicaWeb_MVC/bin
+MedicaWeb_MVC/obj
+
 # User-specific files
 *.rsuser
 *.suo

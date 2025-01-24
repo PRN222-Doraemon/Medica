@@ -1,6 +1,6 @@
-using System.Diagnostics;
 using MedicaWeb_MVC.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace MedicaWeb_MVC.Controllers
 {
