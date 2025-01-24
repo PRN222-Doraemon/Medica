@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Services.Ultilities.Seeders;
+using System.Runtime.Serialization.Formatters;
 
 namespace Infrastructure.Persistence
 {
@@ -8,17 +9,18 @@ namespace Infrastructure.Persistence
         // === Props & Fields
         // =====================================
 
-        private readonly IDataSeeder _dataSeeder;
+        private readonly IFileReader _fileReader;
+
         private readonly ApplicationDbContext _dbContext;
 
         // =====================================
         // === Constructors
         // =====================================
 
-        public ApplicationDbContextSeeder(ApplicationDbContext dbContext, IDataSeeder dataSeeder)
+        public ApplicationDbContextSeeder(ApplicationDbContext dbContext, IFileReader fileReader)
         {
             _dbContext = dbContext;
-            _dataSeeder = dataSeeder;
+            _fileReader = fileReader;
         }
 
         // =====================================
@@ -27,7 +29,7 @@ namespace Infrastructure.Persistence
 
         public async Task SeedAllAsync()
         {
-            await _dataSeeder.SeedAsync();
+            //await _dataSeeder.SeedAsync();
         }
     }
 }

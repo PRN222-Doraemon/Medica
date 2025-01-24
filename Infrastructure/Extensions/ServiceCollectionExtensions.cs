@@ -22,6 +22,7 @@ namespace Infrastructure.Extensions
                     .AddDefaultTokenProviders();
 
                 // Add FileReader service
+                services.AddScoped<IFileReader, FileReader>();
 
                 // Set Services for Data Seeders
                 services.AddScoped<ApplicationDbContextSeeder>();

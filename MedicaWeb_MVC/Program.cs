@@ -1,6 +1,7 @@
 using Infrastructure.Extensions;
 using Infrastructure.Persistence;
 using MedicaWeb_MVC.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,9 +35,11 @@ app.MapControllerRoute(
 using var scope = app.Services.CreateScope();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
 var applicationSeeder = scope.ServiceProvider.GetRequiredService<ApplicationDbContextSeeder>();
+using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
 try
 {
+    await dbContext.Database.MigrateAsync();
     await applicationSeeder.SeedAllAsync();
 }
 catch (Exception ex)
