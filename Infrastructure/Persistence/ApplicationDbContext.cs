@@ -50,7 +50,6 @@ namespace Infrastructure.Persistence
         {
             base.OnModelCreating(modelBuilder);
 
-
             // Configure Category entity
             modelBuilder.Entity<Category>(entity =>
             {
