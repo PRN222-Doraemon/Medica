@@ -298,6 +298,28 @@ namespace Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
+
+            modelBuilder.Entity("Core.Entities.Category", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
+            modelBuilder.Entity("Core.Entities.Comment", b =>
+                {
+                    b.Navigation("ReplyComments");
+                });
+
+            modelBuilder.Entity("Core.Entities.Course", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("CourseChapters");
+                });
+
+            modelBuilder.Entity("Core.Entities.CourseChapter", b =>
+                {
+                    b.Navigation("Resources");
+                });
 #pragma warning restore 612, 618
         }
     }
