@@ -1,5 +1,4 @@
 ﻿using Infrastructure.Data.Seeders;
-using Infrastructure.Persistence;
 using Infrastructure.Services.Ultilities.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
