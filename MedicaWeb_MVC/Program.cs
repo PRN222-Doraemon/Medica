@@ -1,14 +1,22 @@
 using Infrastructure.Extensions;
 using Infrastructure.Persistence;
+using Infrastructure.Persistence.Seeders;
 using MedicaWeb_MVC.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// ====================================
+// === Add services to the container
+// ====================================
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
+
+// ====================================
+// === Build the application
+// ====================================
 
 var app = builder.Build();
 
@@ -19,6 +27,10 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
+// ====================================
+// === Use Middlewares
+// ====================================
 
 app.UseHttpsRedirection();
 
@@ -31,6 +43,10 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// ===================================================
+// === Create a scope and call the service manually
+// ===================================================
 
 using var scope = app.Services.CreateScope();
 var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();

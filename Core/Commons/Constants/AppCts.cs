@@ -4,19 +4,14 @@ namespace Restaurants.Application.Commons.Constants
 {
     public static class AppCts
     {
+        public static readonly string AbsoluteProjectPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 
         /// <summary>
-        /// All file path
+        /// Location of Fake Json Filepath
         /// </summary>
-        public static class Locations
+        public static class SeederRelativePath
         {
-            public static readonly string AbsoluteProjectPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
-
-            public static class RelativeFilePath
-            {
-                public static string RestaurantSeeder = Path.Combine("Seeders", "FakeData", "RestaurantSeedData.json");
-                public static string DishSeeder = Path.Combine("Seeders", "FakeData", "DishSeedData.json");
-            }
+            public static string CoursesFilePath = Path.Combine("Persistence", "Seeders", "CoursesSeedData.json");
         }
     }
 }
