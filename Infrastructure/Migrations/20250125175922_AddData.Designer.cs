@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250125160159_AddData")]
+    [Migration("20250125175922_AddData")]
     partial class AddData
     {
         /// <inheritdoc />
@@ -24,6 +24,64 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Core.Entities.Classroom", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreateAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("LecturerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MaxParticipant")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Mode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("LecturerId");
+
+                    b.ToTable("Classrooms");
+                });
 
             modelBuilder.Entity("Core.Entities.Contact", b =>
                 {
@@ -75,6 +133,29 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contacts", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Entities.Course", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.Property<DateTime>("UpdateAt")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Course");
                 });
 
             modelBuilder.Entity("Core.Entities.Identity.ApplicationRole", b =>
@@ -198,6 +279,8 @@ namespace Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Core.Entities.News", b =>
@@ -349,6 +432,38 @@ namespace Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Core.Entities.Identity.Lecturer", b =>
+                {
+                    b.HasBaseType("Core.Entities.Identity.ApplicationUser");
+
+                    b.ToTable("Lecturers", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Entities.Identity.Student", b =>
+                {
+                    b.HasBaseType("Core.Entities.Identity.ApplicationUser");
+
+                    b.ToTable("Students", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Entities.Classroom", b =>
+                {
+                    b.HasOne("Core.Entities.Course", "Course")
+                        .WithMany("Classrooms")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("Core.Entities.Identity.Lecturer", "Lecturer")
+                        .WithMany("Classrooms")
+                        .HasForeignKey("LecturerId")
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("Lecturer");
+                });
+
             modelBuilder.Entity("Core.Entities.Contact", b =>
                 {
                     b.OwnsOne("MindSpace.Domain.Entities.Owned.Address", "Address", b1 =>
@@ -441,6 +556,47 @@ namespace Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Core.Entities.Identity.Lecturer", b =>
+                {
+                    b.HasOne("Core.Entities.Identity.ApplicationUser", "User")
+                        .WithOne("Lecturer")
+                        .HasForeignKey("Core.Entities.Identity.Lecturer", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Core.Entities.Identity.Student", b =>
+                {
+                    b.HasOne("Core.Entities.Identity.ApplicationUser", "User")
+                        .WithOne("Student")
+                        .HasForeignKey("Core.Entities.Identity.Student", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Core.Entities.Course", b =>
+                {
+                    b.Navigation("Classrooms");
+                });
+
+            modelBuilder.Entity("Core.Entities.Identity.ApplicationUser", b =>
+                {
+                    b.Navigation("Lecturer")
+                        .IsRequired();
+
+                    b.Navigation("Student")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Core.Entities.Identity.Lecturer", b =>
+                {
+                    b.Navigation("Classrooms");
                 });
 #pragma warning restore 612, 618
         }

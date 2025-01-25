@@ -16,5 +16,13 @@ namespace Core.Entities.Identity
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public UserStatus Status { get; set; } = UserStatus.Enabled;
+
+
+        // 1 Student - 1 User
+        public virtual Student Student { get; set; }
+
+
+        // 1 Lecturer - 1 User
+        public virtual Lecturer Lecturer { get; set; }
     }
 }

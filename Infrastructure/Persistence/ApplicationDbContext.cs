@@ -12,6 +12,10 @@ namespace Infrastructure.Persistence
         // ========================
 
         private DbSet<Contact> Contacts { get; set; }
+        private DbSet<Lecturer> Lecturers { get; set; }
+        private DbSet<Student> Students { get; set; }
+        private DbSet<News> News { get; set; }
+        private DbSet<Classroom> Classrooms { get; set; }
 
         // ========================
         // === Constructors

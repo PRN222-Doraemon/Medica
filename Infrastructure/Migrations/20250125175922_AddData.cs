@@ -85,6 +85,20 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Course",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Course", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "News",
                 columns: table => new
                 {
@@ -209,6 +223,73 @@ namespace Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Lecturers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Lecturers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Lecturers_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Students",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Students", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Students_AspNetUsers_Id",
+                        column: x => x.Id,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Classrooms",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Mode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    MaxParticipant = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
+                    CourseId = table.Column<int>(type: "int", nullable: false),
+                    LecturerId = table.Column<int>(type: "int", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Classrooms", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Classrooms_Course_CourseId",
+                        column: x => x.CourseId,
+                        principalTable: "Course",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Classrooms_Lecturers_LecturerId",
+                        column: x => x.LecturerId,
+                        principalTable: "Lecturers",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -247,6 +328,16 @@ namespace Infrastructure.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Classrooms_CourseId",
+                table: "Classrooms",
+                column: "CourseId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Classrooms_LecturerId",
+                table: "Classrooms",
+                column: "LecturerId");
         }
 
         /// <inheritdoc />
@@ -268,13 +359,25 @@ namespace Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Classrooms");
+
+            migrationBuilder.DropTable(
                 name: "Contacts");
 
             migrationBuilder.DropTable(
                 name: "News");
 
             migrationBuilder.DropTable(
+                name: "Students");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Course");
+
+            migrationBuilder.DropTable(
+                name: "Lecturers");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
