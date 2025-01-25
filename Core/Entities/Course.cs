@@ -15,6 +15,9 @@ namespace Core.Entities
         public TimeSpan Duration { get; set; }
         public IEnumerable<CourseChapter> CourseChapters { get; set; } = new List<CourseChapter>();
         public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
+
+        // 1 Course - M Classroom
+        public virtual ICollection<Classroom> Classrooms { get; set; } = new HashSet<Classroom>();
     }
 
     public enum CourseStatus

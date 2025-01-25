@@ -1,5 +1,4 @@
 ﻿using Core.Entities.Identity;
-using MindSpace.Domain.Entities;
 using System.Runtime.Serialization;
 
 namespace Core.Entities
@@ -16,7 +15,7 @@ namespace Core.Entities
         public string Title { get; set; }
         public string Details { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set;} = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public string Status { get; set; } = CommentStatus.Posted.ToString();
     }
 
