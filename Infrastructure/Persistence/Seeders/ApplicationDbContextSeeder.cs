@@ -1,6 +1,4 @@
-﻿using Infrastructure.Data.Seeders;
-using Infrastructure.Services.Ultilities.Seeders;
-using Restaurants.Application.Commons.Constants;
+﻿using Infrastructure.Services.Ultilities.Seeders;
 
 namespace Infrastructure.Persistence.Seeders
 {

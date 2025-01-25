@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace MindSpace.Domain.Commons.Constants
+namespace Core.Entities.Constants
 {
     public enum UserStatus
     {
