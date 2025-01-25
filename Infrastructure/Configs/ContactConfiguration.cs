@@ -1,13 +1,6 @@
 ﻿using Core.Entities;
-using Core.Entities.Constants;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MindSpace.Domain.Entities.Owned;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Configs
 {

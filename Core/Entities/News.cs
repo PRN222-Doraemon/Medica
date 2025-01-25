@@ -1,9 +1,4 @@
-﻿using Core.Entities.Constants;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.Serialization;
 
 namespace Core.Entities
 {
@@ -15,4 +10,23 @@ namespace Core.Entities
         public NewsType NewsType { get; set; }
         public NewsStatus Status { get; set; }
     }
+
+    public enum NewsStatus
+    {
+        [EnumMember(Value = "Active")]
+        Active,
+
+        [EnumMember(Value = "Disabled")]
+        Disabled
+
+    }
+    public enum NewsType
+    {
+        [EnumMember(Value = "Blog")]
+        Blog,
+
+        [EnumMember(Value = "Program")]
+        Program
+    }
+
 }

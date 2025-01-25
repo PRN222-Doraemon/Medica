@@ -1,4 +1,7 @@
-﻿namespace MedicaWeb_MVC.Extensions
+﻿using Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+
+namespace MedicaWeb_MVC.Extensions
 {
     public static class AddApplicationServicesExtensions
     {
@@ -6,6 +9,10 @@
             IConfiguration config)
         {
             // Registers the database context with the DI container
+            services.AddDbContext<ApplicationDbContext>(opt =>
+            {
+                opt.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+            });
 
             // Register services with the DI container
 

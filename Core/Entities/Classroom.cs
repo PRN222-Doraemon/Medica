@@ -1,10 +1,5 @@
-﻿using Core.Entities.Constants;
-using Core.Entities.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Entities.Identity;
+using System.Runtime.Serialization;
 
 namespace Core.Entities
 {
@@ -27,5 +22,23 @@ namespace Core.Entities
         // 1 lecturer - M classroom
         public int LecturerId { get; set; }
         public Lecturer Lecturer { get; set; }
+    }
+
+    public enum ClassroomMode
+    {
+        [EnumMember(Value = "Online")]
+        Online,
+
+        [EnumMember(Value = "Offline")]
+        Offline,
+    }
+
+    public enum ClassroomStatus
+    {
+        [EnumMember(Value = "Active")]
+        Active,
+
+        [EnumMember(Value = "Cancelled")]
+        Cancelled
     }
 }

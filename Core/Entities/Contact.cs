@@ -1,5 +1,5 @@
-﻿using Core.Entities.Constants;
-using MindSpace.Domain.Entities.Owned;
+﻿using MindSpace.Domain.Entities.Owned;
+using System.Runtime.Serialization;
 
 namespace Core.Entities
 {
@@ -12,5 +12,14 @@ namespace Core.Entities
         public DateTime LastContacted { get; set; }
         public bool IsSubscribed { get; set; }
         public ContactStatus Status { get; set; }
+    }
+
+    public enum ContactStatus
+    {
+        [EnumMember(Value = "Unknown")]
+        Unknown,
+
+        [EnumMember(Value = "Booked")]
+        Contacted
     }
 }
