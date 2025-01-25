@@ -1,6 +1,6 @@
 ﻿using Core.Entities;
 
-namespace Core.Interfaces
+namespace Core.Interfaces.Repos
 {
     /// <summary>
     /// This interface defines the Unit Of Work (UoW) pattern for data access. 

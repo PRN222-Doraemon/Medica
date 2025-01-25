@@ -1,7 +1,6 @@
 ﻿using Infrastructure.Services.Ultilities.Seeders;
-using System.Runtime.Serialization.Formatters;
 
-namespace Infrastructure.Persistence
+namespace Infrastructure.Persistence.Seeders
 {
     public class ApplicationDbContextSeeder
     {
@@ -27,9 +26,13 @@ namespace Infrastructure.Persistence
         // === Methods
         // =====================================
 
+        /// <summary>
+        /// Add Json File here
+        /// </summary>
+        /// <returns></returns>
         public async Task SeedAllAsync()
         {
-            //await _dataSeeder.SeedAsync();
+            //await new JsonDataSeeder<Restaurant>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.CoursesFilePath).SeedAsync();
         }
     }
 }

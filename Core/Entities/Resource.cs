@@ -1,4 +1,5 @@
-﻿using MindSpace.Domain.Entities;
+﻿using Core.Entities.Identity;
+using MindSpace.Domain.Entities;
 using System.Runtime.Serialization;
 
 namespace Core.Entities

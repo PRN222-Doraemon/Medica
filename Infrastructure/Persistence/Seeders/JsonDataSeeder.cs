@@ -1,9 +1,10 @@
-﻿using Infrastructure.Persistence;
+﻿using Infrastructure.Data.Seeders;
+using Infrastructure.Services.Ultilities.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Restaurants.Application.Commons.Constants;
 
-namespace Infrastructure.Services.Ultilities.Seeders
+namespace Infrastructure.Persistence.Seeders
 {
     public class JsonDataSeeder<T> : IDataSeeder where T : class
     {
@@ -27,7 +28,7 @@ namespace Infrastructure.Services.Ultilities.Seeders
 
         // =====================================
         // === Methods
-        // =====================================git ad
+        // =====================================
 
         /// <summary>
         /// Add file before parse to json object
@@ -36,7 +37,7 @@ namespace Infrastructure.Services.Ultilities.Seeders
         /// <returns></returns>
         public JsonDataSeeder<T> AddRelativeFilePath(string relativeFilePath)
         {
-            _absoluteFilePathJson = Path.Combine(AppCts.Locations.AbsoluteProjectPath, relativeFilePath);
+            _absoluteFilePathJson = Path.Combine(AppCts.AbsoluteProjectPath, relativeFilePath);
             return this;
         }
 

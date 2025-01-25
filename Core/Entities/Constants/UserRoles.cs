@@ -1,4 +1,4 @@
-﻿namespace MindSpace.Domain.Commons.Constants
+﻿namespace Core.Entities.Constants
 {
     public static class UserRoles
     {

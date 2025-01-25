@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
-using MindSpace.Domain.Commons.Constants;
-using System.ComponentModel;
+﻿using Core.Entities.Constants;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MindSpace.Domain.Entities
+namespace Core.Entities.Identity
 {
     public class ApplicationUser : IdentityUser<int> //Using int as key type
     {
