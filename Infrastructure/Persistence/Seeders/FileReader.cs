@@ -1,6 +1,7 @@
-﻿using System.Text;
+﻿using Infrastructure.Services.Ultilities.Seeders;
+using System.Text;
 
-namespace Infrastructure.Services.Ultilities.Seeders
+namespace Infrastructure.Persistence.Seeders
 {
     public class FileReader : IFileReader
     {

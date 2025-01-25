@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace MindSpace.Domain.Entities
+namespace Core.Entities.Identity
 {
     public class ApplicationRole : IdentityRole<int> // Use int as the key type
     {
