@@ -7,5 +7,9 @@
 
         // 1 Lecturer - M Classroom
         public virtual ICollection<Classroom> Classrooms { get; set; } = new HashSet<Classroom>();
+       
+        // 1 Lecturer - M Feedbacks
+        public virtual ICollection<Feedback> Feedbacks { get; set; } = new HashSet<Feedback>();
+
     }
 }
