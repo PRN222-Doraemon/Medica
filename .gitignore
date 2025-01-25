@@ -490,5 +490,5 @@ $RECYCLE.BIN/
 *.yml
 
 /publish
-API/appsettings.json
+MedicaWeb_MVC/appsettings.json
 .vscode
