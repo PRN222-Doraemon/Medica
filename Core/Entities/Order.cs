@@ -16,14 +16,14 @@ namespace Core.Entities
     }
     public enum OrderStatus
     {
-        [EnumMember(Value = "Pending")] 
+        [EnumMember(Value = "Pending")]
         Pending,
-        [EnumMember(Value = "Cancelled")] 
+        [EnumMember(Value = "Cancelled")]
         Cancelled,
-        [EnumMember(Value = "Paid")] 
+        [EnumMember(Value = "Paid")]
         Paid
 
     }
-        
+
 
 }

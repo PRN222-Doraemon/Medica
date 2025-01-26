@@ -14,9 +14,7 @@ namespace Core.Entities
         public IEnumerable<Comment> ReplyComments { get; set; } = new List<Comment>();
         public string Title { get; set; }
         public string Details { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; } = DateTime.Now;
-        public string Status { get; set; } = CommentStatus.Posted.ToString();
+        public CommentStatus Status { get; set; }
     }
 
     public enum CommentStatus

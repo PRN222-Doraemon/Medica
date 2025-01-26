@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Configs
 {
-    public class OrderConfiguration : IEntityTypeConfiguration<Order>
+    internal class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
@@ -14,7 +14,7 @@ namespace Infrastructure.Configs
                 .IsRequired();
             builder.Property(o => o.Status)
                 .HasConversion(s => s.ToString(),
-                s => (OrderStatus) Enum.Parse(typeof(OrderStatus), s));
+                s => (OrderStatus)Enum.Parse(typeof(OrderStatus), s));
 
             builder.Property(o => o.PaymentIntentId)
                 .IsRequired();
@@ -26,7 +26,6 @@ namespace Infrastructure.Configs
                 .WithMany(o => o.Orders)
                 .HasForeignKey(s => s.StudentId)
                 .OnDelete(DeleteBehavior.ClientCascade);
-
         }
     }
 }

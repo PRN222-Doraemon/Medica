@@ -7,6 +7,8 @@
 
         // 1 Student - M Feedbacks
         public virtual ICollection<Feedback> Feedbacks { get; set; } = new HashSet<Feedback>();
+
+        // 1 Student - M Orders
         public virtual ICollection<Order> Orders { get; set; } = new HashSet<Order>();
     }
 }
