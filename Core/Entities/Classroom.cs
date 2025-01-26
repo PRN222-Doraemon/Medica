@@ -27,6 +27,9 @@ namespace Core.Entities
         // 1 Classroom - M Feedbacks
         public virtual ICollection<Feedback> Feedbacks { get; set; } = new HashSet<Feedback>();
 
+        // 1 Classrom - M OrderDetails
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
+
     }
 
     public enum ClassroomMode
