@@ -23,9 +23,9 @@ namespace Infrastructure.Configs
 
             //1 Student - M Order
             builder.HasOne(s => s.Student)
-                .WithMany(o => o.Order)
-                .HasForeignKey(s.StudentId)
-                .OnDelete(DeleteBehaviour.CilentCascade);
+                .WithMany(o => o.Orders)
+                .HasForeignKey(s => s.StudentId)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
         }
     }

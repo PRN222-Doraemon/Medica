@@ -1,9 +1,5 @@
 ﻿using Core.Entities.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
 
 namespace Core.Entities
 {
@@ -15,6 +11,8 @@ namespace Core.Entities
         public OrderStatus Status { get; set; }
         public int PaymentIntentId { get; set; }
         public decimal TotalPrice { get; set; }
+
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
     }
     public enum OrderStatus
     {
