@@ -3,6 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Ignore migrations
+Infrastructure/Migrations
 # Ignore appsetttings.json
 Core/appsettings.json
 Core/appsettings*.json
