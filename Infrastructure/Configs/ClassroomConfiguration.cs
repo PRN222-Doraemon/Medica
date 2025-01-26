@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Configs
 {
-    public class ClassroomConfiguration : IEntityTypeConfiguration<Classroom>
+    internal class ClassroomConfiguration : IEntityTypeConfiguration<Classroom>
     {
         public void Configure(EntityTypeBuilder<Classroom> builder)
         {

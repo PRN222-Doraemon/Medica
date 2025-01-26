@@ -8,11 +8,11 @@ namespace Core.Entities
         public string Title { get; set; }
         public string? Description { get; set; }
         public string? FileUrl { get; set; }
-        public string Type { get; set; }
+        public ResourceType ResourceType { get; set; }
         public int CourseChapterID { get; set; }
         public CourseChapter CourseChapter { get; set; }
         public int CreatedByUserID { get; set; }
-        public ApplicationUser CreatedBy { get; set; }
+        public Employee CreatedBy { get; set; }
     }
 
     public enum ResourceType

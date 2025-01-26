@@ -9,7 +9,7 @@ namespace Core.Entities
         public string? ImgUrl { get; set; }
         public int CategoryID { get; set; }
         public Category Category { get; set; }
-        public string Status { get; set; } = CourseStatus.Active.ToString();
+        public CourseStatus Status { get; set; }
         public TimeSpan Duration { get; set; }
         public IEnumerable<CourseChapter> CourseChapters { get; set; } = new List<CourseChapter>();
         public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();

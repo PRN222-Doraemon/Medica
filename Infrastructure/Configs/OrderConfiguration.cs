@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Configs
 {
-    public class OrderConfiguration : IEntityTypeConfiguration<Order>
+    internal class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
         public void Configure(EntityTypeBuilder<Order> builder)
         {
@@ -23,10 +23,9 @@ namespace Infrastructure.Configs
 
             //1 Student - M Order
             builder.HasOne(s => s.Student)
-                .WithMany(o => o.Order)
-                .HasForeignKey(s.StudentId)
-                .OnDelete(DeleteBehaviour.CilentCascade);
-
+                .WithMany(o => o.Orders)
+                .HasForeignKey(s => s.StudentId)
+                .OnDelete(DeleteBehavior.ClientCascade);
         }
     }
 }

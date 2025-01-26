@@ -66,7 +66,6 @@ namespace Core.Specifications
             Includes.Add(includeExpression);
         }
 
-
         /// <summary>
         /// Add custom include queries to the CustomIncludes list
         /// </summary>
