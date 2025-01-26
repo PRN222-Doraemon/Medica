@@ -8,8 +8,6 @@ namespace Core.Entities
         public string Title { get; set; }
         public string? Description { get; set; }
         public string? FileUrl { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime LastUpdatedAt { get; set; } = DateTime.Now;
         public string Type { get; set; }
         public int CourseChapterID { get; set; }
         public CourseChapter CourseChapter { get; set; }

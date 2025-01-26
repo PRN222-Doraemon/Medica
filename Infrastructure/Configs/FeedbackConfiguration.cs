@@ -21,12 +21,14 @@ namespace Infrastructure.Configs
 
             builder.Property(f => f.FeedbackContent)
              .HasMaxLength(1000)
+             .HasColumnType("varchar(1000)")
              .IsRequired();
 
             builder.Property(c => c.Status)
                 .HasConversion(
                 s => s.ToString(),
-                s => (FeedbackStatus)Enum.Parse(typeof(FeedbackStatus), s));
+                s => (FeedbackStatus)Enum.Parse(typeof(FeedbackStatus), s))
+                .HasColumnType("varchar(50)");
 
             // 1 Lecturer - M Feedback
             builder.HasOne(c => c.Lecturer)

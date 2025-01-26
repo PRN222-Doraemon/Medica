@@ -12,12 +12,21 @@ namespace Infrastructure.Persistence
         // === DbSets
         // ========================
 
-        private DbSet<Contact> Contacts { get; set; }
-        private DbSet<Lecturer> Lecturers { get; set; }
-        private DbSet<Student> Students { get; set; }
-        private DbSet<News> News { get; set; }
-        private DbSet<Classroom> Classrooms { get; set; }
-        private DbSet<Feedback> Feedbacks { get; set; }
+        internal DbSet<Lecturer> Lecturers { get; set; }
+        internal DbSet<Student> Students { get; set; }
+        internal DbSet<Employee> Employees { get; set; }
+        internal DbSet<Department> Departments { get; set; }
+
+        internal DbSet<Course> Courses { get; set; }
+        internal DbSet<Category> Categories { get; set; }
+        internal DbSet<CourseChapter> CourseChapters { get; set; }
+        internal DbSet<Classroom> Classrooms { get; set; }
+        internal DbSet<Comment> Comments { get; set; }
+        internal DbSet<Feedback> Feedbacks { get; set; }
+
+        internal DbSet<Resource> Resources { get; set; }
+        internal DbSet<Contact> Contacts { get; set; }
+        internal DbSet<News> News { get; set; }
 
         // ========================
         // === Constructors
@@ -28,11 +37,6 @@ namespace Infrastructure.Persistence
         }
 
 
-        public DbSet<Category> Categories { get; set; }
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<CourseChapter> CourseChapters { get; set; }
-        public DbSet<Resource> Resources { get; set; }
-        public DbSet<Comment> Comments { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -199,14 +203,14 @@ namespace Infrastructure.Persistence
 
                     // Configure CreatedAt
                     modelBuilder.Entity(entityType.ClrType)
-                        .Property(nameof(BaseEntity.CreateAt))
+                        .Property(nameof(BaseEntity.CreatedAt))
                         .IsRequired()
                         .HasDefaultValueSql("CURRENT_TIMESTAMP")
                         .ValueGeneratedOnAdd();
 
                     // Configure UpdatedAt
                     modelBuilder.Entity(entityType.ClrType)
-                        .Property(nameof(BaseEntity.UpdateAt))
+                        .Property(nameof(BaseEntity.UpdatedAt))
                         .IsRequired()
                         .HasDefaultValueSql("CURRENT_TIMESTAMP")
                         .ValueGeneratedOnAddOrUpdate();

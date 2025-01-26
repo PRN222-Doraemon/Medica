@@ -14,15 +14,15 @@ namespace Infrastructure.Configs
             // Properties
             builder.Property(c => c.Email)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasColumnType("varchar(255)");
 
             builder.Property(c => c.Name)
                 .IsRequired()
-                .HasMaxLength(255);
+                .HasColumnType("varchar(255)");
 
             builder.Property(c => c.Phone)
                 .IsRequired()
-                .HasMaxLength(20);
+                .HasColumnType("varchar(20)");
 
             builder.Property(c => c.LastContacted)
                 .IsRequired()
@@ -36,16 +36,17 @@ namespace Infrastructure.Configs
             builder.Property(c => c.Status)
                 .HasConversion(
                 s => s.ToString(),
-                s => (ContactStatus)Enum.Parse(typeof(ContactStatus), s));
+                s => (ContactStatus)Enum.Parse(typeof(ContactStatus), s))
+                .HasColumnType("varchar(50)");
 
             // 1 Contact - Owns 1 Address
             builder.OwnsOne(c => c.Address, a =>
             {
-                a.Property(a => a.Street).IsUnicode().HasMaxLength(100);
-                a.Property(a => a.City).IsUnicode().HasMaxLength(50);
-                a.Property(a => a.Ward).IsUnicode().HasMaxLength(50);
-                a.Property(a => a.Province).IsUnicode().HasMaxLength(50);
-                a.Property(a => a.PostalCode).HasMaxLength(10);
+                a.Property(a => a.Street).HasColumnType("varchar(100)").HasMaxLength(100);
+                a.Property(a => a.City).HasColumnType("varchar(50)").HasMaxLength(50);
+                a.Property(a => a.Ward).HasColumnType("varchar(50)").HasMaxLength(50);
+                a.Property(a => a.Province).HasColumnType("varchar(50)").HasMaxLength(50);
+                a.Property(a => a.PostalCode).HasColumnType("varchar(10)").HasMaxLength(10);
             });
         }
     }

@@ -15,9 +15,6 @@ namespace Infrastructure.Extensions
         {
             try
             {
-                var connectionString = configuration.GetConnectionString("MedicaDb");
-                services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString).EnableSensitiveDataLogging());
-
                 services.AddIdentity<ApplicationUser, ApplicationRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();

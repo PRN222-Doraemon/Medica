@@ -16,6 +16,5 @@ namespace Infrastructure.Configs
                 .WithOne(u => u.Student)
                 .HasForeignKey<Student>(s => s.Id);
         }
-
     }
 }
