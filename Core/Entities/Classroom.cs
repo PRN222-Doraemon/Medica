@@ -23,7 +23,6 @@ namespace Core.Entities
         public int LecturerId { get; set; }
         public Lecturer Lecturer { get; set; }
 
-
         // 1 Classroom - M Feedbacks
         public virtual ICollection<Feedback> Feedbacks { get; set; } = new HashSet<Feedback>();
 
