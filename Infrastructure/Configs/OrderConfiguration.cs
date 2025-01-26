@@ -14,7 +14,7 @@ namespace Infrastructure.Configs
                 .IsRequired();
             builder.Property(o => o.Status)
                 .HasConversion(s => s.ToString(),
-                s => (OrderStatus) Enum.Parse(typeof(OrderStatus), s));
+                s => (OrderStatus)Enum.Parse(typeof(OrderStatus), s));
 
             builder.Property(o => o.PaymentIntentId)
                 .IsRequired();
