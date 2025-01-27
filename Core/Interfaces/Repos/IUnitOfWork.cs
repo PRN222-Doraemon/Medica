@@ -10,6 +10,6 @@ namespace Core.Interfaces.Repos
     public interface IUnitOfWork : IDisposable
     {
         IGenericRepository<T> Repository<T>() where T : BaseEntity;
-        Task<int> Complete();
+        Task<int> CompleteAsync();
     }
 }

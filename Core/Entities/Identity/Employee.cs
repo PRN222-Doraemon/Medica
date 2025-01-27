@@ -1,6 +1,4 @@
-﻿using MindSpace.Domain.Entities;
-
-namespace Core.Entities.Identity
+﻿namespace Core.Entities.Identity
 {
     public class Employee : ApplicationUser
     {
