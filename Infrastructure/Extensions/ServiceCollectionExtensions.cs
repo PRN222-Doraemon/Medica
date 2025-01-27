@@ -3,7 +3,6 @@ using Infrastructure.Persistence;
 using Infrastructure.Persistence.Seeders;
 using Infrastructure.Services.Ultilities.Seeders;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
