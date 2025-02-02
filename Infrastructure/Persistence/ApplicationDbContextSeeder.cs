@@ -1,6 +1,6 @@
-﻿using Infrastructure.Services.Ultilities.Seeders;
+﻿using Core.Ultilities.Seeders;
 
-namespace Infrastructure.Persistence.Seeders
+namespace Infrastructure.Persistence
 {
     public class ApplicationDbContextSeeder
     {

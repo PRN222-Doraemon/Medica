@@ -1,4 +1,4 @@
-namespace MindSpace.Domain.Entities.Owned
+namespace Core.Entities.Owned
 {
     public class Address
     {

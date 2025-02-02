@@ -4,7 +4,7 @@ using Infrastructure.Persistence;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
 
-namespace Restaurants.Infrastructure.Repositories
+namespace Infrastructure.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {

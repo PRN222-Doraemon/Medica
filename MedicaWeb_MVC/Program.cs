@@ -1,6 +1,5 @@
 using Infrastructure.Extensions;
 using Infrastructure.Persistence;
-using Infrastructure.Persistence.Seeders;
 using MedicaWeb_MVC.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -48,18 +47,24 @@ app.MapControllerRoute(
 // === Create a scope and call the service manually
 // ===================================================
 
-using var scope = app.Services.CreateScope();
-var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-var applicationSeeder = scope.ServiceProvider.GetRequiredService<ApplicationDbContextSeeder>();
-using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+if (builder.Configuration.GetValue<bool>("IsSeedingMode"))
+{
+    using var scope = app.Services.CreateScope();
+    var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+    var applicationSeeder = scope.ServiceProvider.GetRequiredService<ApplicationDbContextSeeder>();
+    var identitySeeder = scope.ServiceProvider.GetRequiredService<ApplicationIdentityDbContextSeeder>();
+    using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-try
-{
-    await dbContext.Database.MigrateAsync();
-    await applicationSeeder.SeedAllAsync();
-}
-catch (Exception ex)
-{
-    logger.LogError(ex, "Error happens during migrations!");
+    try
+    {
+        await dbContext.Database.EnsureDeletedAsync();
+        await dbContext.Database.MigrateAsync();
+        await applicationSeeder.SeedAllAsync();
+        await identitySeeder.SeedIdentityAsync();
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Error happens during migrations!");
+    }
 }
 app.Run();

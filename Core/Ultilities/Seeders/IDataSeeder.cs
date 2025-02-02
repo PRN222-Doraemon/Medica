@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Data.Seeders
+﻿namespace Core.Ultilities.Seeders
 {
     public interface IDataSeeder
     {

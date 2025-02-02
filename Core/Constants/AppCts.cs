@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Restaurants.Application.Commons.Constants
+namespace Core.Constants
 {
     public static class AppCts
     {
@@ -11,7 +11,7 @@ namespace Restaurants.Application.Commons.Constants
         /// </summary>
         public static class SeederRelativePath
         {
-            public static string CoursesFilePath = Path.Combine("Persistence", "Seeders", "CoursesSeedData.json");
+            public static string CoursesFilePath = Path.Combine("Seeders", "CoursesSeedData.json");
         }
     }
 }

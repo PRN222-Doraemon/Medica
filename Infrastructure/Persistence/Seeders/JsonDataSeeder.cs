@@ -1,8 +1,7 @@
-﻿using Infrastructure.Data.Seeders;
-using Infrastructure.Services.Ultilities.Seeders;
+﻿using Core.Constants;
+using Core.Ultilities.Seeders;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Restaurants.Application.Commons.Constants;
 
 namespace Infrastructure.Persistence.Seeders
 {
