@@ -13,7 +13,7 @@ namespace Infrastructure.Persistence
 
         private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
-        private const string PASSWORD = "Password!";
+        private const string PASSWORD = "Password123!";
 
         // =====================================
         // === Constructors
