@@ -1,7 +1,7 @@
 ﻿using Core.Entities.Identity;
+using Core.Ultilities.Seeders;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Seeders;
-using Infrastructure.Services.Ultilities.Seeders;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +23,9 @@ namespace Infrastructure.Extensions
 
                 // Set Services for Data Seeders
                 services.AddScoped<ApplicationDbContextSeeder>();
+
+                // Set Service for Identity Seeders
+                services.AddScoped<ApplicationIdentityDbContextSeeder>();
             }
             catch (Exception ex)
             {

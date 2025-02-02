@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Services.Ultilities.Seeders
+﻿namespace Core.Ultilities.Seeders
 {
     public interface IFileReader
     {

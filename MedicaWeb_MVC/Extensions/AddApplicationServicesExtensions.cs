@@ -14,9 +14,6 @@ namespace MedicaWeb_MVC.Extensions
                 opt.UseSqlServer(config.GetConnectionString("DefaultConnection"));
             });
 
-            // Register services with the DI container
-
-
             // Register Auto Mapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

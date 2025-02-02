@@ -1,4 +1,4 @@
-﻿using Infrastructure.Services.Ultilities.Seeders;
+﻿using Core.Ultilities.Seeders;
 using System.Text;
 
 namespace Infrastructure.Persistence.Seeders

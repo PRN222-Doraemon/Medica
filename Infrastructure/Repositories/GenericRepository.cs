@@ -3,9 +3,8 @@ using Core.Interfaces.Repos;
 using Core.Specifications;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
-namespace Restaurants.Infrastructure.Repositories
+namespace Infrastructure.Repositories
 {
     /// <summary>
     /// Implementation of IGenericRepository<T>
