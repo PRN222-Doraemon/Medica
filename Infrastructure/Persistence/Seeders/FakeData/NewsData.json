@@ -1,0 +1,30 @@
+[
+  {
+    "Title": "New Wellness Program Launched",
+    "Content": "We are excited to announce the launch of our new wellness program aimed at improving mental health among students. The program includes workshops, activities, and counseling services.",
+    "ImageUrl": "https://example.com/images/wellness-program.jpg",
+    "NewsType": "Program",
+    "Status": "Active"
+  },
+  {
+    "Title": "Blog Post: Mental Health Tips for Students",
+    "Content": "This blog post provides valuable tips for students on how to manage stress and maintain a healthy mental state during exams. Check out the full article for more insights.",
+    "ImageUrl": "https://example.com/images/mental-health-tips.jpg",
+    "NewsType": "Blog",
+    "Status": "Active"
+  },
+  {
+    "Title": "Annual Mental Health Conference 2025",
+    "Content": "The Annual Mental Health Conference will take place in 2025, featuring experts and professionals from around the world. Stay tuned for more details and registration information.",
+    "ImageUrl": "https://example.com/images/mental-health-conference.jpg",
+    "NewsType": "Program",
+    "Status": "Disabled"
+  },
+  {
+    "Title": "New Features in Mental Health App",
+    "Content": "The latest update to our mental health app includes new features like mood tracking, meditation sessions, and access to therapists. Download the app now for the new features.",
+    "ImageUrl": "https://example.com/images/mental-health-app.jpg",
+    "NewsType": "Blog",
+    "Status": "Active"
+  }
+]

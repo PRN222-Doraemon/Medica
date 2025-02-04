@@ -40,4 +40,13 @@
     </ProjectReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Persistence\Seeders\FakeData\ContactsData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Persistence\Seeders\FakeData\NewsData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

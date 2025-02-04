@@ -1,0 +1,47 @@
+[
+  {
+    "Email": "john.doe@example.com",
+    "Name": "John Doe",
+    "Phone": "123-456-7890",
+    "Address": {
+      "Street": "123 Elm St",
+      "City": "Somewhere",
+      "Ward": "Central Ward",
+      "Province": "California",
+      "PostalCode": "98765"
+    },
+    "LastContacted": "2025-01-15T08:30:00",
+    "IsSubscribed": true,
+    "Status": "Booked"
+  },
+  {
+    "Email": "jane.smith@example.com",
+    "Name": "Jane Smith",
+    "Phone": "987-654-3210",
+    "Address": {
+      "Street": "456 Oak Rd",
+      "City": "Anywhere",
+      "Ward": "East Ward",
+      "Province": "Texas",
+      "PostalCode": "12345"
+    },
+    "LastContacted": "2025-01-10T09:00:00",
+    "IsSubscribed": false,
+    "Status": "Unknown"
+  },
+  {
+    "Email": "alice.jones@example.com",
+    "Name": "Alice Jones",
+    "Phone": "555-555-5555",
+    "Address": {
+      "Street": "789 Pine Ln",
+      "City": "Somewhere",
+      "Ward": "North Ward",
+      "Province": "New York",
+      "PostalCode": "12321"
+    },
+    "LastContacted": "2025-01-20T10:15:00",
+    "IsSubscribed": true,
+    "Status": "Booked"
+  }
+]

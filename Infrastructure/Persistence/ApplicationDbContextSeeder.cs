@@ -1,4 +1,7 @@
-﻿using Core.Ultilities.Seeders;
+﻿using Core.Constants;
+using Core.Entities;
+using Core.Ultilities.Seeders;
+using Infrastructure.Persistence.Seeders;
 
 namespace Infrastructure.Persistence
 {
@@ -32,7 +35,8 @@ namespace Infrastructure.Persistence
         /// <returns></returns>
         public async Task SeedAllAsync()
         {
-            //await new JsonDataSeeder<Restaurant>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.CoursesFilePath).SeedAsync();
+            await new JsonDataSeeder<Contact>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.ContactsFilePath).SeedAsync();
+            await new JsonDataSeeder<News>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.NewsFilePath).SeedAsync();
         }
     }
 }
