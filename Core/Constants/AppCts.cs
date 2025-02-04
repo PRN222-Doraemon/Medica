@@ -12,6 +12,7 @@ namespace Core.Constants
         public static class SeederRelativePath
         {
             public static string ContactsFilePath = Path.Combine("Persistence", "Seeders", "FakeData", "ContactsData.json");
+            public static string NewsFilePath = Path.Combine("Persistence", "Seeders", "FakeData", "NewsData.json");
         }
     }
 }

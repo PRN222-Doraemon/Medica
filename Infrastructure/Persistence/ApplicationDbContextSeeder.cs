@@ -36,6 +36,7 @@ namespace Infrastructure.Persistence
         public async Task SeedAllAsync()
         {
             await new JsonDataSeeder<Contact>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.ContactsFilePath).SeedAsync();
+            await new JsonDataSeeder<News>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.NewsFilePath).SeedAsync();
         }
     }
 }
