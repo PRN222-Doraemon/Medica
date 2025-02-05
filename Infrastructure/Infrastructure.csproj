@@ -8,7 +8,11 @@
 
   <ItemGroup>
     <Compile Remove="Configurations\**" />
+    <Compile Remove="Data\**" />
+    <Compile Remove="Identity\**" />
     <EmbeddedResource Remove="Configurations\**" />
+    <EmbeddedResource Remove="Data\**" />
+    <EmbeddedResource Remove="Identity\**" />
     <None Remove="Configurations\**" />
   </ItemGroup>
 
@@ -16,10 +20,13 @@
     <Folder Include="Data\" />
     <Folder Include="Identity\" />
     <Folder Include="Migrations\" />
+    <None Remove="Data\**" />
+    <None Remove="Identity\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Bogus" Version="35.6.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.1">
       <PrivateAssets>all</PrivateAssets>
@@ -45,6 +52,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Persistence\Seeders\FakeData\NewsData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Persistence\Seeders\FakeData\Department.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

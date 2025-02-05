@@ -2,6 +2,7 @@
 using Infrastructure.Persistence.Seeders.FakeData;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Persistence
 {
@@ -45,20 +46,20 @@ namespace Infrastructure.Persistence
                     await _dbContext.SaveChangesAsync();
                 }
 
-                // Seed Users with Password
-                //if (!await _dbContext.Users.AnyAsync())
-                //{
-                //    foreach (ApplicationUser user in users)
-                //    {
-                //        await _userManager.CreateAsync(user, PASSWORD);
-                //    }
-                //}
+                //Seed Users with Password
+                if (!await _dbContext.Users.AnyAsync())
+                {
+                    foreach (ApplicationUser user in users)
+                    {
+                        await _userManager.CreateAsync(user, PASSWORD);
+                    }
+                }
 
-                // Seed Users with Roles
-                //if (!users.IsNullOrEmpty() && await _dbContext.Roles.AnyAsync())
-                //{
-                //    await IdentityData.GetUserRoles(users, _userManager);
-                //}
+                //Seed Users with Roles
+                if (users is not null && await _dbContext.Roles.AnyAsync())
+                {
+                    await IdentityData.GetUserRoles(users, _userManager);
+                }
             }
         }
 
