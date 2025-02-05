@@ -1,0 +1,34 @@
+[
+  {
+    "UserID": 1,
+    "CourseID": 1,
+    "SrcCommentID": null,
+    "Title": "Great introduction!",
+    "Details": "This is an excellent starting point for the course.",
+    "Status": "Posted"
+  },
+  {
+    "UserID": 2,
+    "CourseID": 1,
+    "SrcCommentID": 1,
+    "Title": "I agree with this!",
+    "Details": "The concepts here are very well explained.",
+    "Status": "Posted"
+  },
+  {
+    "UserID": 3,
+    "CourseID": 2,
+    "SrcCommentID": 1,
+    "Title": "Needs more examples",
+    "Details": "The theory is great, but more practical examples would be helpful.",
+    "Status": "Posted"
+  },
+  {
+    "UserID": 4,
+    "CourseID": 2,
+    "SrcCommentID": 3,
+    "Title": "I agree, more examples would be great",
+    "Details": "It would help to see how this can be applied in real-world scenarios.",
+    "Status": "Posted"
+  }
+]

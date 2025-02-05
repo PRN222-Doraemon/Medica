@@ -1,4 +1,7 @@
-﻿using Core.Entities.Identity;
+﻿using Core.Constants;
+using Core.Entities;
+using Core.Entities.Identity;
+using Infrastructure.Persistence.Seeders;
 using Infrastructure.Persistence.Seeders.FakeData;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +23,9 @@ namespace Infrastructure.Persistence
         // === Constructors
         // =====================================
 
-        public ApplicationIdentityDbContextSeeder(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager)
+        public ApplicationIdentityDbContextSeeder(
+            ApplicationDbContext dbContext, 
+            UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;
