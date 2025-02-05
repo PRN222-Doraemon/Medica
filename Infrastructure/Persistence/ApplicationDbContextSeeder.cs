@@ -1,4 +1,4 @@
-﻿using Core.Constants;
+using Core.Constants;
 using Core.Entities;
 using Core.Ultilities.Seeders;
 using Infrastructure.Persistence.Seeders;
@@ -14,6 +14,7 @@ namespace Infrastructure.Persistence
         private readonly IFileReader _fileReader;
 
         private readonly ApplicationDbContext _dbContext;
+
 
         // =====================================
         // === Constructors
@@ -37,6 +38,7 @@ namespace Infrastructure.Persistence
         {
             await new JsonDataSeeder<Contact>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.ContactsFilePath).SeedAsync();
             await new JsonDataSeeder<News>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.NewsFilePath).SeedAsync();
+            await new JsonDataSeeder<Department>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.DepartmentSeedPath).SeedAsync();
         }
     }
 }
