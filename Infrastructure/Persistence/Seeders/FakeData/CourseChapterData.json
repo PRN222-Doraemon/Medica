@@ -1,0 +1,82 @@
+[
+  {
+    "Name": "Introduction to Calculus",
+    "Description": "Covers basic concepts of limits and continuity.",
+    "CourseID": 1
+  },
+  {
+    "Name": "Derivatives and Their Applications",
+    "Description": "Explains derivatives and real-world applications.",
+    "CourseID": 1
+  },
+  {
+    "Name": "Integrals and Area Under the Curve",
+    "Description": "Fundamentals of integration and applications in physics.",
+    "CourseID": 1
+  },
+  {
+    "Name": "Sequences and Series",
+    "Description": "Introduction to infinite sequences and convergence.",
+    "CourseID": 1
+  },
+  {
+    "Name": "Getting Started with Python",
+    "Description": "Introduction to variables, loops, and functions in Python.",
+    "CourseID": 2
+  },
+  {
+    "Name": "Object-Oriented Programming in Python",
+    "Description": "Covers classes, objects, and inheritance.",
+    "CourseID": 2
+  },
+  {
+    "Name": "Python for Data Analysis",
+    "Description": "Using pandas and NumPy for data analysis.",
+    "CourseID": 2
+  },
+  {
+    "Name": "Advanced Python: Decorators and Generators",
+    "Description": "Deep dive into advanced Python concepts.",
+    "CourseID": 2
+  },
+  {
+    "Name": "Newtonian Mechanics",
+    "Description": "Explains motion, force, and gravity.",
+    "CourseID": 3
+  },
+  {
+    "Name": "Laws of Thermodynamics",
+    "Description": "Study of heat, work, and energy conservation.",
+    "CourseID": 3
+  },
+  {
+    "Name": "Electricity and Magnetism",
+    "Description": "Introduction to electric fields, circuits, and magnetism.",
+    "CourseID": 3
+  },
+  {
+    "Name": "Modern Physics: Quantum Mechanics",
+    "Description": "Exploring wave-particle duality and quantum states.",
+    "CourseID": 3
+  },
+  {
+    "Name": "Web Development Basics",
+    "Description": "HTML, CSS, and JavaScript fundamentals.",
+    "CourseID": 4
+  },
+  {
+    "Name": "Frontend Development with React",
+    "Description": "Building modern UI using React.js.",
+    "CourseID": 4
+  },
+  {
+    "Name": "Backend Development with Node.js",
+    "Description": "Creating REST APIs with Express and MongoDB.",
+    "CourseID": 4
+  },
+  {
+    "Name": "Full Stack Development Project",
+    "Description": "Building and deploying a complete web application.",
+    "CourseID": 4
+  }
+]

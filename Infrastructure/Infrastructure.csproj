@@ -48,7 +48,28 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Persistence\Seeders\FakeData\CommentData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Persistence\Seeders\FakeData\ResourceData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Persistence\Seeders\FakeData\CourseChapterData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Persistence\Seeders\FakeData\ClassroomData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Persistence\Seeders\FakeData\CourseData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Persistence\Seeders\FakeData\CategoryData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="Persistence\Seeders\FakeData\ContactsData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Persistence\Seeders\FakeData\FeedbackData.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Persistence\Seeders\FakeData\NewsData.json">

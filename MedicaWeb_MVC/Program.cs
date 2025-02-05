@@ -52,7 +52,6 @@ if (builder.Configuration.GetValue<bool>("IsSeedingMode"))
     using var scope = app.Services.CreateScope();
     var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
     var applicationSeeder = scope.ServiceProvider.GetRequiredService<ApplicationDbContextSeeder>();
-    var identitySeeder = scope.ServiceProvider.GetRequiredService<ApplicationIdentityDbContextSeeder>();
     using var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
     try
@@ -60,7 +59,6 @@ if (builder.Configuration.GetValue<bool>("IsSeedingMode"))
         await dbContext.Database.EnsureDeletedAsync();
         await dbContext.Database.MigrateAsync();
         await applicationSeeder.SeedAllAsync();
-        await identitySeeder.SeedIdentityAsync();
     }
     catch (Exception ex)
     {

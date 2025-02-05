@@ -1,0 +1,34 @@
+[
+  {
+    "Rating": 4.5,
+    "FeedbackContent": "Great lecture, very informative!",
+    "Status": "Enabled",
+    "StudentId": 1,
+    "LecturerId": 6,
+    "ClassroomId": 1
+  },
+  {
+    "Rating": 3.8,
+    "FeedbackContent": "The session was good, but could use more examples.",
+    "Status": "Enabled",
+    "StudentId": 2,
+    "LecturerId": 6,
+    "ClassroomId": 2
+  },
+  {
+    "Rating": 5.0,
+    "FeedbackContent": "Best class I've ever attended!",
+    "Status": "Enabled",
+    "StudentId": 3,
+    "LecturerId": 7,
+    "ClassroomId": 2
+  },
+  {
+    "Rating": 2.5,
+    "FeedbackContent": "The lecture was a bit difficult to follow.",
+    "Status": "Disabled",
+    "StudentId": 4,
+    "LecturerId": 7,
+    "ClassroomId": 2
+  }
+]

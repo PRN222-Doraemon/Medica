@@ -21,11 +21,11 @@ namespace Infrastructure.Extensions
                 // Add FileReader service
                 services.AddScoped<IFileReader, FileReader>();
 
-                // Set Services for Data Seeders
-                services.AddScoped<ApplicationDbContextSeeder>();
-
                 // Set Service for Identity Seeders
                 services.AddScoped<ApplicationIdentityDbContextSeeder>();
+
+                // Set Services for Data Seeders
+                services.AddScoped<ApplicationDbContextSeeder>();
             }
             catch (Exception ex)
             {

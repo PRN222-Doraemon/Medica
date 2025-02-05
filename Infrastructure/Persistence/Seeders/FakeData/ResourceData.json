@@ -1,0 +1,34 @@
+[
+  {
+    "Title": "Introduction to Programming",
+    "Description": "Lecture slides for the first chapter of the programming course.",
+    "FileUrl": "https://example.com/slides/intro-to-programming",
+    "ResourceType": "Slide",
+    "CourseChapterID": 1,
+    "CreatedByUserID": 8
+  },
+  {
+    "Title": "Advanced C# Techniques",
+    "Description": "Lecture slides on advanced topics in C# programming.",
+    "FileUrl": "https://example.com/slides/advanced-csharp",
+    "ResourceType": "Slide",
+    "CourseChapterID": 2,
+    "CreatedByUserID": 9
+  },
+  {
+    "Title": "Object-Oriented Programming Basics",
+    "Description": "An introductory video explaining the principles of OOP.",
+    "FileUrl": "https://example.com/videos/oop-basics",
+    "ResourceType": "Video",
+    "CourseChapterID": 3,
+    "CreatedByUserID": 8
+  },
+  {
+    "Title": "Web Development with ASP.NET Core",
+    "Description": "Lecture slides covering basic web development with ASP.NET Core.",
+    "FileUrl": "https://example.com/slides/aspnet-core-web-development",
+    "ResourceType": "Slide",
+    "CourseChapterID": 4,
+    "CreatedByUserID": 9
+  }
+]
