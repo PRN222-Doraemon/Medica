@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@{
+	var searchBarVM = new SearchbarVM()
+			{
+				Action = "Search",
+				Controller = "Profile",
+			};
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 @* Head & Metadata *@
@@ -8,7 +16,7 @@
 	<title>@ViewData["Title"] - MedicaWeb_MVC</title>
 
 	@* CSSs *@
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/lib/bootswatch/litera/bootstrap.min.css" />
 	<link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css" />
@@ -21,23 +29,59 @@
 
 	@* Header *@
 	<header>
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+		<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
 			<div class="container-fluid">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MedicaWeb_MVC</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-						aria-expanded="false" aria-label="Toggle navigation">
+
+				<!-- Heading -->
+				<a class="navbar-brand" href="#">Medica</a>
+
+				<!-- Search Bar (Using Partial View) -->
+				<div class="flex-lg-grow-1 mx-3">
+					<partial name="PartialViews/_Searchbar" model="@searchBarVM" />
+				</div>
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1">
+
+				<!-- Links Items -->
+				<div class="collapse navbar-collapse" id="navbarColor02">
+					<ul class="navbar-nav me-auto">
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+							<a class="nav-link active" href="#">
+								Home
+								<span class="visually-hidden">(current)</span>
+							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+							<a class="nav-link" asp-controller="Course" asp-action="Index">Courses</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" asp-controller="News" asp-action="Index">News</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" asp-controller="Mylearning" asp-action="Index">My Learning</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
 						</li>
 					</ul>
 				</div>
+				<ul class="navbar-nav ms-auto d-flex flex-row gap-3">
+					<!-- Cart -->
+					<li class="nav-item">
+						<a class="nav-link" asp-controller="Cart" asp-action="Index">
+							<i class="bi bi-cart2 fs-1"></i>
+						</a>
+					</li>
+
+					<!-- Profile -->
+					<li class="nav-item">
+						<a class="nav-link" asp-controller="Account" asp-action="Index">
+							<i class="bi bi-person-circle fs-1"></i>
+						</a>
+					</li>
+				</ul>
 			</div>
 		</nav>
 	</header>
