@@ -1,0 +1,63 @@
+﻿@{
+	var searchBarVM = new SearchbarVM()
+			{
+				Action = "Search",
+				Controller = "Profile",
+			};
+}
+
+<nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+	<div class="container-fluid">
+
+		<!-- Heading -->
+		<a class="navbar-brand" href="#">Medica</a>
+
+		<!-- Search Bar (Using Partial View) -->
+		<div class="flex-lg-grow-1 mx-3">
+			<partial name="ReusableViews/_Searchbar" model="@searchBarVM" />
+		</div>
+
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<!-- Links Items -->
+		<div class="collapse navbar-collapse" id="navbarColor02">
+			<ul class="navbar-nav me-auto">
+				<li class="nav-item">
+					<a class="nav-link active" href="#">
+						Home
+						<span class="visually-hidden">(current)</span>
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" asp-controller="Course" asp-action="Index">Courses</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" asp-controller="News" asp-action="Index">News</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" asp-controller="Mylearning" asp-action="Index">My Learning</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
+				</li>
+			</ul>
+		</div>
+		<ul class="navbar-nav ms-auto d-flex flex-row gap-3">
+			<!-- Cart -->
+			<li class="nav-item">
+				<a class="nav-link" asp-controller="Cart" asp-action="Index">
+					<i class="bi bi-cart2 fs-1"></i>
+				</a>
+			</li>
+
+			<!-- Profile -->
+			<li class="nav-item">
+				<a class="nav-link" asp-controller="Account" asp-action="Index">
+					<i class="bi bi-person-circle fs-1"></i>
+				</a>
+			</li>
+		</ul>
+	</div>
+</nav>
