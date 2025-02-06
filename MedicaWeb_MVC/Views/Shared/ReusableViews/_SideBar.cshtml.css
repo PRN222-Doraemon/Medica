@@ -1,0 +1,18 @@
+﻿/* Default height for large screens (100vh for full height) */
+#sidebar {
+    height: 100%; /* Full viewport height */
+}
+
+/* For smaller screens (like mobile), make it auto to fit content */
+@media (max-width: 768px) {
+    #sidebar {
+        height: auto; /* Adjust based on content */
+    }
+}
+
+/* You can also target other screen sizes as needed */
+@media (max-width: 576px) {
+    #sidebar {
+        height: auto; /* Again, adjust height as per content */
+    }
+}
