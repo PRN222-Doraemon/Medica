@@ -19,17 +19,20 @@
 @* Body *@
 <body class="d-flex flex-column min-vh-100">
 
-	@* Header *@
-	<header class="mb-3">
-		<partial name="ReusableViews/_NavBar" />
-	</header>
-
 	@* Container *@
-	<main role="main" class="flex-grow-1">
-		<div class="container-fluid">
-			@RenderBody()
-		</div>
-	</main>
+	<div class="row flex-grow-1">
+		<!-- Sidebar - Takes up 3 columns -->
+		<aside class="col-md-3 col-xl-2 col-12">
+			<partial name="ReusableViews/_SideBar" />
+		</aside>
+
+		<!-- Main Content - Takes up 9 columns -->
+		<main role="main" class="col-md-9 col-xl-10 col-12 p-3">
+			<div class="container-fluid">
+				@RenderBody()
+			</div>
+		</main>
+	</div>
 
 	@* Footer *@
 	<partial name="ReusableViews/_Footer" />
