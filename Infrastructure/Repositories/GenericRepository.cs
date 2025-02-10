@@ -1,8 +1,10 @@
-﻿using Core.Entities;
+﻿using Castle.Core.Logging;
+using Core.Entities;
 using Core.Interfaces.Repos;
 using Core.Specifications;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Repositories
 {
@@ -18,6 +20,7 @@ namespace Infrastructure.Repositories
         // ===================================
 
         private readonly ApplicationDbContext _dbContext;
+        private readonly ILogger<GenericRepository<T>> _logger;
 
         // ===================================
         // === Constructors
@@ -27,10 +30,12 @@ namespace Infrastructure.Repositories
         /// Injects a DbContext instance.
         /// </summary>
         /// <param name="dbContext"></param>
-        public GenericRepository(ApplicationDbContext dbContext)
+        public GenericRepository(ApplicationDbContext dbContext, ILogger<GenericRepository<T>> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
+
 
         // ===================================
         // === Methods
