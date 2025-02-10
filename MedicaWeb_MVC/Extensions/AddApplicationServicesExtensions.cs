@@ -1,4 +1,6 @@
-﻿using Infrastructure.Persistence;
+﻿using Core.Interfaces.Repos;
+using Infrastructure.Persistence;
+using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace MedicaWeb_MVC.Extensions
@@ -16,6 +18,10 @@ namespace MedicaWeb_MVC.Extensions
 
             // Register Auto Mapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            // Register Unit of Work
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
             return services;
         }

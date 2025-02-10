@@ -1,0 +1,72 @@
+﻿@model LecturerClassroomVM
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-5">
+        <form class="mb-4" method="get">
+            <div class="input-group">
+                <input type="text" class="form-control me-2" name="search" placeholder="Search classrooms">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </form>
+        </div>
+
+        <div class="col-md-2 ms-auto">
+            <button class="btn btn-primary">Create Classroom</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <select class="form-select mb-3" name="category">
+                @foreach (var category in Model.Categories!)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <select class="form-select mb-3" name="status">
+                @foreach (var status in Enum.GetValues(typeof(CourseStatus)))
+                {
+                    <option value="@status">@status</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        @if (Model.Classrooms != null)
+       {
+           @foreach (var classroom in Model.Classrooms)
+           {
+            <div class="col-md-4 mb-5">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="@classroom.Course.ImgUrl" alt="Course Image" class="img-fluid mb-3">
+                        <h5 class="card-title">@classroom.Course.Name</h5>
+                        <p class="card-text">Uploaded by: @classroom.Lecturer.UserName</p>
+
+                        <div class="d-flex justify-content-between">
+                            <p class="card-text">Last updated: @classroom.UpdatedAt.ToString("dd/MM/yyyy")</p>
+                            <p class="card-text" style="color: @(classroom.Status.ToString().ToLower() == "active" ? "#28a745" : "#dc3545")">@classroom.Status.ToString()</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           }
+       }
+       else
+       {
+           <p>No classrooms available.</p>
+       }
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <partial name="_PagingBar" model="@ViewBag.CurrentPage" />
+        </div>
+    </div>
+</div>

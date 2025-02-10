@@ -1,0 +1,11 @@
+﻿@model int
+@{
+    var prevDisabled = Model == 1 ? "disabled" : "";
+    var nextDisabled = Model == ViewBag.TotalPages ? "disabled" : "";
+}
+
+<partial name="_PagingBarPartial" model="@Model" />
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
