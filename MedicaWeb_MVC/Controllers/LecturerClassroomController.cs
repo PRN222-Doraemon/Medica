@@ -1,8 +1,8 @@
 using Core.Entities;
 using Core.Interfaces.Repos;
 using Infrastructure.Specifications.ClassSpecifications;
-using MedicaWeb_MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Core.ViewModels;
 
 namespace MedicaWeb_MVC.Controllers
 {
@@ -22,16 +22,9 @@ namespace MedicaWeb_MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var specification = new ClassroomWithCourseSpecification();
-            var classrooms = await _unitOfWork.Repository<Classroom>().ListAsync(specification);
-            var viewModel = new LecturerClassroomVM
-            {
-                Classrooms = classrooms.ToList(),
-                Categories = classrooms.Select(c => c.Course.Category).Distinct().ToList()
-            };
-            return View(viewModel);
+            return RedirectToAction("Search");
 
         }
 
@@ -42,6 +35,47 @@ namespace MedicaWeb_MVC.Controllers
             return View(classroom);
         }
 
+        [HttpGet("search")]
+        public async Task<IActionResult> Search(LecturerClassroomVM lecturerClassroomVM)
+        {
+            var specification = new ClassroomWithCourseSpecification(lecturerClassroomVM);
+            var classrooms = await _unitOfWork.Repository<Classroom>().ListAsync(specification);
+            var categories = await _unitOfWork.Repository<Category>().ListAllAsync();
+
+            var viewModel = new LecturerClassroomVM
+            {
+                Classrooms = classrooms.ToList(),
+                Categories = categories.ToList()
+            };
+
+            return View("Index", viewModel);
+        }
+
+        [HttpGet("create")]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpGet("details/{id}")]
+        public async Task<IActionResult> Details(int id)
+        {
+            var specification = new ClassroomDetailsSpecification(id);
+            var classroom = await _unitOfWork.Repository<Classroom>().GetEntityWithSpec(specification);
+
+            if (classroom == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new ClassDetailsVM
+            {
+                Classroom = classroom,
+                Course = classroom.Course
+            };
+
+            return View(viewModel);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

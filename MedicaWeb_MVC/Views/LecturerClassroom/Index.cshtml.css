@@ -1,0 +1,15 @@
+.card {
+  height: 450px;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100%;
+}
+
+.img-fluid {
+  max-width: 100%;
+  height: auto;
+}

@@ -3,9 +3,12 @@
 @{
 	if (User.IsInRole(UserRoles.Admin))
 	{
-		Layout = "_Layout";
+		Layout = "_LayoutAdmin";
+	} else if (User.IsInRole(UserRoles.Lecturer))
+	{
+		Layout = "_LayoutLecturer";
 	} else
 	{
-		Layout = "_LayoutAdmin";
+		Layout = "_LayoutLecturer";
 	}
 }
