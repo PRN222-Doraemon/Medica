@@ -5,7 +5,8 @@
     "ImgUrl": "https://example.com/calculus.jpg",
     "CategoryID": 1,
     "Status": "Active",
-    "Duration": "02:30:00"
+    "Duration": "02:30:00",
+    "CreatedByUserID":  5
   },
   {
     "Name": "Introduction to Programming",
@@ -13,6 +14,7 @@
     "ImgUrl": "https://example.com/programming.jpg",
     "CategoryID": 2,
     "Status": "Active",
+    "CreatedByUserID": 5,
     "Duration": "03:00:00"
   },
   {
@@ -21,7 +23,8 @@
     "ImgUrl": "https://example.com/physics.jpg",
     "CategoryID": 3,
     "Status": "Active",
-    "Duration": "02:45:00"
+    "Duration": "02:45:00",
+    "CreatedByUserID": 5
   },
   {
     "Name": "Marketing Strategies",
@@ -29,7 +32,8 @@
     "ImgUrl": "https://example.com/marketing.jpg",
     "CategoryID": 4,
     "Status": "Inactive",
-    "Duration": "02:15:00"
+    "Duration": "02:15:00",
+    "CreatedByUserID": 6
   },
   {
     "Name": "Cognitive Psychology",
@@ -37,6 +41,7 @@
     "ImgUrl": "https://example.com/psychology.jpg",
     "CategoryID": 5,
     "Status": "Active",
-    "Duration": "02:20:00"
+    "Duration": "02:20:00",
+    "CreatedByUserID": 6
   }
 ]

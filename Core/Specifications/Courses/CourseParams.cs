@@ -13,5 +13,6 @@ namespace Core.Specifications.Courses
         }
         public int? CategoryID { get; set; }
         public CourseStatus? Status { get; set; }
+        public int? CreatedByUserId { get; set; }
     }
 }

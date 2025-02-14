@@ -34,6 +34,11 @@ namespace Infrastructure.Configs
 
             builder.Property(c => c.Duration)
                    .IsRequired();
+
+            builder.HasOne(c => c.CreatedBy)
+                   .WithMany(cat => cat.Courses)
+                   .HasForeignKey(c => c.CreatedByUserID)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
