@@ -1,4 +1,5 @@
-﻿using System.Runtime.Serialization;
+﻿using Core.Entities.Identity;
+using System.Runtime.Serialization;
 
 namespace Core.Entities
 {
@@ -8,6 +9,8 @@ namespace Core.Entities
         public string? Description { get; set; }
         public string? ImgUrl { get; set; }
         public int CategoryID { get; set; }
+        public int CreatedByUserID { get; set; }
+        public ApplicationUser CreatedBy { get; set; }
         public Category Category { get; set; }
         public CourseStatus Status { get; set; }
         public TimeSpan Duration { get; set; }
