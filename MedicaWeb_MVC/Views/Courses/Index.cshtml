@@ -1,0 +1,47 @@
+﻿@model ListVM<Course>
+
+<div class="container py-4">
+    <!-- Search and Filter -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <!-- Search -->
+        <div class="flex-grow-1 me-3">
+            <input type="text" class="form-control form-control-lg" placeholder="Search for anything">
+        </div>
+
+        <!-- Filter -->
+        <div class="d-flex gap-2">
+            <select asp-items="ViewBag.Categories" class="form-select form-select-lg">
+            </select>
+            <select asp-items="ViewBag.Status" class="form-select form-select-lg">
+            </select>
+        </div>
+
+        <!-- Create Button -->
+        <button class="btn btn-primary btn-lg ms-3">Create new +</button>
+    </div>
+
+    <!-- Course List -->
+    <div class="row g-4">
+        @foreach(var course in Model.Items)
+        {
+            <div class="col-md-4">
+                <div class="card p-3">
+                    <div class="bg-light text-center py-5">Image</div>
+                    <div class="card-body">
+                        <h5 class="card-title">@course.Name</h5>
+                        <p class="text-primary-emphasis">@("Upload by " + course.CreatedBy.FirstName + " " + course.CreatedBy.LastName)</p>
+                        <p class="text-primary-emphasis">@("Last updated: " + course.UpdatedAt)</p>
+                        <div class="d-flex align-items-center">
+                            <span class="badge bg-success me-2">@course.Status</span>
+                            <a href="#" class="btn btn-outline-info">Detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    @await Html.PartialAsync("~/Views/Shared/ReusableViews/_Paging.cshtml", new PagingVM { CurrentPage = Model.PagingInfo.CurrentPage, TotalItems = Model.PagingInfo.TotalItems })
+
+</div>

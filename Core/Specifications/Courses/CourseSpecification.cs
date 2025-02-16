@@ -23,6 +23,8 @@ namespace Core.Specifications.Courses
             CustomIncludes.Add(x => x.Include(c => c.Comments)
                                     .ThenInclude(cc => cc.ReplyComments)
                                     .ThenInclude(rc => rc.User));
+            ApplyPaging(courseParam.PageSize * (courseParam.PageIndex - 1),
+                courseParam.PageSize);
         }
 
         public CourseSpecification(int id)
