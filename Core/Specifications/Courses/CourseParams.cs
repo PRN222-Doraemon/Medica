@@ -9,7 +9,7 @@ namespace Core.Specifications.Courses
         public string Search
         {
             get => _search;
-            set => _search = value.ToLower();
+            set => _search = value?.ToLower() ?? string.Empty;
         }
         public int? CategoryID { get; set; }
         public CourseStatus? Status { get; set; }

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MedicaWeb_MVC.Extensions
 {
-    public static class AddApplicationServicesExtensions
+    public static class ApplicationServicesExtensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services,
             IConfiguration config)

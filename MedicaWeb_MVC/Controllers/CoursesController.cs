@@ -18,17 +18,26 @@ namespace MedicaWeb_MVC.Controllers
             _courseService = courseService;
             _categoryRepo = categoryRepo;
         }
-        public async Task<IActionResult> Index(CourseParams courseParams)
+        public async Task<IActionResult> Index([FromQuery]CourseParams courseParams)
         {
-            ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
-            ViewData["Status"] = new SelectList(new List<string> { "Active", "Inactive"});
+            ViewData["Categories"] = new SelectList(
+                await _categoryRepo.ListAllAsync(), 
+                "Id", 
+                "Name", 
+                courseParams.CategoryID);
+
+            ViewData["Status"] = new SelectList(
+                new List<string> { CourseStatus.Active.ToString(), CourseStatus.Inactive.ToString() }, 
+                selectedValue: courseParams.Status?.ToString() ?? CourseStatus.Active.ToString());
+
             var spec = new CourseSpecification(courseParams);
             var courses = await _courseService.GetCoursesAsync(spec);
 
             var model = new ListVM<Course>
             {
                 Items = courses,
-                PagingInfo = new PagingVM { CurrentPage = courseParams.PageIndex, TotalItems = courses.Count() }
+                PagingInfo = new PagingVM { CurrentPage = courseParams.PageIndex, TotalItems = courses.Count() },
+                SearchValue = new SearchbarVM { Controller = "Courses", Action = "Index", SearchText = courseParams.Search}
             };
             return View(model);
         }
