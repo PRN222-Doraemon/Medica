@@ -21,6 +21,10 @@ namespace MedicaWeb_MVC.Extensions
                 config.CreateMap<Comment, CommentVM>()
                 .ForMember(dest => dest.UserName, u => u.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"));
 
+                config.CreateMap<Feedback, FeedbackVM>()
+                .ForMember(dest => dest.StudentName, u => u.MapFrom(src => $"{src.Student.FirstName} {src.Student.LastName}"))
+                .ForMember(dest => dest.StudentImgUrl, u => u.MapFrom(src => src.Student.ImageUrl));
+
             });
         }
     }
