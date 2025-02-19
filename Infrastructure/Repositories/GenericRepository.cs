@@ -98,7 +98,7 @@ namespace Infrastructure.Repositories
         /// <returns>A queryable set of the entity</returns>
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
-            return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>().AsQueryable(), spec);
+            return SpecificationEvaluator<T>.GetQuery(_dbContext.Set<T>().AsQueryable(), spec).AsSplitQuery();
         }
 
         /// <summary>

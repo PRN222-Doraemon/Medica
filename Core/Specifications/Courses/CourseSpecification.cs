@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.Constants;
+using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Specifications.Courses
@@ -13,7 +14,10 @@ namespace Core.Specifications.Courses
         {
             AddInclude(x => x.Category);
             AddInclude(x => x.CreatedBy);
-            CustomIncludes.Add(x => x.Include(c => c.CourseChapters)
+            CustomIncludes.Add(x => x.AsSplitQuery().Include(c => c.CourseChapters.Where(chapter =>
+            c.CourseChapters.Take(AppCts.Display.MAX_VISIBLE_CHAPTERS)
+                           .Select(x => x.Id)
+                           .Contains(chapter.Id)))
                                     .ThenInclude(cc => cc.Resources)
                                     .ThenInclude(r => r.CreatedBy));
             CustomIncludes.Add(x => x.Include(c => c.Comments)
@@ -27,6 +31,7 @@ namespace Core.Specifications.Courses
                                     .ThenInclude(f => f.Student));
             ApplyPaging(courseParam.PageSize * (courseParam.PageIndex - 1),
                 courseParam.PageSize);
+            
         }
 
         public CourseSpecification(int id)
@@ -47,5 +52,6 @@ namespace Core.Specifications.Courses
             CustomIncludes.Add(x => x.Include(c => c.Feedbacks)
                                     .ThenInclude(f => f.Student));
         }
+
     }
 }

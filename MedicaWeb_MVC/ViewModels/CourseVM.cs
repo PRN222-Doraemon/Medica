@@ -22,6 +22,8 @@ namespace MedicaWeb_MVC.ViewModels
 
         public int TotalChapters => CourseChapters.Count();
         public int TotalResources => CourseChapters.Sum(chapter => chapter.TotalResources);
+        public decimal Rates => Feedbacks.Average(f => f.Rating);
+        public int Reviews => Feedbacks.Count();
 
     }
 }
