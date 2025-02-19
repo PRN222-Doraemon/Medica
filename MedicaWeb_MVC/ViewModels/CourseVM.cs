@@ -12,6 +12,8 @@ namespace MedicaWeb_MVC.ViewModels
         public string CreatedByUserName { get; set; } = string.Empty;
         public CourseStatus Status { get; set; }
         public TimeSpan Duration { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
         public IEnumerable<CourseChapterVM> CourseChapters { get; set; } = new List<CourseChapterVM>();
         public IEnumerable<CommentVM> Comments { get; set; } = new List<CommentVM>();
 

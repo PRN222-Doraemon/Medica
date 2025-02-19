@@ -1,4 +1,5 @@
-﻿using Core.Interfaces.Repos;
+﻿using AutoMapper;
+using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Infrastructure.Persistence;
 using Infrastructure.Repositories;
@@ -19,6 +20,8 @@ namespace MedicaWeb_MVC.Extensions
             });
 
             // Register Auto Mapper
+            IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+            services.AddSingleton(mapper);
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             // register service

@@ -1,4 +1,4 @@
-﻿@model ListVM<Course>
+﻿@model ListVM<CourseVM>
 
 <div class="container py-4">
     <!-- Search and Filter -->
@@ -27,13 +27,18 @@
         {
             <div class="col-md-4">
                 <div class="card p-3">
-                    <div class="bg-light text-center py-5">Image</div>
+                    <div class="text-center">
+                        <img src="@course.ImgUrl" class="img-fluid rounded" alt="Course Image">
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">@course.Name</h5>
-                        <p class="text-primary-emphasis">@("Upload by " + course.CreatedBy.FirstName + " " + course.CreatedBy.LastName)</p>
-                        <p class="text-primary-emphasis">@("Last updated: " + course.UpdatedAt)</p>
+                        <p class="text-primary-emphasis">Category: @course.CategoryName</p>
+                        <p class="text-primary-emphasis">@($"Upload by {course.CreatedByUserName}")</p>                       
                         <div class="d-flex align-items-center">
                             <span class="badge bg-success me-2">@course.Status</span>
+                            <p class="text-success">@($"Updated {course.CreatedAt.ToShortDateString()}")</p>
+                        </div>
+                        <div class="text-end mt-2">
                             <a href="#" class="btn btn-outline-info">Detail</a>
                         </div>
                     </div>

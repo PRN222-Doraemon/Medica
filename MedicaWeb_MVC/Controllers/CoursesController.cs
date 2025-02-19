@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using AutoMapper;
+using Core.Entities;
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Courses;
@@ -13,10 +14,12 @@ namespace MedicaWeb_MVC.Controllers
     {
         private ICourseService _courseService;
         private IGenericRepository<Category> _categoryRepo;
-        public CoursesController(ICourseService courseService, IGenericRepository<Category> categoryRepo)
+        private IMapper _mapper;
+        public CoursesController(ICourseService courseService, IGenericRepository<Category> categoryRepo, IMapper mapper)
         {
             _courseService = courseService;
             _categoryRepo = categoryRepo;
+            _mapper = mapper;
         }
         public async Task<IActionResult> Index([FromQuery]CourseParams courseParams)
         {
@@ -33,9 +36,9 @@ namespace MedicaWeb_MVC.Controllers
             var spec = new CourseSpecification(courseParams);
             var courses = await _courseService.GetCoursesAsync(spec);
 
-            var model = new ListVM<Course>
+            var model = new ListVM<CourseVM>
             {
-                Items = courses,
+                Items = _mapper.Map<IEnumerable<CourseVM>>(courses),
                 PagingInfo = new PagingVM { CurrentPage = courseParams.PageIndex, TotalItems = courses.Count() },
                 SearchValue = new SearchbarVM { Controller = "Courses", Action = "Index", SearchText = courseParams.Search}
             };
