@@ -62,7 +62,7 @@ namespace Infrastructure.Persistence.Seeders
             }
             catch (Exception ex)
             {
-                throw new Exception($"Failed to deserialize JSON");
+                throw new Exception(ex.Message);
             }
         }
 

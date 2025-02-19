@@ -1,4 +1,5 @@
 ﻿using Core.Ultilities.Seeders;
+using System.Net.WebSockets;
 using System.Text;
 
 namespace Infrastructure.Persistence.Seeders
@@ -16,6 +17,7 @@ namespace Infrastructure.Persistence.Seeders
             try
             {
                 // Check if file exists before proceeding
+                var isExist = File.Exists(filePath);
                 if (!File.Exists(filePath))
                 {
                     throw new FileNotFoundException("File not found.", filePath);

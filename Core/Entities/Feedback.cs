@@ -1,4 +1,5 @@
 ﻿using Core.Entities.Identity;
+using System.Runtime.Serialization;
 
 namespace Core.Entities
 {
@@ -22,7 +23,9 @@ namespace Core.Entities
 
     public enum FeedbackStatus
     {
+        [EnumMember(Value = "Enabled")]
         Enabled,
+        [EnumMember(Value = "Disabled")]
         Disabled
     }
 }

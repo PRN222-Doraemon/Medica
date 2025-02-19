@@ -23,6 +23,8 @@ namespace Core.Specifications.Courses
             CustomIncludes.Add(x => x.Include(c => c.Comments)
                                     .ThenInclude(cc => cc.ReplyComments)
                                     .ThenInclude(rc => rc.User));
+            CustomIncludes.Add(x => x.Include(c => c.Feedbacks)
+                                    .ThenInclude(f => f.Student));
             ApplyPaging(courseParam.PageSize * (courseParam.PageIndex - 1),
                 courseParam.PageSize);
         }
@@ -42,6 +44,8 @@ namespace Core.Specifications.Courses
             CustomIncludes.Add(x => x.Include(c => c.Comments)
                                     .ThenInclude(cc => cc.ReplyComments)
                                     .ThenInclude(rc => rc.User));
+            CustomIncludes.Add(x => x.Include(c => c.Feedbacks)
+                                    .ThenInclude(f => f.Student));
         }
     }
 }
