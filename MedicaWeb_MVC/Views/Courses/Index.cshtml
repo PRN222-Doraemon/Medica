@@ -1,39 +1,45 @@
-﻿@model ListVM<Course>
+﻿@model ListVM<CourseVM>
 
 <div class="container py-4">
     <!-- Search and Filter -->
     <div class="d-flex justify-content-between align-items-center mb-3">
         <!-- Search -->
         <div class="flex-grow-1 me-3">
-            <input type="text" class="form-control form-control-lg" placeholder="Search for anything">
+            @await Html.PartialAsync("~/Views/Shared/ReusableViews/_SearchBar.cshtml", Model.SearchValue)
         </div>
-
+        
         <!-- Filter -->
-        <div class="d-flex gap-2">
-            <select asp-items="ViewBag.Categories" class="form-select form-select-lg">
-            </select>
-            <select asp-items="ViewBag.Status" class="form-select form-select-lg">
-            </select>
-        </div>
-
-        <!-- Create Button -->
+        <form id="filterForm" asp-controller="Courses" asp-action="Index" method="get">
+            <div class="d-flex gap-2">
+                <select asp-items="ViewBag.Categories" class="form-select form-select-lg" name="CategoryId" onchange="submitForm()">
+                </select>
+                <select asp-items="ViewBag.Status" class="form-select form-select-lg" name="Status" onchange="submitForm()">
+                </select>
+            </div>
+        </form>
+       <!-- Create Button -->
         <button class="btn btn-primary btn-lg ms-3">Create new +</button>
     </div>
 
     <!-- Course List -->
     <div class="row g-4">
-        @foreach(var course in Model.Items)
+        @foreach(var course in @Model.Items)
         {
             <div class="col-md-4">
                 <div class="card p-3">
-                    <div class="bg-light text-center py-5">Image</div>
+                    <div class="text-center">
+                        <img src="@course.ImgUrl" class="img-fluid rounded" alt="Course Image">
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title">@course.Name</h5>
-                        <p class="text-primary-emphasis">@("Upload by " + course.CreatedBy.FirstName + " " + course.CreatedBy.LastName)</p>
-                        <p class="text-primary-emphasis">@("Last updated: " + course.UpdatedAt)</p>
+                        <p class="text-primary-emphasis">Category: @course.CategoryName</p>
+                        <p class="text-primary-emphasis">@($"Upload by {course.CreatedByUserName}")</p>                       
                         <div class="d-flex align-items-center">
                             <span class="badge bg-success me-2">@course.Status</span>
-                            <a href="#" class="btn btn-outline-info">Detail</a>
+                            <p class="text-success">@($"Updated {course.CreatedAt.ToShortDateString()}")</p>
+                        </div>
+                        <div class="text-end mt-2">
+                            <a asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id" class="btn btn-outline-info">Detail</a>
                         </div>
                     </div>
                 </div>
@@ -42,6 +48,12 @@
     </div>
 
     <!-- Pagination -->
-    @await Html.PartialAsync("~/Views/Shared/ReusableViews/_Paging.cshtml", new PagingVM { CurrentPage = Model.PagingInfo.CurrentPage, TotalItems = Model.PagingInfo.TotalItems })
+    @await Html.PartialAsync("~/Views/Shared/ReusableViews/_Paging.cshtml", @Model.PagingInfo)
 
 </div>
+
+<script>
+    function submitForm() {
+        document.getElementById("filterForm").submit();
+    }
+</script>

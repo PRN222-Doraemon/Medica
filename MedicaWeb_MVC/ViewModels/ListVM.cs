@@ -2,7 +2,8 @@
 {
     public class ListVM<T>
     {
-        public IEnumerable<T> Items { get; set; }
-        public PagingVM PagingInfo { get; set; }
+        public IEnumerable<T> Items { get; set; } =  new List<T>();
+        public PagingVM? PagingInfo { get; set; }
+        public SearchbarVM? SearchValue { get; set; }
     }
 }

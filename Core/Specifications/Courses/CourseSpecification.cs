@@ -6,7 +6,7 @@ namespace Core.Specifications.Courses
     public class CourseSpecification : BaseSpecification<Course>
     {
         public CourseSpecification(CourseParams courseParam)
-            :base(c => ((string.IsNullOrEmpty(courseParam.Search) ||  courseParam.Search == c.Name)) &&
+            :base(c => (string.IsNullOrEmpty(courseParam.Search) || c.Name.ToLower().Contains(courseParam.Search)) &&
             (!courseParam.CategoryID.HasValue || courseParam.CategoryID == c.CategoryID) &&
             (!courseParam.Status.HasValue|| courseParam.Status == c.Status) &&
             (!courseParam.CreatedByUserId.HasValue || courseParam.CreatedByUserId == c.CreatedByUserID))
