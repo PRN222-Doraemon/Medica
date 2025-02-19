@@ -44,5 +44,11 @@ namespace MedicaWeb_MVC.Controllers
             };
             return View(model);
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var course = await _courseService.GetCourseByIdAsync(id);
+            return View(_mapper.Map<CourseVM>(course));
+        }
     }
 }

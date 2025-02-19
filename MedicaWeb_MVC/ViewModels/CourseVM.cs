@@ -5,6 +5,7 @@ namespace MedicaWeb_MVC.ViewModels
 {
     public class CourseVM
     {
+        public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
         public string? ImgUrl { get; set; }
@@ -16,8 +17,10 @@ namespace MedicaWeb_MVC.ViewModels
         public DateTime UpdatedAt { get; set; }
         public IEnumerable<CourseChapterVM> CourseChapters { get; set; } = new List<CourseChapterVM>();
         public IEnumerable<CommentVM> Comments { get; set; } = new List<CommentVM>();
-
-        // 1 Course - M Classroom
         public virtual ICollection<Classroom> Classrooms { get; set; } = new HashSet<Classroom>();
+
+        public int TotalChapters => CourseChapters.Count();
+        public int TotalResources => CourseChapters.Sum(chapter => chapter.TotalResources);
+
     }
 }

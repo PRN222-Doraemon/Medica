@@ -1,0 +1,103 @@
+﻿@model CourseVM
+@{
+    ViewData["Title"] = "Course Detail";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Phần trái: Thông tin khóa học -->
+        <div class="col-md-8">
+            <h1 class="fw-bold">@Model.Name</h1>
+
+            <div class="d-flex align-items-center">
+                <span class="badge bg-warning text-dark me-2">Bestseller</span>
+                <span class="fw-bold">4.5</span>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-fill text-warning"></i>
+                <i class="bi bi-star-half text-warning"></i>
+                <span class="text-muted ms-2">(4,636 ratings) - 29,032 students</span>
+            </div>
+
+            <p class="mt-3">Created by <strong>@Model.CreatedByUserName</strong></p>
+            <p><i class="bi bi-clock-history"></i> Last updated @Model.UpdatedAt.ToShortDateString()</p>
+
+            <hr>
+
+            <h4>What you'll learn</h4>
+            <p>@Model.Description<p>
+
+            <hr>
+
+            <!-- Accordion course's resources -->
+            <h4>Course content</h4>
+            <p>@($"{Model.TotalChapters} chapters - {Model.TotalResources} lectures - {Model.Duration} total length")</p>
+
+            
+            <div class="accordion" id="courseContent">
+                @foreach(var chapter in Model.CourseChapters) {
+                    var collapseId = $"collapse-{chapter.Id}";
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
+                                        @($"{chapter.Name} ({chapter.TotalResources} lectures)")
+                            </button>
+                        </h2>
+                        <div id="@collapseId" class="accordion-collapse collapse">
+                            <div class="accordion-body">
+                                <ul>
+                                    @foreach(var resource in chapter.Resources) {
+                                        <li>@resource.Title</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <hr />
+
+            <!-- Reviews -->
+            <h4>Student Reviews</h4>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="card p-3">
+                        <div class="d-flex align-items-center">
+                            <div class="avatar bg-primary text-white me-2">Initial</div>
+                            <div>
+                                <h5 class="mb-0">UserName</h5>
+                                <span class="text-muted">DatePosted</span>
+                            </div>
+                        </div>
+                        <p class="mt-2">Comment</p>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-outline-primary mt-3">Show all reviews</button>
+        </div>
+
+        <!-- Phần phải: Video + Giá -->
+        <div class="col-md-4">
+            <div class="card">
+                <img src="https://source.unsplash.com/400x250/?ai,technology" class="card-img-top" alt="Course Image">
+                <div class="card-body">
+                    <h3 class="fw-bold text-danger">₫1,499,000</h3>
+                    <button class="btn btn-primary w-100 mb-2">View Classes</button>
+
+                    <h5>This course includes:</h5>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-camera-video"></i> 30.5 hours on-demand video</li>
+                        <li><i class="bi bi-file-earmark-text"></i> 37 articles</li>
+                        <li><i class="bi bi-download"></i> Downloadable resources</li>
+                        <li><i class="bi bi-phone"></i> Access on mobile and TV</li>
+                        <li><i class="bi bi-award"></i> Certificate of completion</li>
+                    </ul>
+
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

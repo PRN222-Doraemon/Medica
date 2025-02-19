@@ -39,7 +39,7 @@
                             <p class="text-success">@($"Updated {course.CreatedAt.ToShortDateString()}")</p>
                         </div>
                         <div class="text-end mt-2">
-                            <a href="#" class="btn btn-outline-info">Detail</a>
+                            <a asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id" class="btn btn-outline-info">Detail</a>
                         </div>
                     </div>
                 </div>
