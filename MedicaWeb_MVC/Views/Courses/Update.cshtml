@@ -1,0 +1,116 @@
+﻿@model CourseVM
+@{
+    ViewData["Title"] = "Update Course";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <!-- Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h1 class="h3 mb-0 text-primary">Update Course</h1>
+                        <a asp-action="Details" asp-controller="Courses" asp-route-id="@Model.Id"
+                           class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Course
+                        </a>
+                    </div>
+
+                    <form asp-action="Update" asp-controller="Courses" method="post" id="updateCourseForm">
+                        <input type="hidden" asp-for="Id" />
+
+                        <!-- Basic Information -->
+                        <div class="mb-4">
+                            <h5 class="mb-3 text-gradient">Basic Information</h5>
+                            <div class="mb-3">
+                                <label asp-for="Name" class="form-label fw-semibold">Course Name</label>
+                                <input asp-for="Name" class="form-control" required>
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Description" class="form-label fw-semibold">What students will learn</label>
+                                <textarea asp-for="Description" class="form-control" rows="4" required></textarea>
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <!-- Course Content -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="mb-0 text-gradient">Course Content</h5>
+                                <button type="button" class="btn btn-primary btn-sm" onclick="addChapter()">
+                                    <i class="bi bi-plus-lg"></i> Add Chapter
+                                </button>
+                            </div>
+
+                            <div id="chaptersContainer" class="accordion">
+                                @if (Model.CourseChapters != null)
+                                {
+                                    @for (int i = 0; i < Model.CourseChapters.Count(); i++)
+                                    {
+                                        var chapter = Model.CourseChapters.ElementAtOrDefault(i);
+                                        var collapseId = $"collapse-{chapter.Id}";
+
+                                        <div class="accordion-item chapter-card mb-3" data-chapter-index="@i">
+                                            <div class="accordion-header position-relative">
+                                                <div class="d-flex align-items-center">
+                                                    <button class="accordion-button collapsed" type="button"
+                                                            data-bs-toggle="collapse" data-bs-target="#@collapseId">
+                                                        <input type="hidden" name="CourseChapters[@i].Id" value="@chapter.Id" />
+                                                        <div class="chapter-edit w-100">
+                                                            <input type="text" class="form-control chapter-name"
+                                                                   name="CourseChapters[@i].Name"
+                                                                   value="@chapter.Name" required>
+                                                        </div>
+                                                    </button>
+                                                    <button type="button" class="btn btn-outline-danger btn-sm ms-2 me-2"
+                                                            onclick="removeChapter(this)">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div id="@collapseId" class="accordion-collapse collapse">
+                                                <div class="accordion-body">
+                                                    <div class="resources-container">
+                                                        @if (chapter.Resources != null)
+                                                        {
+                                                            @for (int j = 0; j < chapter.Resources.Count(); j++)
+                                                            {
+                                                                var resource = chapter.Resources.ElementAtOrDefault(j);
+                                                                <div class="resource-item mb-2" data-resource-index="@j">
+                                                                    <div class="d-flex align-items-center gap-2">
+                                                                        <i class="bi bi-play-circle text-primary"></i>
+                                                                        <input type="hidden" name="CourseChapters[@i].Resources[@j].Id" value="@resource.Id" />
+                                                                        <input type="text" class="form-control"
+                                                                               name="CourseChapters[@i].Resources[@j].Title"
+                                                                               value="@resource.Title" required>
+                                                                        <button type="button" class="btn btn-outline-danger btn-sm"
+                                                                                onclick="removeResource(this)">
+                                                                            <i class="bi bi-trash"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                    <button type="button" class="btn btn-outline-primary btn-sm mt-3" onclick="addResource(this)">
+                                                        <i class="bi bi-plus-lg"></i> Add Resource
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Update Course</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

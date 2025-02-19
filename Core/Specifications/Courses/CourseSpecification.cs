@@ -14,10 +14,7 @@ namespace Core.Specifications.Courses
         {
             AddInclude(x => x.Category);
             AddInclude(x => x.CreatedBy);
-            CustomIncludes.Add(x => x.AsSplitQuery().Include(c => c.CourseChapters.Where(chapter =>
-            c.CourseChapters.Take(AppCts.Display.MAX_VISIBLE_CHAPTERS)
-                           .Select(x => x.Id)
-                           .Contains(chapter.Id)))
+            CustomIncludes.Add(x => x.Include(c => c.CourseChapters)
                                     .ThenInclude(cc => cc.Resources)
                                     .ThenInclude(r => r.CreatedBy));
             CustomIncludes.Add(x => x.Include(c => c.Comments)
