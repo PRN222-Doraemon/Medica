@@ -3,13 +3,12 @@ using Core.Entities;
 
 namespace MedicaWeb_MVC.ViewModels
 {
-    public class ResourceVM
+    public class ResourceCreateVM
     {
-        public int Id { get; set; }
-        public int CourseChapterID { get; set; }
-        public string Title { get; set; } = string.Empty;
+        public string Title { get; set; }
         public string? Description { get; set; }
         public string? FileUrl { get; set; }
         public ResourceType ResourceType { get; set; }
+        public int CreatedByUserID { get; set; } = 1;
     }
 }

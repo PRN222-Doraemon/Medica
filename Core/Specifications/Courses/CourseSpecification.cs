@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.Constants;
+using Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Specifications.Courses
@@ -27,6 +28,7 @@ namespace Core.Specifications.Courses
                                     .ThenInclude(f => f.Student));
             ApplyPaging(courseParam.PageSize * (courseParam.PageIndex - 1),
                 courseParam.PageSize);
+            
         }
 
         public CourseSpecification(int id)
@@ -47,5 +49,6 @@ namespace Core.Specifications.Courses
             CustomIncludes.Add(x => x.Include(c => c.Feedbacks)
                                     .ThenInclude(f => f.Student));
         }
+
     }
 }

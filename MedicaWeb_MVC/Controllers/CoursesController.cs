@@ -7,6 +7,7 @@ using MedicaWeb_MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NuGet.Protocol.Core.Types;
+using System.Net.WebSockets;
 
 namespace MedicaWeb_MVC.Controllers
 {
@@ -49,6 +50,47 @@ namespace MedicaWeb_MVC.Controllers
         {
             var course = await _courseService.GetCourseByIdAsync(id);
             return View(_mapper.Map<CourseVM>(course));
+        }
+        [HttpGet]
+        public async Task<IActionResult> Update(int id)
+        {
+            var course = await _courseService.GetCourseByIdAsync(id);
+            return View(_mapper.Map<CourseVM>(course));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(CourseCreateVM courseVM)
+        {
+            var course = _mapper.Map<Course>(courseVM);
+            await _courseService.UpdateCourseAsync(course);
+            course = await _courseService.GetCourseByIdAsync(course.Id);
+            return View(_mapper.Map<CourseVM>(course));
+        }
+
+        public async Task<IActionResult> CreateAsync()
+        {
+            ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Create(CourseCreateVM courseVM)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var course = _mapper.Map<Course>(courseVM);
+                    await _courseService.CreateCourseAsync(course);
+                    TempData["success"] = "Successfully created a new course!";
+                    return RedirectToAction(nameof(Index));                  
+                }
+                catch (Exception ex)
+                {
+                    TempData["error"] = ex.Message;
+                }
+            }
+            ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
+            return View(courseVM);
         }
     }
 }

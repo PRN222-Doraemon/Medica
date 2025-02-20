@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Core.Constants;
+using Core.Entities;
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications;
@@ -31,7 +32,8 @@ namespace Infrastructure.Services
         public async Task<Course> GetCourseByIdAsync(int id)
         {
             var spec = new CourseSpecification(id);
-            return await _unitOfWork.Repository<Course>().GetEntityWithSpec(spec);
+            var course = await _unitOfWork.Repository<Course>().GetEntityWithSpec(spec);
+            return course;
         }
 
         public async Task<IEnumerable<Course>> GetCoursesAsync(ISpecification<Course> spec)

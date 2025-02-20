@@ -1,106 +1,230 @@
-﻿@model CourseVM
+﻿@using Core.Constants
+@model CourseVM
 @{
     ViewData["Title"] = "Course Detail";
+    var totalChapters = Model.CourseChapters.Count();
 }
 
-<div class="container mt-4">
-    <div class="row">
-        <!-- Course details -->
-        <div class="col-md-8">
-            <h1 class="fw-bold">@Model.Name</h1>
-
-            <div class="d-flex align-items-center">
-                <span class="badge bg-warning text-dark me-2">Bestseller</span>
-                <span class="fw-bold">4.5</span>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-fill text-warning"></i>
-                <i class="bi bi-star-half text-warning"></i>
-                <span class="text-muted ms-2">(4,636 ratings) - 29,032 students</span>
-            </div>
-
-            <p class="mt-3">Created by <strong>@Model.CreatedByUserName</strong></p>
-            <p><i class="bi bi-clock-history"></i> Last updated @Model.UpdatedAt.ToShortDateString()</p>
-
-            <hr>
-
-            <h4>What you'll learn</h4>
-            <p>@Model.Description<p>
-
-            <hr>
-
-            <!-- Accordion course's resources -->
-            <h4>Course content</h4>
-            <p>@($"{Model.TotalChapters} chapters - {Model.TotalResources} lectures - {Model.Duration} total length")</p>
-
+<div class="container py-5">
+    <!-- Back Button -->
+    <div class="mb-3">
+        <a class="btn btn-outline-primary" asp-action="Index" asp-controller="Courses">
             
-            <div class="accordion" id="courseContent">
-                @foreach(var chapter in Model.CourseChapters) {
-                    var collapseId = $"collapse-{chapter.Id}";
-                    <div class="accordion-item">
-                        <h2 class="accordion-header">
-                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId">
-                                        @($"{chapter.Name} ({chapter.TotalResources} lectures)")
-                            </button>
-                        </h2>
-                        <div id="@collapseId" class="accordion-collapse collapse">
-                            <div class="accordion-body">
-                                <ul>
-                                    @foreach(var resource in chapter.Resources) {
-                                        <li>@resource.Title</li>
-                                    }
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-            <hr />
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+    </div>
+    <div class="row g-4">
+        <!-- Course details -->
+        <div class="col-lg-8">
+            <!-- Course Header -->
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h1 class="display-5 fw-bold mb-0">@Model.Name</h1>
+                    <a asp-action="Update" asp-controller="Courses" asp-route-id="@Model.Id"
+                       class="btn btn-outline-primary">
+                        <i class="bi bi-pencil"></i> Update Course
+                    </a>
+                </div>
 
-            <!-- Feedbacks -->
-            <h4>Student Feedbacks</h4>
-            <div class="row">
-                @foreach(var feeback in Model.Feedbacks) {
-                    <div class="col-md-6 mb-3">
-                        <div class="card p-3">
-                            <div class="d-flex align-items-center">
-                                <img src="https://source.unsplash.com/400x250/?ai,technology" class="card-img-top" alt="Course Image">
-                                <div>
-                                    <h5 class="mb-0">@feeback.StudentName</h5>
-                                    <span class="fw-bold">4.5</span>
-                                    <i class="bi bi-star-fill text-warning"></i>
+                <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
+                    <span class="badge bg-warning text-dark">Bestseller</span>
+                    <div class="d-flex align-items-center">
+                        <span class="fw-bold me-2">@Model.Rates</span>
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= Math.Floor(Model.Rates))
+                            {
+                                <i class="bi bi-star-fill text-warning"></i>
+                            }
+                            else if (i - (double)Model.Rates <= 0.5)
+                            {
+                                <i class="bi bi-star-half text-warning"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-star text-warning"></i>
+                            }
+                        }
+                        <span class="text-muted ms-2">(@Model.Reviews reviews)</span>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center gap-3 text-muted">
+                    <div>Created by <a href="#" class="text-decoration-none fw-semibold">@Model.CreatedByUserName</a></div>
+                    <div class="d-flex align-items-center gap-1">
+                        <i class="bi bi-clock-history"></i>
+                        <span>Last updated @Model.UpdatedAt.ToShortDateString()</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- What you'll learn section -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">What you'll learn</h4>
+                    <div class="card-text">@Model.Description</div>
+                </div>
+            </div>
+
+            <!-- Course Content -->
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0">Course content</h4>
+                    <span class="text-muted">
+                        @($"{Model.TotalChapters} chapters • {Model.TotalResources} lectures • {Model.Duration} total length")
+                    </span>
+                </div>
+                <div class="border rounded">
+                    <div class="accordion accordion-flush" id="courseContent">
+                        @foreach (var chapter in Model.CourseChapters)
+                        {
+                            var collapseId = $"collapse-{chapter.Id}";
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button"
+                                    data-bs-toggle="collapse" data-bs-target="#@collapseId">
+                                        <div class="d-flex justify-content-between align-items-center w-100">
+                                            <span>@chapter.Name</span>
+                                            <span class="badge bg-light text-dark ms-2">
+                                                @($"{chapter.TotalResources} lectures")
+                                            </span>
+                                        </div>
+                                    </button>
+                                </h2>
+                                <div id="@collapseId" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <ul class="list-group list-group-flush">
+                                            @foreach (var resource in chapter.Resources)
+                                            {
+                                                <li class="list-group-item d-flex align-items-center gap-2">
+                                                    <i class="bi bi-play-circle"></i>
+                                                    <span>@resource.Title</span>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
-                            <p class="mt-2">@feeback.FeedbackContent</p>
-                        </div>
+                        }
                     </div>
-                }               
+                    @if (totalChapters > AppCts.Display.MAX_VISIBLE_CHAPTERS)
+                    {
+                        <div class="text-center py-3 border-top">
+                            <button id="viewMoreChapters" class="btn btn-outline-primary" onclick="toggleChapters()">
+                                Show more chapters
+                                <i class="bi bi-chevron-down ms-1"></i>
+                            </button>
+                        </div>
+                    }
+                </div>
+                
             </div>
-            <button class="btn btn-outline-primary mt-3">Show all reviews</button>
+
+            <!-- Reviews Section -->
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex align-items-center gap-2 mb-4">
+                        <i class="bi bi-star-fill text-warning fs-4"></i>
+                        <h4 class="mb-0">@($"{Model.Rates} course rating")</h4>
+                        <span class="text-muted">(@Model.Reviews ratings)</span>
+                    </div>
+
+                    @foreach (var review in Model.Feedbacks)
+                    {
+                        <div class="border-bottom pb-4 mb-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="d-flex gap-3">
+                                    <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+                                         style="width: 48px; height: 48px;">
+                                        <span class="fw-semibold">@review.StudentName.Substring(0, 2).ToUpper()</span>
+                                    </div>
+
+                                    <div>
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <span class="fw-semibold">@review.StudentName</span>
+                                            <div class="text-warning">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    <i class="bi bi-star-@(i <= review.Rating ? "fill" : "")"></i>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="text-muted small">@review.CreatedDate</div>
+                                    </div>
+                                </div>
+
+                                <div class="dropdown">
+                                    <button class="btn btn-link text-muted p-0" data-bs-toggle="dropdown">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">Report</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <p class="mb-3">@review.FeedbackContent</p>
+
+                            @if (review.FeedbackContent.Length > 150)
+                            {
+                                <button class="btn btn-link text-primary p-0 mb-3">Show more</button>
+                            }
+
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="text-muted small">Helpful?</span>
+                                <button class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-hand-thumbs-up me-1"></i>
+                                    <span>Yes</span>
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm">
+                                    <i class="bi bi-hand-thumbs-down me-1"></i>
+                                    <span>No</span>
+                                </button>
+                            </div>
+                        </div>
+                    }
+
+                    @if (Model.Reviews > AppCts.Display.MAX_VISIBLE_REVIEWS)
+                    {
+                        <div class="text-center">
+                            <button id="viewMoreReviews" class="btn btn-outline-primary" onclick="toggleReviews()">
+                                Show more reviews
+                                <i class="bi bi-chevron-down ms-1"></i>
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
         </div>
 
-        <!-- IMG + Price -->
-        <div class="col-md-4">
-            <div class="card">
-                <img src="https://source.unsplash.com/400x250/?ai,technology" class="card-img-top" alt="Course Image">
+        <!-- Course Card -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm position-sticky" style="top: 2rem;">
+                <img src="/api/placeholder/800/400" class="card-img-top" alt="@Model.Name">
                 <div class="card-body">
-                    <h3 class="fw-bold text-danger">₫1,499,000</h3>
-                    <button class="btn btn-primary w-100 mb-2">View Classes</button>
+                    <button class="btn btn-primary btn-lg w-100 mb-4">View Classes</button>
 
-                    <h5>This course includes:</h5>
-                    <ul class="list-unstyled">
-                        <li><i class="bi bi-camera-video"></i> 30.5 hours on-demand video</li>
-                        <li><i class="bi bi-file-earmark-text"></i> 37 articles</li>
-                        <li><i class="bi bi-download"></i> Downloadable resources</li>
-                        <li><i class="bi bi-phone"></i> Access on mobile and TV</li>
-                        <li><i class="bi bi-award"></i> Certificate of completion</li>
+                    <h5 class="mb-3">This course includes:</h5>
+                    <ul class="list-unstyled mb-0">
+                        <li class="d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-camera-video text-primary"></i>
+                            <span>@Model.Duration on-demand video</span>
+                        </li>
+                        <li class="d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-download text-primary"></i>
+                            <span>Downloadable resources</span>
+                        </li>
+                        <li class="d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-phone text-primary"></i>
+                            <span>Access on mobile and TV</span>
+                        </li>
+                        <li class="d-flex align-items-center gap-2">
+                            <i class="bi bi-award text-primary"></i>
+                            <span>Certificate of completion</span>
+                        </li>
                     </ul>
-
-                    <hr>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
