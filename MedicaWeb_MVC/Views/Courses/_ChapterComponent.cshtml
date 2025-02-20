@@ -1,0 +1,32 @@
+﻿@model CourseChapterVM
+@{
+    var collapseId = $"collapse-{Model.Id}";
+}
+
+<div class="accordion-item chapter-card mb-3 shadow-sm border" data-chapter-index="@Model.Id">
+    <div class="accordion-header position-relative">
+        <div class="d-flex align-items-center">
+            <button class="accordion-button collapsed" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#@collapseId">
+                <div class="chapter-edit w-100">
+                    <input type="text" class="form-control chapter-name"
+                           name="CourseChapters[@Model.Id].Name"
+                           required placeholder="Enter chapter name">
+                </div>
+            </button>
+            <button type="button" class="btn btn-outline-danger btn-sm ms-2 me-2"
+                    onclick="removeChapter(this)">
+                <i class="bi bi-trash"></i>
+            </button>
+        </div>
+    </div>
+    <div id="@collapseId" class="accordion-collapse collapse">
+        <div class="accordion-body bg-light">
+            <div class="resources-container">
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm mt-3" onclick="addResource(this)">
+                <i class="bi bi-plus-lg"></i> Add Resource
+            </button>
+        </div>
+    </div>
+</div>

@@ -2,7 +2,6 @@
 @model CourseVM
 @{
     ViewData["Title"] = "Course Detail";
-    var totalReviews = Model.Feedbacks.Count();
     var totalChapters = Model.CourseChapters.Count();
 }
 
@@ -185,7 +184,7 @@
                         </div>
                     }
 
-                    @if (totalReviews > AppCts.Display.MAX_VISIBLE_REVIEWS)
+                    @if (Model.Reviews > AppCts.Display.MAX_VISIBLE_REVIEWS)
                     {
                         <div class="text-center">
                             <button id="viewMoreReviews" class="btn btn-outline-primary" onclick="toggleReviews()">

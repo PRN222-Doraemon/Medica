@@ -16,6 +16,10 @@ namespace MedicaWeb_MVC.Extensions
                 .ForMember(dest => dest.CreatedByUserName, u => u.MapFrom(src => $"{src.CreatedBy.FirstName} {src.CreatedBy.LastName}"))
                 .ForMember(dest => dest.CategoryName, u => u.MapFrom(src => src.Category.Name));
 
+                config.CreateMap<CourseCreateVM, Course>();
+                config.CreateMap<CourseChapterCreateVM, CourseChapter>();
+                config.CreateMap<ResourceCreateVM, Resource>();
+
                 config.CreateMap<CourseChapter, CourseChapterVM>();
                 config.CreateMap<Resource, ResourceVM>();
                 config.CreateMap<Comment, CommentVM>()
