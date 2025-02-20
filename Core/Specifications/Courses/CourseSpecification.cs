@@ -26,9 +26,9 @@ namespace Core.Specifications.Courses
                                     .ThenInclude(rc => rc.User));
             CustomIncludes.Add(x => x.Include(c => c.Feedbacks)
                                     .ThenInclude(f => f.Student));
-            ApplyPaging(courseParam.PageSize * (courseParam.PageIndex - 1),
-                courseParam.PageSize);
-            
+            //ApplyPaging(courseParam.PageSize * (courseParam.PageIndex - 1),
+            //    courseParam.PageSize);
+
         }
 
         public CourseSpecification(int id)

@@ -5,10 +5,11 @@ namespace MedicaWeb_MVC.ViewModels
 {
     public class ResourceCreateVM
     {
-        public string Title { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; } = string.Empty;
         public string? Description { get; set; }
         public string? FileUrl { get; set; }
         public ResourceType ResourceType { get; set; }
-        public int CreatedByUserID { get; set; } = 1;
+        public int CreatedByUserID { get; set; }
     }
 }

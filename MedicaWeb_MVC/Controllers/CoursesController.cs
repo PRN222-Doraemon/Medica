@@ -6,6 +6,7 @@ using Core.Specifications.Courses;
 using MedicaWeb_MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Core.Types;
 using System.Net.WebSockets;
 
@@ -13,14 +14,17 @@ namespace MedicaWeb_MVC.Controllers
 {
     public class CoursesController : Controller
     {
-        private ICourseService _courseService;
-        private IGenericRepository<Category> _categoryRepo;
-        private IMapper _mapper;
-        public CoursesController(ICourseService courseService, IGenericRepository<Category> categoryRepo, IMapper mapper)
+        private readonly ICourseService _courseService;
+        private readonly IGenericRepository<Category> _categoryRepo;
+        private readonly IMapper _mapper;
+        private readonly IUserService _userService;
+        public CoursesController(ICourseService courseService, IGenericRepository<Category> categoryRepo, 
+            IMapper mapper, IUserService userService)
         {
             _courseService = courseService;
             _categoryRepo = categoryRepo;
             _mapper = mapper;
+            _userService = userService;
         }
         public async Task<IActionResult> Index([FromQuery]CourseParams courseParams)
         {
@@ -51,20 +55,32 @@ namespace MedicaWeb_MVC.Controllers
             var course = await _courseService.GetCourseByIdAsync(id);
             return View(_mapper.Map<CourseVM>(course));
         }
-        [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
+            ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
             var course = await _courseService.GetCourseByIdAsync(id);
-            return View(_mapper.Map<CourseVM>(course));
+            return View(_mapper.Map<CourseCreateVM>(course));
         }
 
         [HttpPost]
         public async Task<IActionResult> Update(CourseCreateVM courseVM)
         {
-            var course = _mapper.Map<Course>(courseVM);
-            await _courseService.UpdateCourseAsync(course);
-            course = await _courseService.GetCourseByIdAsync(course.Id);
-            return View(_mapper.Map<CourseVM>(course));
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var course = _mapper.Map<Course>(courseVM);
+                    await _courseService.UpdateCourseAsync(course);
+                    TempData["success"] = "Successfully updated a new course!";
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    TempData["error"] = ex.InnerException.Message;
+                }
+            }
+            ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
+            return View(courseVM);
         }
 
         public async Task<IActionResult> CreateAsync()
@@ -79,7 +95,12 @@ namespace MedicaWeb_MVC.Controllers
             {
                 try
                 {
+                    var user = _userService.GetUserByClaims(HttpContext.User);
+                    if (user == null)
+                        return Unauthorized();
                     var course = _mapper.Map<Course>(courseVM);
+                    // created by user ID value is just for testing, it will be updated later
+                    course.CreatedByUserID = 1;
                     await _courseService.CreateCourseAsync(course);
                     TempData["success"] = "Successfully created a new course!";
                     return RedirectToAction(nameof(Index));                  
