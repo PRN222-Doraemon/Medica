@@ -17,9 +17,9 @@ namespace Core.Entities
 
     public enum ResourceType
     {
-        [EnumMember(Value = "Lecture Slides")]
+        [EnumMember(Value = "Slide")]
         Slide,
-        [EnumMember(Value = "Online Video")]
+        [EnumMember(Value = "Video")]
         Video
     }
 }

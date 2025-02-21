@@ -1,47 +1,92 @@
 [
   {
-    "Name": "Calculus 101",
-    "Description": "An introduction to calculus covering limits, derivatives, and integrals.",
-    "ImgUrl": "https://example.com/calculus.jpg",
-    "CategoryID": 1,
-    "Status": "Active",
-    "Duration": "02:30:00",
-    "CreatedByUserID":  5
+    "name": "Balanced Nutrition",
+    "description": "Learn how to build a healthy and balanced diet.",
+    "imgUrl": "https://www.snhu.edu/-/media/images/social/og/importance-of-health-education-og-new.ashx",
+    "categoryID": 1,
+    "createdByUserID": 5,
+    "status": "Active",
+    "duration": "12:00:00"
   },
   {
-    "Name": "Introduction to Programming",
-    "Description": "Learn the basics of programming using Python.",
-    "ImgUrl": "https://example.com/programming.jpg",
-    "CategoryID": 2,
-    "Status": "Active",
-    "CreatedByUserID": 5,
-    "Duration": "03:00:00"
+    "name": "Personalized Meal Planning",
+    "description": "Create a meal plan tailored to different lifestyles.",
+    "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrzDZV8WGUQ5-Ib1cnA8-nxEqf_SnlkkicVXiEY9cKLhsaYpC_71x5vZ7t9qQmQZoLWpc&usqp=CAU",
+    "categoryID": 1,
+    "createdByUserID": 5,
+    "status": "Active",
+    "duration": "10:00:00"
   },
   {
-    "Name": "Physics Fundamentals",
-    "Description": "Covers Newtonian mechanics, waves, and thermodynamics.",
-    "ImgUrl": "https://example.com/physics.jpg",
-    "CategoryID": 3,
-    "Status": "Active",
-    "Duration": "02:45:00",
-    "CreatedByUserID": 5
+    "name": "Therapeutic Yoga",
+    "description": "Yoga techniques to reduce stress and improve mental health.",
+    "imgUrl": "https://blogmedia.testbook.com/blog/wp-content/uploads/2023/07/question-an-100-38de3fc8.jpg",
+    "categoryID": 3,
+    "createdByUserID": 5,
+    "status": "Active",
+    "duration": "15:00:00"
   },
   {
-    "Name": "Marketing Strategies",
-    "Description": "Explore effective marketing techniques and business growth strategies.",
-    "ImgUrl": "https://example.com/marketing.jpg",
-    "CategoryID": 4,
-    "Status": "Inactive",
-    "Duration": "02:15:00",
-    "CreatedByUserID": 6
+    "name": "Basic First Aid",
+    "description": "Essential first aid skills to help people in need.",
+    "imgUrl": "https://www.healthstream.com/images/default-source/blog/blog-images_healthcareconcepts_608x320_artboard-34_lb.tmb-auto.jpg?sfvrsn=4bf74f62_0",
+    "categoryID": 4,
+    "createdByUserID": 5,
+    "status": "Active",
+    "duration": "5:00:00"
   },
   {
-    "Name": "Cognitive Psychology",
-    "Description": "Understand human cognition, memory, and problem-solving.",
-    "ImgUrl": "https://example.com/psychology.jpg",
-    "CategoryID": 5,
-    "Status": "Active",
-    "Duration": "02:20:00",
-    "CreatedByUserID": 6
+    "name": "Athlete Training Program",
+    "description": "Workout programs to boost performance and endurance.",
+    "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-wADmGVUhKq8zNilavk0fAQ1R3CHdZeEI06JsPJMlEpnZivUdo0fb5AOLLycqsq7Rgak&usqp=CAU",
+    "categoryID": 2,
+    "createdByUserID": 5,
+    "status": "Active",
+    "duration": "20:00:00"
+  },
+  {
+    "name": "Strength & Conditioning",
+    "description": "Techniques to increase strength and avoid injuries.",
+    "imgUrl": "https://soco-images.s3.ap-south-1.amazonaws.com/dbac7b455f45b348f25f5fbefe0c33d2.png",
+    "categoryID": 2,
+    "createdByUserID": 6,
+    "status": "Active",
+    "duration": "18:00:00"
+  },
+  {
+    "name": "Mindfulness & Stress Reduction",
+    "description": "Meditation and breathing exercises for stress relief.",
+    "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8yXe4XeCjxS6MVk5KGOJ1dZBp_Y4023dJWw&s",
+    "categoryID": 3,
+    "createdByUserID": 6,
+    "status": "Active",
+    "duration": "8:00:00"
+  },
+  {
+    "name": "Emergency Response & CPR",
+    "description": "Learn how to perform CPR and respond to medical emergencies.",
+    "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQWGtUN4rC1fIBtNni5gT0FO4cr5C9cJQifdx_QNBHdjjhjyiLFAEZy4ugZedzm_UJ-h08&usqp=CAU",
+    "categoryID": 4,
+    "createdByUserID": 6,
+    "status": "Active",
+    "duration": "6:00:00"
+  },
+  {
+    "name": "Epidemiology Basics",
+    "description": "Introduction to disease spread and public health interventions.",
+    "imgUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkIq5glXzLP0v7-c1nbD0z27S1vNfgnLoj7A&s",
+    "categoryID": 5,
+    "createdByUserID": 6,
+    "status": "Active",
+    "duration": "14:00:00"
+  },
+  {
+    "name": "Mental Health First Aid",
+    "description": "How to support individuals experiencing mental health crises.",
+    "imgUrl": "https://www.snhu.edu/-/media/images/social/og/importance-of-health-education-og-new.ashx",
+    "categoryID": 3,
+    "createdByUserID": 6,
+    "status": "Active",
+    "duration": "7:00:00"
   }
 ]

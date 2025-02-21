@@ -1,34 +1,188 @@
 [
   {
-    "Title": "Introduction to Programming",
-    "Description": "Lecture slides for the first chapter of the programming course.",
-    "FileUrl": "https://example.com/slides/intro-to-programming",
-    "ResourceType": "Slide",
-    "CourseChapterID": 1,
-    "CreatedByUserID": 8
+    "title": "Introduction to Nutrition - Lecture Slides",
+    "description": "Overview of basic nutrition concepts.",
+    "fileUrl": "https://example.com/slides/nutrition_intro.pdf",
+    "resourceType": "Slide",
+    "courseChapterID": 1,
+    "createdByUserID": 8
   },
   {
-    "Title": "Advanced C# Techniques",
-    "Description": "Lecture slides on advanced topics in C# programming.",
-    "FileUrl": "https://example.com/slides/advanced-csharp",
-    "ResourceType": "Slide",
-    "CourseChapterID": 2,
-    "CreatedByUserID": 9
+    "title": "Nutrition Basics Video",
+    "description": "Explains macronutrients and micronutrients.",
+    "fileUrl": "https://example.com/videos/nutrition_basics.mp4",
+    "resourceType": "Video",
+    "courseChapterID": 1,
+    "createdByUserID": 8
+  },
+
+  {
+    "title": "Macronutrients Breakdown - Slides",
+    "description": "Detailed explanation of proteins, carbs, and fats.",
+    "fileUrl": "https://example.com/slides/macronutrients.pdf",
+    "resourceType": "Slide",
+    "courseChapterID": 2,
+    "createdByUserID": 8
   },
   {
-    "Title": "Object-Oriented Programming Basics",
-    "Description": "An introductory video explaining the principles of OOP.",
-    "FileUrl": "https://example.com/videos/oop-basics",
-    "ResourceType": "Video",
-    "CourseChapterID": 3,
-    "CreatedByUserID": 8
+    "title": "Macronutrients Explained Video",
+    "description": "How macronutrients affect your body.",
+    "fileUrl": "https://example.com/videos/macronutrients.mp4",
+    "resourceType": "Video",
+    "courseChapterID": 2,
+    "createdByUserID": 8
+  },
+
+  {
+    "title": "Meal Planning Basics - Lecture Slides",
+    "description": "Key concepts for healthy meal planning.",
+    "fileUrl": "https://example.com/slides/meal_planning.pdf",
+    "resourceType": "Slide",
+    "courseChapterID": 3,
+    "createdByUserID": 8
   },
   {
-    "Title": "Web Development with ASP.NET Core",
-    "Description": "Lecture slides covering basic web development with ASP.NET Core.",
-    "FileUrl": "https://example.com/slides/aspnet-core-web-development",
-    "ResourceType": "Slide",
-    "CourseChapterID": 4,
-    "CreatedByUserID": 9
+    "title": "How to Plan Meals - Video",
+    "description": "Steps to create a balanced meal plan.",
+    "fileUrl": "https://example.com/videos/meal_planning.mp4",
+    "resourceType": "Video",
+    "courseChapterID": 3,
+    "createdByUserID": 8
+  },
+
+  {
+    "title": "Yoga Poses for Beginners - Lecture Slides",
+    "description": "Introduction to basic yoga poses.",
+    "fileUrl": "https://example.com/slides/yoga_basics.pdf",
+    "resourceType": "Slide",
+    "courseChapterID": 5,
+    "createdByUserID": 8
+  },
+  {
+    "title": "Yoga Postures Tutorial",
+    "description": "A step-by-step guide to beginner yoga.",
+    "fileUrl": "https://example.com/videos/yoga_basics.mp4",
+    "resourceType": "Video",
+    "courseChapterID": 5,
+    "createdByUserID": 8
+  },
+
+  {
+    "title": "Emergency First Aid - Lecture Slides",
+    "description": "How to provide first aid in emergencies.",
+    "fileUrl": "https://example.com/slides/first_aid.pdf",
+    "resourceType": "Slide",
+    "courseChapterID": 4,
+    "createdByUserID": 9
+  },
+  {
+    "title": "CPR Training Video",
+    "description": "A demonstration of CPR techniques.",
+    "fileUrl": "https://example.com/videos/cpr_training.mp4",
+    "resourceType": "Video",
+    "courseChapterID": 4,
+    "createdByUserID": 9
+  },
+
+  {
+    "title": "Strength Training - Lecture Slides",
+    "description": "Best practices for strength training.",
+    "fileUrl": "https://example.com/slides/strength_training.pdf",
+    "resourceType": "Slide",
+    "courseChapterID": 6,
+    "createdByUserID": 9
+  },
+  {
+    "title": "Strength Training Techniques Video",
+    "description": "Workouts for muscle endurance.",
+    "fileUrl": "https://example.com/videos/strength_training.mp4",
+    "resourceType": "Video",
+    "courseChapterID": 6,
+    "createdByUserID": 9
+  },
+
+  {
+    "title": "Mindfulness Techniques - Lecture Slides",
+    "description": "Daily exercises for mindfulness.",
+    "fileUrl": "https://example.com/slides/mindfulness.pdf",
+    "resourceType": "Slide",
+    "courseChapterID": 7,
+    "createdByUserID": 9
+  },
+  {
+    "title": "Guided Mindfulness Meditation Video",
+    "description": "Learn how to practice mindfulness.",
+    "fileUrl": "https://example.com/videos/mindfulness.mp4",
+    "resourceType": "Video",
+    "courseChapterID": 7,
+    "createdByUserID": 9
+  },
+
+  {
+    "title": "Injury Prevention - Lecture Slides",
+    "description": "How to avoid sports injuries.",
+    "fileUrl": "https://example.com/slides/injury_prevention.pdf",
+    "resourceType": "Slide",
+    "courseChapterID": 8,
+    "createdByUserID": 9
+  },
+  {
+    "title": "Sports Injury Prevention Video",
+    "description": "Preventing common sports injuries.",
+    "fileUrl": "https://example.com/videos/injury_prevention.mp4",
+    "resourceType": "Video",
+    "courseChapterID": 8,
+    "createdByUserID": 9
+  },
+
+  {
+    "title": "Public Health Policies - Lecture Slides",
+    "description": "Government regulations on health.",
+    "fileUrl": "https://example.com/slides/public_health.pdf",
+    "resourceType": "Slide",
+    "courseChapterID": 9,
+    "createdByUserID": 9
+  },
+  {
+    "title": "Understanding Public Health Video",
+    "description": "How public health policies work.",
+    "fileUrl": "https://example.com/videos/public_health.mp4",
+    "resourceType": "Video",
+    "courseChapterID": 9,
+    "createdByUserID": 9
+  },
+
+  {
+    "title": "Holistic Nutrition - Lecture Slides",
+    "description": "Balancing diet, lifestyle, and exercise.",
+    "fileUrl": "https://example.com/slides/holistic_health.pdf",
+    "resourceType": "Slide",
+    "courseChapterID": 10,
+    "createdByUserID": 9
+  },
+  {
+    "title": "Holistic Health Guide Video",
+    "description": "A guide to holistic health practices.",
+    "fileUrl": "https://example.com/videos/holistic_health.mp4",
+    "resourceType": "Video",
+    "courseChapterID": 10,
+    "createdByUserID": 9
+  },
+
+  {
+    "title": "Emergency Preparedness - Lecture Slides",
+    "description": "What to do in medical emergencies.",
+    "fileUrl": "https://example.com/slides/emergency_prep.pdf",
+    "resourceType": "Slide",
+    "courseChapterID": 11,
+    "createdByUserID": 9
+  },
+  {
+    "title": "Medical Emergency Response Video",
+    "description": "Responding to critical medical cases.",
+    "fileUrl": "https://example.com/videos/emergency_response.mp4",
+    "resourceType": "Video",
+    "courseChapterID": 11,
+    "createdByUserID": 9
   }
 ]
