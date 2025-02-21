@@ -2,9 +2,13 @@
 using Core.Ultilities.Seeders;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Seeders;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Extensions
 {
@@ -14,9 +18,36 @@ namespace Infrastructure.Extensions
         {
             try
             {
-                services.AddIdentity<ApplicationUser, ApplicationRole>()
+                // Registers the database context with the DI container
+                services.AddDbContext<ApplicationDbContext>(opt =>
+                {
+                    opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                });
+
+                // Configure Identity and Authentication & Authorization
+                services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
+                {
+                    o.Password.RequireDigit = true;
+                    o.Password.RequiredLength = 8;
+                    o.Password.RequireUppercase = false;
+                    o.Password.RequireLowercase = false;
+                    o.Password.RequireNonAlphanumeric = false;
+                    o.Password.RequireDigit = false;
+                })
                     .AddEntityFrameworkStores<ApplicationDbContext>()
                     .AddDefaultTokenProviders();
+
+                // Using Cookie-based Authorization
+                services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.Cookie.SameSite = SameSiteMode.Strict;
+                    options.LoginPath = "/Account/Login";
+                    options.AccessDeniedPath = "/Account/AccessDenied";
+                    options.SlidingExpiration = true; // Extend the cookie if active
+                });
 
                 // Add FileReader service
                 services.AddScoped<IFileReader, FileReader>();
