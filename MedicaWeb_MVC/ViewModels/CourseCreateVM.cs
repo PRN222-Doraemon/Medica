@@ -11,7 +11,7 @@ namespace MedicaWeb_MVC.ViewModels
         public string? ImgUrl { get; set; }
         public int CategoryID { get; set; }
         public string? CategoryName { get; set; }
-        public int CreatedByUserID { get; set; }
+        //public int CreatedByUserID { get; set; }
         public TimeSpan Duration { get; set; }
         public IEnumerable<CourseChapterCreateVM> CourseChapters { get; set; } = new List<CourseChapterCreateVM>();
     }

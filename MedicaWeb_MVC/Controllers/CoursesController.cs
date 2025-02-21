@@ -55,61 +55,61 @@ namespace MedicaWeb_MVC.Controllers
             var course = await _courseService.GetCourseByIdAsync(id);
             return View(_mapper.Map<CourseVM>(course));
         }
-        public async Task<IActionResult> Update(int id)
+        public async Task<IActionResult> Upsert(int? id)
         {
             ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
-            var course = await _courseService.GetCourseByIdAsync(id);
+
+            // create a new course
+            if (id == null)
+            {
+                return View(new CourseCreateVM());
+            }
+
+            // Update course
+            var course = await _courseService.GetCourseByIdAsync(id.Value);
+            if (course == null)
+            {
+                return NotFound();
+            }
             return View(_mapper.Map<CourseCreateVM>(course));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(CourseCreateVM courseVM)
+        public async Task<IActionResult> Upsert(CourseCreateVM courseVM)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var course = _mapper.Map<Course>(courseVM);
-                    await _courseService.UpdateCourseAsync(course);
-                    TempData["success"] = "Successfully updated a new course!";
+                    Course course;
+                    // Add new course
+                    if (courseVM.Id == 0)
+                    {
+                        course = _mapper.Map<Course>(courseVM);
+                        // created by user ID value is just for testing, it will be updated later
+                        course.CreatedByUserID = 1;
+                        await _courseService.CreateCourseAsync(course);
+                        TempData["success"] = "Successfully created a new course!";
+                    }
+                    // Update course
+                    else
+                    {
+                        course = await _courseService.GetCourseByIdAsync(courseVM.Id);
+                        if (course == null)
+                        {
+                            return NotFound();
+                        }
+                        _mapper.Map(courseVM, course);
+                        await _courseService.UpdateCourseAsync(course);
+                        TempData["success"] = "Successfully updated a new course!";
+                    }
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
-                    TempData["error"] = ex.InnerException.Message;
+                    TempData["error"] = ex.InnerException?.Message ?? ex.Message;
                 }
-            }
-            ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
-            return View(courseVM);
-        }
-
-        public async Task<IActionResult> CreateAsync()
-        {
-            ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> Create(CourseCreateVM courseVM)
-        {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var user = _userService.GetUserByClaims(HttpContext.User);
-                    if (user == null)
-                        return Unauthorized();
-                    var course = _mapper.Map<Course>(courseVM);
-                    // created by user ID value is just for testing, it will be updated later
-                    course.CreatedByUserID = 1;
-                    await _courseService.CreateCourseAsync(course);
-                    TempData["success"] = "Successfully created a new course!";
-                    return RedirectToAction(nameof(Index));                  
-                }
-                catch (Exception ex)
-                {
-                    TempData["error"] = ex.Message;
-                }
-            }
+            }          
             ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
             return View(courseVM);
         }
