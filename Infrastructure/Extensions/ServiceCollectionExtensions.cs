@@ -37,24 +37,16 @@ namespace Infrastructure.Extensions
                 }).AddEntityFrameworkStores<ApplicationDbContext>()
                   .AddDefaultTokenProviders();
 
-                // Using Cookie-based Authorization and Google Authentication
-                services.AddAuthentication(o =>
-                {
-                    o.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-                }).AddCookie(o =>
+                services.ConfigureApplicationCookie(o =>
                 {
                     o.Cookie.HttpOnly = true;
                     o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     o.Cookie.SameSite = SameSiteMode.Strict;
-                    o.LoginPath = "/Account/Login";
-                    o.AccessDeniedPath = "/Account/AccessDenied";
+                    o.Cookie.IsEssential = true;
+                    o.LoginPath = "/Accounts/Login";
+                    o.AccessDeniedPath = "/Accounts/AccessDenied";
                     o.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Expire within 30m
                     o.SlidingExpiration = true; // Extend the cookie if active
-                }).AddGoogle(o =>
-                {
-                    o.ClientId = configuration["Authentication:Google:ClientId"];
-                    o.ClientSecret = configuration["Authentication:Google:ClientSecret"];
                 });
 
                 // Add FileReader service

@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<ApplicationUser> _signInManager;
+
+<!DOCTYPE html>
 <html lang="en">
 
 @* Head & Metadata *@
@@ -21,17 +23,30 @@
 
 	@* Container *@
 	<div class="row flex-grow-1">
-		<!-- Sidebar - Takes up 3 columns -->
-		<aside class="col-md-3 col-xl-2 col-12">
-			<partial name="ReusableViews/_SideBar" />
-		</aside>
 
-		<!-- Main Content - Takes up 9 columns -->
-		<main role="main" class="col-md-9 col-xl-10 col-12 p-3">
-			<div class="container-fluid">
-				@RenderBody()
-			</div>
-		</main>
+		@if (_signInManager.IsSignedIn(User))
+		{
+			<!-- Sidebar -->
+			<aside class="col-md-3 col-xl-2 col-12">
+				<partial name="ReusableViews/_SideBar" />
+			</aside>
+
+			<!-- Main Content -->
+			<main role="main" class="col-md-9 col-xl-10 col-12 p-3">
+				<div class="container-fluid">
+					@RenderBody()
+				</div>
+			</main>
+		}
+		else
+		{
+			<main role="main">
+				<div class="container-fluid">
+					@RenderBody()
+				</div>
+			</main>
+		}
+
 	</div>
 
 	@* Footer *@

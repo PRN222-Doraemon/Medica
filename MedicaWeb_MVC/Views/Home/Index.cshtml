@@ -1,13 +1,58 @@
 ﻿@{
-	ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-	<h1 class="display-4">Welcome</h1>
-	<h2>Example body text</h2>
-	<p>Nullam quis risus eget <a href="#">urna mollis ornare</a> vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
-	<p><small>This line of text is meant to be treated as fine print.</small></p>
-	<p>The following is <strong>rendered as bold text</strong>.</p>
-	<p>The following is <em>rendered as italicized text</em>.</p>
-	<p>An abbreviation of the word attribute is <abbr title="attribute">attr</abbr>.</p>
+<div class="container text-center mt-5">
+    <!-- Hero Section -->
+    <h1 class="display-4 fw-bold text-primary">Welcome to Science Hub</h1>
+    <p class="lead text-muted">Expand your knowledge with our interactive science courses.</p>
+
+    <!-- Action Buttons -->
+    <div class="mt-4">
+        <a href="/Account/Login" class="btn btn-primary btn-lg me-2">Login</a>
+        <a href="/Account/Register" class="btn btn-outline-secondary btn-lg">Register</a>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- Science Courses Section -->
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-lg">
+                <img src="https://source.unsplash.com/400x250/?physics" class="card-img-top" alt="Physics">
+                <div class="card-body">
+                    <h5 class="card-title">Physics</h5>
+                    <p class="card-text">Explore the laws of the universe, from motion to quantum mechanics.</p>
+                    <a href="/Courses/Physics" class="btn btn-outline-primary">Explore</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-lg">
+                <img src="https://source.unsplash.com/400x250/?chemistry" class="card-img-top" alt="Chemistry">
+                <div class="card-body">
+                    <h5 class="card-title">Chemistry</h5>
+                    <p class="card-text">Dive into the world of atoms, molecules, and chemical reactions.</p>
+                    <a href="/Courses/Chemistry" class="btn btn-outline-primary">Explore</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-lg">
+                <img src="https://source.unsplash.com/400x250/?biology" class="card-img-top" alt="Biology">
+                <div class="card-body">
+                    <h5 class="card-title">Biology</h5>
+                    <p class="card-text">Understand the secrets of life, from cells to ecosystems.</p>
+                    <a href="/Courses/Biology" class="btn btn-outline-primary">Explore</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <!-- Footer -->
+    <p class="text-muted">Join thousands of learners exploring the wonders of science.</p>
 </div>

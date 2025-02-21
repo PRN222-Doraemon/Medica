@@ -21,6 +21,7 @@ namespace MedicaWeb_MVC.Extensions
 
             // Register service
             services.AddScoped<ICourseService, CourseService>();
+            services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 

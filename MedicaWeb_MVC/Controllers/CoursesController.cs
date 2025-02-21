@@ -4,6 +4,7 @@ using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Courses;
 using MedicaWeb_MVC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NuGet.Protocol.Core.Types;
@@ -22,16 +23,17 @@ namespace MedicaWeb_MVC.Controllers
             _categoryRepo = categoryRepo;
             _mapper = mapper;
         }
-        public async Task<IActionResult> Index([FromQuery]CourseParams courseParams)
+
+        public async Task<IActionResult> Index([FromQuery] CourseParams courseParams)
         {
             ViewData["Categories"] = new SelectList(
-                await _categoryRepo.ListAllAsync(), 
-                "Id", 
-                "Name", 
+                await _categoryRepo.ListAllAsync(),
+                "Id",
+                "Name",
                 courseParams.CategoryID);
 
             ViewData["Status"] = new SelectList(
-                new List<string> { CourseStatus.Active.ToString(), CourseStatus.Inactive.ToString() }, 
+                new List<string> { CourseStatus.Active.ToString(), CourseStatus.Inactive.ToString() },
                 selectedValue: courseParams.Status?.ToString() ?? CourseStatus.Active.ToString());
 
             var spec = new CourseSpecification(courseParams);
@@ -41,7 +43,7 @@ namespace MedicaWeb_MVC.Controllers
             {
                 Items = _mapper.Map<IEnumerable<CourseVM>>(courses),
                 PagingInfo = new PagingVM { CurrentPage = courseParams.PageIndex, TotalItems = courses.Count() },
-                SearchValue = new SearchbarVM { Controller = "Courses", Action = "Index", SearchText = courseParams.Search}
+                SearchValue = new SearchbarVM { Controller = "Courses", Action = "Index", SearchText = courseParams.Search }
             };
             return View(model);
         }
@@ -82,7 +84,7 @@ namespace MedicaWeb_MVC.Controllers
                     var course = _mapper.Map<Course>(courseVM);
                     await _courseService.CreateCourseAsync(course);
                     TempData["success"] = "Successfully created a new course!";
-                    return RedirectToAction(nameof(Index));                  
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {

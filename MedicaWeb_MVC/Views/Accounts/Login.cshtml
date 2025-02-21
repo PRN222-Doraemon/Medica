@@ -1,0 +1,40 @@
+﻿@model LoginVM
+
+@{
+	ViewData["Title"] = "Login";
+}
+
+<h2>Login</h2>
+
+<form asp-action="Login" method="post" asp-controller="Accounts">
+
+	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+	<!-- Email Field -->
+	<div>
+		<label asp-for="@Model.UserName"></label>
+		<input asp-for="@Model.UserName" type="text" />
+		<span asp-validation-for="@Model.UserName" class="text-danger"></span>
+	</div>
+
+	<!-- Password Field -->
+	<div>
+		<label asp-for="@Model.Password"></label>
+		<input asp-for="@Model.Password" type="password" required />
+		<span asp-validation-for="@Model.Password" class="text-danger"></span>
+	</div>
+
+	<!-- Remember Me -->
+	<div>
+		<input asp-for="@Model.IsRememberMe" type="checkbox" />
+		<label asp-for="@Model.IsRememberMe"></label>
+	</div>
+
+	<button type="submit">Login</button>
+
+	<a asp-action="GoogleLogin">Login with Google</a>
+</form>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
