@@ -20,7 +20,7 @@
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <h1 class="display-5 fw-bold mb-0">@Model.Name</h1>
-                    <a asp-action="Update" asp-controller="Courses" asp-route-id="@Model.Id"
+                    <a asp-action="Upsert" asp-controller="Courses" asp-route-id="@Model.Id"
                        class="btn btn-outline-primary">
                         <i class="bi bi-pencil"></i> Update Course
                     </a>
@@ -200,7 +200,7 @@
         <!-- Course Card -->
         <div class="col-lg-4">
             <div class="card shadow-sm position-sticky" style="top: 2rem;">
-                <img src="/api/placeholder/800/400" class="card-img-top" alt="@Model.Name">
+                <img src="@Model.ImgUrl" class="card-img-top" alt="@Model.Name">
                 <div class="card-body">
                     <button class="btn btn-primary btn-lg w-100 mb-4">View Classes</button>
 

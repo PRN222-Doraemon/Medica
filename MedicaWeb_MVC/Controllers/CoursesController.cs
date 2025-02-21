@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Constants;
 using Core.Entities;
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
@@ -6,6 +7,7 @@ using Core.Specifications.Courses;
 using MedicaWeb_MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Core.Types;
 using System.Net.WebSockets;
 
@@ -13,14 +15,19 @@ namespace MedicaWeb_MVC.Controllers
 {
     public class CoursesController : Controller
     {
-        private ICourseService _courseService;
-        private IGenericRepository<Category> _categoryRepo;
-        private IMapper _mapper;
-        public CoursesController(ICourseService courseService, IGenericRepository<Category> categoryRepo, IMapper mapper)
+        private readonly ICourseService _courseService;
+        private readonly ICloudinaryService _cloudinaryService;
+        private readonly IGenericRepository<Category> _categoryRepo;
+        private readonly IMapper _mapper;
+        private readonly IUserService _userService;
+        public CoursesController(ICourseService courseService, IGenericRepository<Category> categoryRepo, 
+            IMapper mapper, IUserService userService, ICloudinaryService cloudinaryService)
         {
             _courseService = courseService;
             _categoryRepo = categoryRepo;
             _mapper = mapper;
+            _userService = userService;
+            _cloudinaryService = cloudinaryService;
         }
         public async Task<IActionResult> Index([FromQuery]CourseParams courseParams)
         {
@@ -51,44 +58,78 @@ namespace MedicaWeb_MVC.Controllers
             var course = await _courseService.GetCourseByIdAsync(id);
             return View(_mapper.Map<CourseVM>(course));
         }
-        [HttpGet]
-        public async Task<IActionResult> Update(int id)
-        {
-            var course = await _courseService.GetCourseByIdAsync(id);
-            return View(_mapper.Map<CourseVM>(course));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Update(CourseCreateVM courseVM)
-        {
-            var course = _mapper.Map<Course>(courseVM);
-            await _courseService.UpdateCourseAsync(course);
-            course = await _courseService.GetCourseByIdAsync(course.Id);
-            return View(_mapper.Map<CourseVM>(course));
-        }
-
-        public async Task<IActionResult> CreateAsync()
+        public async Task<IActionResult> Upsert(int? id)
         {
             ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
-            return View();
+
+            // create a new course
+            if (id == null)
+            {
+                ViewData["Title"] = "Create Course";
+                return View(new CourseCreateVM());
+            }
+
+            // Update course
+            ViewData["Title"] = "Update Course";
+            var course = await _courseService.GetCourseByIdAsync(id.Value);
+            if (course == null)
+            {
+                return NotFound();
+            }
+            return View(_mapper.Map<CourseCreateVM>(course));
         }
+
         [HttpPost]
-        public async Task<IActionResult> Create(CourseCreateVM courseVM)
+        public async Task<IActionResult> Upsert(CourseCreateVM courseVM)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var course = _mapper.Map<Course>(courseVM);
-                    await _courseService.CreateCourseAsync(course);
-                    TempData["success"] = "Successfully created a new course!";
-                    return RedirectToAction(nameof(Index));                  
+                    Course course;
+                    string? imgUrl = null;
+                    // upload image to Cloudinary and save image url
+                    if(courseVM.ImageFile != null)
+                    {
+                        imgUrl = await _cloudinaryService.UploadImageAsync(courseVM.ImageFile);                       
+                    }
+                    
+                    // Add new course
+                    if (courseVM.Id == 0)
+                    {
+                        course = _mapper.Map<Course>(courseVM);
+                        if (!string.IsNullOrEmpty(imgUrl))
+                        {
+                            course.ImgUrl = imgUrl;
+                        }
+                        // created by user ID value is just for testing, it will be updated later
+                        course.CreatedByUserID = 1;
+                        await _courseService.CreateCourseAsync(course);
+                        TempData["success"] = "Successfully created a new course!";
+                    }
+                    // Update course
+                    else
+                    {
+                        course = await _courseService.GetCourseByIdAsync(courseVM.Id);
+                        if (course == null)
+                        {
+                            return NotFound();
+                        }
+                        _mapper.Map(courseVM, course);
+                        if (!string.IsNullOrEmpty(imgUrl))
+                        {
+                            course.ImgUrl = imgUrl;
+                        }
+                        await _courseService.UpdateCourseAsync(course);
+                        TempData["success"] = "Successfully updated a new course!";
+                    }
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
                 {
-                    TempData["error"] = ex.Message;
+                    TempData["error"] = ex.InnerException?.Message ?? ex.Message;
                 }
-            }
+            }          
             ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
             return View(courseVM);
         }
