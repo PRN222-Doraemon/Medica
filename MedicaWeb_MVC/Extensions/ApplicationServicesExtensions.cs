@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
+using Core.Helpers;
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
-using Infrastructure.Persistence;
 using Infrastructure.Repositories;
 using Infrastructure.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.EntityFrameworkCore;
 
 namespace MedicaWeb_MVC.Extensions
 {
@@ -24,6 +22,11 @@ namespace MedicaWeb_MVC.Extensions
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
+
+
+            // config cloudinary
+            services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
 
             return services;
         }

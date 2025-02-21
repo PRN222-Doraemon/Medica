@@ -1,11 +1,7 @@
-﻿using Core.Constants;
-using Core.Entities;
-using Core.Entities.Identity;
-using Infrastructure.Persistence.Seeders;
+﻿using Core.Entities.Identity;
 using Infrastructure.Persistence.Seeders.FakeData;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Infrastructure.Persistence
 {
@@ -24,7 +20,7 @@ namespace Infrastructure.Persistence
         // =====================================
 
         public ApplicationIdentityDbContextSeeder(
-            ApplicationDbContext dbContext, 
+            ApplicationDbContext dbContext,
             UserManager<ApplicationUser> userManager)
         {
             _dbContext = dbContext;

@@ -1,10 +1,6 @@
-﻿using Core.Entities.Identity;
-using Core.Interfaces.Services;
-using Infrastructure.Services;
+﻿using Core.Interfaces.Services;
 using MedicaWeb_MVC.ViewModels;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace MedicaWeb_MVC.Controllers
 {

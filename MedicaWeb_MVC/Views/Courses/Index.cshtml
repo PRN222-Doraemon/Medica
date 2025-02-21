@@ -16,7 +16,7 @@
                     </select>
                 </div>
             </form>
-            <a class="btn btn-primary d-flex align-items-center gap-2" asp-controller="Courses" asp-action="Create">
+            <a class="btn btn-primary d-flex align-items-center gap-2" asp-controller="Courses" asp-action="Upsert">
                 <i class="bi bi-plus-lg"></i>
                 Create new
             </a>
@@ -58,6 +58,10 @@
                 </div>
             </div>
         }
+    </div>
+
+    <div>
+        @await Html.PartialAsync("~/Views/Shared/ReusableViews/_Paging.cshtml", Model.PagingInfo)
     </div>
 </div>
 
