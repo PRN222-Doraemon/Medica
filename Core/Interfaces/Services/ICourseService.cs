@@ -11,6 +11,5 @@ namespace Core.Interfaces.Services
         Task CreateCourseAsync(Course course);
         Task UpdateCourseAsync(Course course);
         Task DeleteCourseAsync(int id);
-
     }
 }

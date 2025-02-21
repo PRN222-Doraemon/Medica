@@ -4,7 +4,7 @@ namespace Core.Interfaces.Services
 {
     public interface ICloudinaryService
     {
-        Task<string> UploadImageAsync(IFormFile file);
+        Task<string> UploadAsync(IFormFile file);
         Task DeleteImageAsync(string publicId);
     }
 }

@@ -6,7 +6,7 @@ namespace Core.Specifications.Courses
 {
     public class CourseSpecification : BaseSpecification<Course>
     {
-        public CourseSpecification(CourseParams courseParam)
+        public CourseSpecification(CourseParams courseParam, bool applyPaging = true)
             :base(c => (string.IsNullOrEmpty(courseParam.Search) || c.Name.ToLower().Contains(courseParam.Search)) &&
             (!courseParam.CategoryID.HasValue || courseParam.CategoryID == c.CategoryID) &&
             (!courseParam.Status.HasValue|| courseParam.Status == c.Status) &&
@@ -26,9 +26,11 @@ namespace Core.Specifications.Courses
                                     .ThenInclude(rc => rc.User));
             CustomIncludes.Add(x => x.Include(c => c.Feedbacks)
                                     .ThenInclude(f => f.Student));
-            //ApplyPaging(courseParam.PageSize * (courseParam.PageIndex - 1),
-            //    courseParam.PageSize);
-
+            if(applyPaging)
+            {
+                ApplyPaging(courseParam.PageSize * (courseParam.Page - 1),
+                courseParam.PageSize);
+            }
         }
 
         public CourseSpecification(int id)

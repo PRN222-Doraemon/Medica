@@ -28,6 +28,7 @@ namespace Core.Constants
             public const int MAX_VISIBLE_REVIEWS = 2;
             public const int MAX_VISIBLE_CHAPTERS = 3;
             public const int MAX_VISIBLE_RESOURCES = 10;
+            public const int MAX_VISIBLE_COURSES = 6;
         }
     }
 }
