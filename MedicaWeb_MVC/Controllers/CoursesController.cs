@@ -42,12 +42,14 @@ namespace MedicaWeb_MVC.Controllers
                 selectedValue: courseParams.Status?.ToString() ?? CourseStatus.Active.ToString());
 
             var spec = new CourseSpecification(courseParams);
+            var countSpec = new CourseSpecification(courseParams, false);
             var courses = await _courseService.GetCoursesAsync(spec);
+            var totalCourses = (await _courseService.GetCoursesAsync(countSpec)).Count();
 
             var model = new ListVM<CourseVM>
             {
                 Items = _mapper.Map<IEnumerable<CourseVM>>(courses),
-                PagingInfo = new PagingVM { CurrentPage = courseParams.PageIndex, TotalItems = courses.Count() },
+                PagingInfo = new PagingVM { CurrentPage = courseParams.Page, TotalItems = totalCourses },
                 SearchValue = new SearchbarVM { Controller = "Courses", Action = "Index", SearchText = courseParams.Search}
             };
             return View(model);
@@ -61,6 +63,7 @@ namespace MedicaWeb_MVC.Controllers
         public async Task<IActionResult> Upsert(int? id)
         {
             ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
+            ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString()});
 
             // create a new course
             if (id == null)
@@ -87,21 +90,28 @@ namespace MedicaWeb_MVC.Controllers
                 try
                 {
                     Course course;
-                    string? imgUrl = null;
+
                     // upload image to Cloudinary and save image url
                     if(courseVM.ImageFile != null)
                     {
-                        imgUrl = await _cloudinaryService.UploadImageAsync(courseVM.ImageFile);                       
+                        courseVM.ImgUrl = await _cloudinaryService.UploadAsync(courseVM.ImageFile);                       
                     }
-                    
+                    // up load file
+                    foreach(var chapter in courseVM.CourseChapters)
+                    {
+                        foreach(var resource in chapter.Resources)
+                        {
+                            if (resource.File != null)
+                            {
+                                resource.FileUrl = await _cloudinaryService.UploadAsync(resource.File);
+                            }
+                        }
+                    }
+
                     // Add new course
                     if (courseVM.Id == 0)
                     {
                         course = _mapper.Map<Course>(courseVM);
-                        if (!string.IsNullOrEmpty(imgUrl))
-                        {
-                            course.ImgUrl = imgUrl;
-                        }
                         // created by user ID value is just for testing, it will be updated later
                         course.CreatedByUserID = 1;
                         await _courseService.CreateCourseAsync(course);
@@ -116,10 +126,6 @@ namespace MedicaWeb_MVC.Controllers
                             return NotFound();
                         }
                         _mapper.Map(courseVM, course);
-                        if (!string.IsNullOrEmpty(imgUrl))
-                        {
-                            course.ImgUrl = imgUrl;
-                        }
                         await _courseService.UpdateCourseAsync(course);
                         TempData["success"] = "Successfully updated a new course!";
                     }
@@ -131,6 +137,8 @@ namespace MedicaWeb_MVC.Controllers
                 }
             }          
             ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
+            ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }
+            );
             return View(courseVM);
         }
     }

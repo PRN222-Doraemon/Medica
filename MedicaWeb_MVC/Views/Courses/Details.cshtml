@@ -96,9 +96,33 @@
                                         <ul class="list-group list-group-flush">
                                             @foreach (var resource in chapter.Resources)
                                             {
-                                                <li class="list-group-item d-flex align-items-center gap-2">
-                                                    <i class="bi bi-play-circle"></i>
-                                                    <span>@resource.Title</span>
+                                                <li class="list-group-item d-flex align-items-center gap-3 justify-content-between">
+                                                    <div class="d-flex align-items-center gap-2">
+                                                        @if (resource.ResourceType == ResourceType.Slide)
+                                                        {
+                                                            <i class="bi bi-file-pdf text-danger"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="bi bi-play-circle text-primary"></i>
+                                                        }
+                                                        <span>@resource.Title</span>
+                                                    </div>
+
+                                                    <a href="@resource.FileUrl"
+                                                       target="_blank"
+                                                       class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1">
+                                                        @if (resource.FileUrl.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                                                        {
+                                                            <i class="bi bi-download"></i>
+                                                            <span>Download PDF</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="bi bi-play"></i>
+                                                            <span>Watch Video</span>
+                                                        }
+                                                    </a>
                                                 </li>
                                             }
                                         </ul>

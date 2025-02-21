@@ -24,7 +24,7 @@ namespace Infrastructure.Services
             _folderName = cloudinarySettings.FolderName;
         }
 
-        public async Task<string> UploadImageAsync(IFormFile file)
+        public async Task<string> UploadAsync(IFormFile file)
         {
             if (file == null || file.Length == 0)
                 throw new ArgumentException("No file was provided");

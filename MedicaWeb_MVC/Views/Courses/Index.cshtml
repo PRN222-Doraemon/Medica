@@ -59,6 +59,10 @@
             </div>
         }
     </div>
+
+    <div>
+        @await Html.PartialAsync("~/Views/Shared/ReusableViews/_Paging.cshtml", Model.PagingInfo)
+    </div>
 </div>
 
 

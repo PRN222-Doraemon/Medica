@@ -9,6 +9,8 @@ namespace MedicaWeb_MVC.ViewModels
         public string Title { get; set; }
         public string? Description { get; set; }
         public string? FileUrl { get; set; }
+        public IFormFile? File { get; set; }
+
         public int CreatedByUserID { get; set; } = 8;
         public ResourceType ResourceType { get; set; } = ResourceType.Slide;
     }
