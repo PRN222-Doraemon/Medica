@@ -1,5 +1,13 @@
+using AutoMapper;
+using Core.Entities;
+using Core.Interfaces.Repos;
+using Core.Interfaces.Services;
+using Core.Specifications.Courses;
 using MedicaWeb_MVC.Models;
+using MedicaWeb_MVC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 
 namespace MedicaWeb_MVC.Controllers
@@ -10,46 +18,28 @@ namespace MedicaWeb_MVC.Controllers
         // === Fields & Props
         // =========================
 
-        private readonly ILogger<HomeController> _logger;
+        private readonly ICourseService _courseService;
+        private readonly IMapper _mapper;
 
         // =========================
         // === Constructors
         // =========================
-
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ICourseService courseService, IMapper mapper)
         {
-            _logger = logger;
+            _courseService = courseService;
+            _mapper = mapper;
         }
 
         // =========================
         // === Methods
         // =========================
 
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            // Define Narbar
-            //var navbarVM = new NavbarVM()
-            //{
-            //    MenuItems = new List<NavbarItemVM>
-            //    {
-            //         new NavbarItemVM { Name = "Courses", Endpoint = Url.Action("Index", "Courses") ?? string.Empty },
-            //        new NavbarItemVM { Name = "News", Endpoint = Url.Action("Index", "News") ?? string.Empty},
-            //        new NavbarItemVM { Name = "My Learnings", Endpoint = Url.Action("Index", "Mylearning") ?? string.Empty }
-            //    }
-            //};
-
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var spec = new TopCoursesByFeedbacksSpecification(3);
+            var courses = await _courseService.GetCoursesAsync(spec);
+            return View(_mapper.Map<IEnumerable<Course>, IEnumerable<CourseVM>>(courses));
         }
     }
 }

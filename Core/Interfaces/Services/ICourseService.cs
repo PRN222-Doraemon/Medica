@@ -1,6 +1,5 @@
 ﻿using Core.Entities;
 using Core.Specifications;
-using Core.Specifications.Courses;
 
 namespace Core.Interfaces.Services
 {

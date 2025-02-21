@@ -1,5 +1,4 @@
-﻿using Core.Entities.Identity;
-using Core.Entities;
+﻿using Core.Entities;
 
 namespace MedicaWeb_MVC.ViewModels
 {
@@ -19,12 +18,12 @@ namespace MedicaWeb_MVC.ViewModels
         public DateTime UpdatedAt { get; set; }
         public IEnumerable<CourseChapterVM> CourseChapters { get; set; } = new List<CourseChapterVM>();
         public IEnumerable<CommentVM> Comments { get; set; } = new List<CommentVM>();
-        public IEnumerable<FeedbackVM> Feedbacks { get; set; } = new List<FeedbackVM>();
+        public virtual IEnumerable<FeedbackVM> Feedbacks { get; set; } = new List<FeedbackVM>();
         public virtual ICollection<Classroom> Classrooms { get; set; } = new HashSet<Classroom>();
 
         public int TotalChapters => CourseChapters.Count();
         public int TotalResources => CourseChapters.Sum(chapter => chapter.TotalResources);
-        public decimal Rates => (Feedbacks.Count()>0) ? Feedbacks.Average(f => f.Rating) : 0;
+        public decimal Rates => (Feedbacks.Count() > 0) ? Feedbacks.Average(f => f.Rating) : 0;
         public int Reviews => Feedbacks.Count();
 
     }

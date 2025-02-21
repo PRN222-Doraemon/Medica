@@ -1,5 +1,4 @@
 ﻿using Core.Ultilities.Seeders;
-using System.Net.WebSockets;
 using System.Text;
 
 namespace Infrastructure.Persistence.Seeders

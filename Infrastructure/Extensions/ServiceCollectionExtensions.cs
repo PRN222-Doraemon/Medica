@@ -2,7 +2,9 @@
 using Core.Ultilities.Seeders;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Seeders;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,9 +16,36 @@ namespace Infrastructure.Extensions
         {
             try
             {
-                services.AddIdentity<ApplicationUser, ApplicationRole>()
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders();
+                // Registers the database context with the DI container
+                services.AddDbContext<ApplicationDbContext>(opt =>
+                {
+                    opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                });
+
+                // Configure Identity and Authentication & Authorization
+                services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
+                {
+                    o.Password.RequireDigit = true;
+                    o.Password.RequiredLength = 8;
+                    o.Password.RequireUppercase = false;
+                    o.Password.RequireLowercase = false;
+                    o.Password.RequireNonAlphanumeric = false;
+                    o.Password.RequireDigit = false;
+                }).AddEntityFrameworkStores<ApplicationDbContext>()
+                  .AddDefaultTokenProviders();
+
+                services.ConfigureApplicationCookie(o =>
+                {
+                    o.Cookie.HttpOnly = true;
+                    o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    o.Cookie.SameSite = SameSiteMode.Strict;
+                    o.Cookie.IsEssential = true;
+
+                    o.LoginPath = "/Accounts/Login";
+                    o.AccessDeniedPath = "/Accounts/AccessDenied";
+                    o.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Non-Activiy time is 30 minutes
+                    o.SlidingExpiration = true; // Extend the ticket if active
+                });
 
                 // Add FileReader service
                 services.AddScoped<IFileReader, FileReader>();

@@ -1,5 +1,6 @@
 ﻿namespace Infrastructure.Persistence.Seeders.Data;
 
+using Core.Constants;
 using Core.Entities.Identity;
 
 internal static class IdentityData
@@ -133,21 +134,21 @@ internal static class IdentityData
     {
         List<ApplicationRole> roles = new List<ApplicationRole>
         {
-            new(UserRoles.Student)
+            new(AppCts.Roles.Student)
             {
-                NormalizedName = UserRoles.Student.ToUpper()
+                NormalizedName = AppCts.Roles.Student.ToUpper()
             },
-            new(UserRoles.Admin)
+            new(AppCts.Roles.Admin)
             {
-                NormalizedName = UserRoles.Admin.ToUpper()
+                NormalizedName = AppCts.Roles.Admin.ToUpper()
             },
-            new(UserRoles.Employee)
+            new(AppCts.Roles.Employee)
             {
-                NormalizedName = UserRoles.Employee.ToUpper()
+                NormalizedName = AppCts.Roles.Employee.ToUpper()
             },
-            new(UserRoles.Lecturer)
+            new(AppCts.Roles.Lecturer)
             {
-                NormalizedName = UserRoles.Lecturer.ToUpper()
+                NormalizedName = AppCts.Roles.Lecturer.ToUpper()
             },
         };
 

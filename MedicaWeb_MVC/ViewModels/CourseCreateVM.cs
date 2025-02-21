@@ -1,7 +1,4 @@
-﻿using Core.Entities.Identity;
-using Core.Entities;
-
-namespace MedicaWeb_MVC.ViewModels
+﻿namespace MedicaWeb_MVC.ViewModels
 {
     public class CourseCreateVM
     {

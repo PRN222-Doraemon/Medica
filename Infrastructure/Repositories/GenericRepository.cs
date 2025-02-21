@@ -1,5 +1,4 @@
-﻿using Castle.Core.Logging;
-using Core.Entities;
+﻿using Core.Entities;
 using Core.Interfaces.Repos;
 using Core.Specifications;
 using Infrastructure.Persistence;

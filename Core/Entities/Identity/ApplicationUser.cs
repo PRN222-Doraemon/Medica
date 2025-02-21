@@ -11,6 +11,8 @@ namespace Core.Entities.Identity
 
         public string? ImageUrl { get; set; } = default!;
 
+        public string FullName => $"{FirstName} {LastName}";
+
         public DateTime DateOfBirth { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
@@ -36,11 +38,5 @@ namespace Core.Entities.Identity
         Disabled
     }
 
-    public static class UserRoles
-    {
-        public const string Student = "Student";
-        public const string Employee = "Employee";
-        public const string Lecturer = "Lecturer";
-        public const string Admin = "Admin";
-    }
+
 }

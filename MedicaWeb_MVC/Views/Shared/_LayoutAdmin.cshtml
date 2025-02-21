@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@inject SignInManager<ApplicationUser> _signInManager;
+
+<!DOCTYPE html>
 <html lang="en">
 
 @* Head & Metadata *@
@@ -21,31 +23,44 @@
 
 	@* Container *@
 	<div class="row flex-grow-1">
-		<!-- Sidebar - Takes up 3 columns -->
-		<aside class="col-md-3 col-xl-2 col-12">
-			<partial name="ReusableViews/_SideBar" />
-		</aside>
 
-		<!-- Main Content - Takes up 9 columns -->
-		<main role="main" class="col-md-9 col-xl-10 col-12 p-3">
-			<div class="container-fluid">
-				@RenderBody()
-				<partial name="ReusableViews/_Notification" />
-			</div>
-		</main>
+		@if (_signInManager.IsSignedIn(User))
+		{
+			<!-- Sidebar -->
+			<aside class="col-md-3 col-xl-2 col-12">
+				<partial name="ReusableViews/_SideBar" />
+			</aside>
+
+			<!-- Main Content -->
+			<main role="main" class="col-md-9 col-xl-10 col-12 p-3">
+				<div class="container-fluid">
+					@RenderBody()
+				</div>
+			</main>
+		}
+		else
+		{
+			<main role="main">
+				<div class="container-fluid">
+					@RenderBody()
+				</div>
+			</main>
+		}
 	</div>
-
-	@* Footer *@
-	<partial name="ReusableViews/_Footer" />
 
 	@* jQuery and Libraries - Load them at the bottom to optimize performance *@
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/lib/toastr.js/toastr.min.js"></script>
 	<script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
-	<script src="~/lib/datatables.net/datatables.min.js" />
+	<script src="~/lib/datatables.net/datatables.min.js"></script>
 	<script src="~/lib/datatables.net-bs5/datatables.bootstrap5.min.js" asp-append-version="true"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
+
+	@* Applied All Page Partial Views *@
+	<partial name="ReusableViews/_Notification" />
+	<partial name="ReusableViews/_Footer" />
+
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

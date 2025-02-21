@@ -1,44 +1,43 @@
 ﻿using AutoMapper;
-using Core.Constants;
 using Core.Entities;
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Courses;
 using MedicaWeb_MVC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol.Core.Types;
-using System.Net.WebSockets;
 
 namespace MedicaWeb_MVC.Controllers
 {
+    [Authorize]
     public class CoursesController : Controller
     {
         private readonly ICourseService _courseService;
         private readonly ICloudinaryService _cloudinaryService;
         private readonly IGenericRepository<Category> _categoryRepo;
         private readonly IMapper _mapper;
-        private readonly IUserService _userService;
-        public CoursesController(ICourseService courseService, IGenericRepository<Category> categoryRepo, 
-            IMapper mapper, IUserService userService, ICloudinaryService cloudinaryService)
+        private readonly IAccountService _accountService;
+        public CoursesController(ICourseService courseService, IGenericRepository<Category> categoryRepo,
+            IMapper mapper, IAccountService accountService, ICloudinaryService cloudinaryService)
         {
             _courseService = courseService;
             _categoryRepo = categoryRepo;
             _mapper = mapper;
-            _userService = userService;
+            _accountService = accountService;
             _cloudinaryService = cloudinaryService;
         }
-        public async Task<IActionResult> Index([FromQuery]CourseParams courseParams)
+
+        public async Task<IActionResult> Index([FromQuery] CourseParams courseParams)
         {
             ViewData["Categories"] = new SelectList(
-                await _categoryRepo.ListAllAsync(), 
-                "Id", 
-                "Name", 
+                await _categoryRepo.ListAllAsync(),
+                "Id",
+                "Name",
                 courseParams.CategoryID);
 
             ViewData["Status"] = new SelectList(
-                new List<string> { CourseStatus.Active.ToString(), CourseStatus.Inactive.ToString() }, 
+                new List<string> { CourseStatus.Active.ToString(), CourseStatus.Inactive.ToString() },
                 selectedValue: courseParams.Status?.ToString() ?? CourseStatus.Active.ToString());
 
             var spec = new CourseSpecification(courseParams);
@@ -50,7 +49,7 @@ namespace MedicaWeb_MVC.Controllers
             {
                 Items = _mapper.Map<IEnumerable<CourseVM>>(courses),
                 PagingInfo = new PagingVM { CurrentPage = courseParams.Page, TotalItems = totalCourses },
-                SearchValue = new SearchbarVM { Controller = "Courses", Action = "Index", SearchText = courseParams.Search}
+                SearchValue = new SearchbarVM { Controller = "Courses", Action = "Index", SearchText = courseParams.Search }
             };
             return View(model);
         }
@@ -63,7 +62,7 @@ namespace MedicaWeb_MVC.Controllers
         public async Task<IActionResult> Upsert(int? id)
         {
             ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
-            ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString()});
+            ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() });
 
             // create a new course
             if (id == null)
@@ -92,14 +91,14 @@ namespace MedicaWeb_MVC.Controllers
                     Course course;
 
                     // upload image to Cloudinary and save image url
-                    if(courseVM.ImageFile != null)
+                    if (courseVM.ImageFile != null)
                     {
-                        courseVM.ImgUrl = await _cloudinaryService.UploadAsync(courseVM.ImageFile);                       
+                        courseVM.ImgUrl = await _cloudinaryService.UploadAsync(courseVM.ImageFile);
                     }
                     // up load file
-                    foreach(var chapter in courseVM.CourseChapters)
+                    foreach (var chapter in courseVM.CourseChapters)
                     {
-                        foreach(var resource in chapter.Resources)
+                        foreach (var resource in chapter.Resources)
                         {
                             if (resource.File != null)
                             {
@@ -135,7 +134,7 @@ namespace MedicaWeb_MVC.Controllers
                 {
                     TempData["error"] = ex.InnerException?.Message ?? ex.Message;
                 }
-            }          
+            }
             ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
             ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }
             );

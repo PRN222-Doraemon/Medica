@@ -1,9 +1,9 @@
-﻿using CloudinaryDotNet.Actions;
-using CloudinaryDotNet;
+﻿using CloudinaryDotNet;
+using CloudinaryDotNet.Actions;
+using Core.Helpers;
 using Core.Interfaces.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using Core.Helpers;
 
 namespace Infrastructure.Services
 {
@@ -14,14 +14,14 @@ namespace Infrastructure.Services
 
         public CloudinaryService(IConfiguration configuration)
         {
-            var cloudinarySettings = configuration.GetSection("CloudinarySettings").Get<CloudinarySettings>();
-            var account = new Account(
-                cloudinarySettings.CloudName,
-                cloudinarySettings.ApiKey,
-                cloudinarySettings.ApiSecret
-            );
-            _cloudinary = new Cloudinary(account);
-            _folderName = cloudinarySettings.FolderName;
+            //var cloudinarySettings = configuration.GetSection("CloudinarySettings").Get<CloudinarySettings>();
+            //var account = new Account(
+            //    cloudinarySettings.CloudName,
+            //    cloudinarySettings.ApiKey,
+            //    cloudinarySettings.ApiSecret
+            //);
+            //_cloudinary = new Cloudinary(account);
+            //_folderName = cloudinarySettings.FolderName;
         }
 
         public async Task<string> UploadAsync(IFormFile file)
