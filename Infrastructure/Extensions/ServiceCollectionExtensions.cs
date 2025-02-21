@@ -3,6 +3,7 @@ using Core.Ultilities.Seeders;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Seeders;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -33,20 +34,27 @@ namespace Infrastructure.Extensions
                     o.Password.RequireLowercase = false;
                     o.Password.RequireNonAlphanumeric = false;
                     o.Password.RequireDigit = false;
-                })
-                    .AddEntityFrameworkStores<ApplicationDbContext>()
-                    .AddDefaultTokenProviders();
+                }).AddEntityFrameworkStores<ApplicationDbContext>()
+                  .AddDefaultTokenProviders();
 
-                // Using Cookie-based Authorization
-                services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
+                // Using Cookie-based Authorization and Google Authentication
+                services.AddAuthentication(o =>
                 {
-                    options.Cookie.HttpOnly = true;
-                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                    options.Cookie.SameSite = SameSiteMode.Strict;
-                    options.LoginPath = "/Account/Login";
-                    options.AccessDeniedPath = "/Account/AccessDenied";
-                    options.SlidingExpiration = true; // Extend the cookie if active
+                    o.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    o.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+                }).AddCookie(o =>
+                {
+                    o.Cookie.HttpOnly = true;
+                    o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    o.Cookie.SameSite = SameSiteMode.Strict;
+                    o.LoginPath = "/Account/Login";
+                    o.AccessDeniedPath = "/Account/AccessDenied";
+                    o.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Expire within 30m
+                    o.SlidingExpiration = true; // Extend the cookie if active
+                }).AddGoogle(o =>
+                {
+                    o.ClientId = configuration["Authentication:Google:ClientId"];
+                    o.ClientSecret = configuration["Authentication:Google:ClientSecret"];
                 });
 
                 // Add FileReader service

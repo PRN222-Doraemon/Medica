@@ -14,8 +14,6 @@ namespace MedicaWeb_MVC.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services,
             IConfiguration config)
         {
-
-
             // Register Auto Mapper
             IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
             services.AddSingleton(mapper);
