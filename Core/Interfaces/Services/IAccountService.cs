@@ -9,8 +9,8 @@ namespace Core.Interfaces.Services
         Task<ApplicationUser?> GetUserByClaimsAsync(ClaimsPrincipal principal);
         Task<List<ApplicationRole>> GetAllRolesAsync();
         Task<bool> LoginAsync(string username, string password, bool isPersistence);
-        Task LoginGoogleAsync(ClaimsPrincipal principal);
-        Task<IdentityResult> RegisterAsync(ApplicationUser user, string password);
+        Task<bool> LoginGoogleAsync(ClaimsPrincipal principal);
+        Task<bool> RegisterAsync(ApplicationUser user, string password, string role);
         Task LogoutAsync();
     }
 }

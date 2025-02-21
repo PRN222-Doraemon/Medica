@@ -52,19 +52,47 @@ namespace Infrastructure.Services
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<IdentityResult> RegisterAsync(ApplicationUser user, string password)
+        public async Task<bool> RegisterAsync(ApplicationUser user, string password, string role)
         {
-            return await _userManager.CreateAsync(user, password);
-        }
+            var result = await _userManager.CreateAsync(user, password);
+            if (!result.Succeeded && user != null) return false;
 
-        public Task LoginGoogleAsync(ClaimsPrincipal principal)
-        {
-            return null;
+            var roleAssigned = await _userManager.AddToRoleAsync(user, role);
+            // Rollback if add role fail
+            if (!roleAssigned.Succeeded)
+            {
+                await _userManager.DeleteAsync(user);
+                return false;
+            }
+
+            // Add claims for further retrival
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.UserName!),
+                new Claim(ClaimTypes.Email, user.Email!),
+                new Claim(ClaimTypes.Role, role)
+            };
+
+            var claimResult = await _userManager.AddClaimsAsync(user, claims);
+
+            // Rollback if add claims fail
+            if (!claimResult.Succeeded)
+            {
+                await _userManager.DeleteAsync(user);
+                return false;
+            }
+
+            return true;
         }
 
         public async Task<List<ApplicationRole>> GetAllRolesAsync()
         {
             return await _roleManager.Roles.ToListAsync();
+        }
+
+        public Task<bool> LoginGoogleAsync(ClaimsPrincipal principal)
+        {
+            return null;
         }
     }
 }
