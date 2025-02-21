@@ -4,35 +4,49 @@
 	ViewData["Title"] = "Login";
 }
 
-<h2>Login</h2>
+<h2 class="text-center mb-4">Login</h2>
 
-<form asp-action="Login" method="post" asp-controller="Accounts">
-
+<form asp-action="Login" method="post" asp-controller="Accounts" class="mx-auto" style="max-width: 400px;">
 	<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-	<!-- Email Field -->
-	<div>
-		<label asp-for="@Model.UserName"></label>
-		<input asp-for="@Model.UserName" type="text" />
+	@* Hidden Fields *@
+	<input asp-for="@Model.ReturnUrl" type="hidden" />
+
+	<!-- Username Field -->
+	<div class="mb-3">
+		<label asp-for="@Model.UserName" class="form-label">
+			<i class="bi bi-person"></i> Username
+		</label>
+		<input asp-for="@Model.UserName" type="text" class="form-control" placeholder="Enter your username" />
 		<span asp-validation-for="@Model.UserName" class="text-danger"></span>
 	</div>
 
 	<!-- Password Field -->
-	<div>
-		<label asp-for="@Model.Password"></label>
-		<input asp-for="@Model.Password" type="password" required />
+	<div class="mb-3">
+		<label asp-for="@Model.Password" class="form-label">
+			<i class="bi bi-lock"></i> Password
+		</label>
+		<input asp-for="@Model.Password" type="password" class="form-control" placeholder="Enter your password" required />
 		<span asp-validation-for="@Model.Password" class="text-danger"></span>
 	</div>
 
 	<!-- Remember Me -->
-	<div>
-		<input asp-for="@Model.IsRememberMe" type="checkbox" />
-		<label asp-for="@Model.IsRememberMe"></label>
+	<div class="mb-3 form-check">
+		<input asp-for="@Model.IsRememberMe" type="checkbox" class="form-check-input" />
+		<label asp-for="@Model.IsRememberMe" class="form-check-label">
+			<i class="bi bi-check-circle"></i> Remember me
+		</label>
 	</div>
 
-	<button type="submit">Login</button>
+	<button type="submit" class="btn btn-primary w-100">
+		<i class="bi bi-box-arrow-in-right"></i> Login
+	</button>
 
-	<a asp-action="GoogleLogin">Login with Google</a>
+	<div class="text-center mt-3">
+		<a asp-action="GoogleLogin" class="btn btn-outline-danger w-100">
+			<i class="bi bi-google"></i> Login with Google
+		</a>
+	</div>
 </form>
 
 @section Scripts {

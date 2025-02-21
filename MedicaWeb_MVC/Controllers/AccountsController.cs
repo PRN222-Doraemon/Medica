@@ -1,5 +1,7 @@
-﻿using Core.Interfaces.Services;
+﻿using CloudinaryDotNet;
+using Core.Interfaces.Services;
 using MedicaWeb_MVC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicaWeb_MVC.Controllers
@@ -26,9 +28,16 @@ namespace MedicaWeb_MVC.Controllers
         // ==============================
 
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login([FromQuery] string? returnUrl = null)
         {
-            return View();
+            // Set returnUrl if accessing the authorize view
+            returnUrl ??= Url.Content("~/");
+
+            LoginVM loginVM = new()
+            {
+                ReturnUrl = returnUrl,
+            };
+            return View(loginVM);
         }
 
         [HttpPost]
@@ -37,10 +46,17 @@ namespace MedicaWeb_MVC.Controllers
             var loginResult = await _accountService.LoginAsync(loginVM.UserName, loginVM.Password, loginVM.IsRememberMe);
             if (loginResult)
             {
-                return RedirectToAction("Index", "Courses");
+                if (string.IsNullOrEmpty(loginVM.ReturnUrl))
+                {
+                    return RedirectToAction("Index", "Courses");
+                }
+                else
+                {
+                    return LocalRedirect(loginVM.ReturnUrl);
+                }
             }
 
-            TempData["Error"] = "Invalid email or password.";
+            TempData["error"] = "Invalid email or password.";
             return RedirectToAction(nameof(Login));
         }
     }

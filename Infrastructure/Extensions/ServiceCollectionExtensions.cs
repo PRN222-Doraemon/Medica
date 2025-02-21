@@ -40,10 +40,11 @@ namespace Infrastructure.Extensions
                     o.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                     o.Cookie.SameSite = SameSiteMode.Strict;
                     o.Cookie.IsEssential = true;
+
                     o.LoginPath = "/Accounts/Login";
                     o.AccessDeniedPath = "/Accounts/AccessDenied";
-                    o.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Expire within 30m
-                    o.SlidingExpiration = true; // Extend the cookie if active
+                    o.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Non-Activiy time is 30 minutes
+                    o.SlidingExpiration = true; // Extend the ticket if active
                 });
 
                 // Add FileReader service
