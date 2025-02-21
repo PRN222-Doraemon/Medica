@@ -1,4 +1,7 @@
-﻿using CloudinaryDotNet;
+﻿using AutoMapper;
+using CloudinaryDotNet;
+using Core.Constants;
+using Core.Entities.Identity;
 using Core.Interfaces.Services;
 using MedicaWeb_MVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -13,14 +16,15 @@ namespace MedicaWeb_MVC.Controllers
         // ==============================
 
         private readonly IAccountService _accountService;
+        private readonly IMapper _mapper;
 
         // ==============================
         // === Constructors
         // ==============================
-
-        public AccountsController(IAccountService accountService)
+        public AccountsController(IAccountService accountService, IMapper mapper)
         {
             _accountService = accountService;
+            _mapper = mapper;
         }
 
         // ==============================
@@ -57,7 +61,52 @@ namespace MedicaWeb_MVC.Controllers
             }
 
             TempData["error"] = "Invalid email or password.";
-            return RedirectToAction(nameof(Login));
+            return View(nameof(Login));
+        }
+
+        [HttpGet]
+        public IActionResult Register([FromQuery] string? returnUrl = null)
+        {
+            // Set returnUrl if accessing the authorize view
+            returnUrl ??= Url.Content("~/");
+
+            RegisterVM registerVM = new()
+            {
+                ReturnUrl = returnUrl,
+            };
+            return View(registerVM);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register([FromForm] RegisterVM registerVM)
+        {
+            if (ModelState.IsValid)
+            {
+                var applicationUser = _mapper.Map<RegisterVM, ApplicationUser>(registerVM);
+
+                // Only create account for student
+                if (await _accountService.RegisterAsync(applicationUser, registerVM.Password, AppCts.Roles.Student))
+                {
+                    if (string.IsNullOrEmpty(registerVM.ReturnUrl))
+                    {
+                        return RedirectToAction("Index", "Courses");
+                    }
+                    else
+                    {
+                        LocalRedirect(registerVM.ReturnUrl);
+                    }
+                }
+            }
+
+            return View(registerVM);
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await _accountService.LogoutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

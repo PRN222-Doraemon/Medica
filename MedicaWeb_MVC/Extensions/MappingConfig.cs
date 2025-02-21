@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using Core.Entities.Identity;
 using MedicaWeb_MVC.ViewModels;
 using Resource = Core.Entities.Resource;
 
@@ -11,6 +12,11 @@ namespace MedicaWeb_MVC.Extensions
         {
             return new MapperConfiguration(config =>
             {
+
+                // ===================================
+                // === Courses & Chapters & Resources
+                // ===================================
+
                 config.CreateMap<Course, CourseVM>()
                 .ForMember(dest => dest.CreatedByUserName, u => u.MapFrom(src => $"{src.CreatedBy.FirstName} {src.CreatedBy.LastName}"))
                 .ForMember(dest => dest.CategoryName, u => u.MapFrom(src => src.Category.Name)).ReverseMap();
@@ -32,12 +38,23 @@ namespace MedicaWeb_MVC.Extensions
                 config.CreateMap<ResourceCreateVM, Resource>().ReverseMap();
 
 
+                // ==============================
+                // === Comments & Feedbacks
+                // ==============================
+
                 config.CreateMap<Comment, CommentVM>()
                 .ForMember(dest => dest.UserName, u => u.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"));
 
                 config.CreateMap<Feedback, FeedbackVM>()
                 .ForMember(dest => dest.StudentName, u => u.MapFrom(src => $"{src.Student.FirstName} {src.Student.LastName}"))
                 .ForMember(dest => dest.StudentImgUrl, u => u.MapFrom(src => src.Student.ImageUrl));
+
+                // ==============================
+                // === Accounts
+                // ==============================
+
+                config.CreateMap<RegisterVM, ApplicationUser>();
+
 
             });
         }

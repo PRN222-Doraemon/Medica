@@ -50,6 +50,5 @@ namespace Core.Specifications.Courses
             CustomIncludes.Add(x => x.Include(c => c.Feedbacks)
                                     .ThenInclude(f => f.Student));
         }
-
     }
 }
