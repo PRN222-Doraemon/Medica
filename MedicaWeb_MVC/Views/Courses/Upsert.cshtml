@@ -1,8 +1,10 @@
 ﻿@model CourseCreateVM
 @{
-    ViewData["Title"] = "Update Course";
+    bool IsUpdate = false;
+    if(ViewBag.Title == "Update Course") {
+        IsUpdate = true;
+    }
 }
-
 <div class="container-fluid py-5">
     <div class="row justify-content-center">
         <div class="col-12">
@@ -11,16 +13,26 @@
                     <!-- Header with gradient background -->
                     <div class="bg-gradient-primary p-4 rounded-3 mb-4">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h1 class="h3 mb-0 text-white">Update Course</h1>
-                            <a asp-action="Details" asp-controller="Courses" asp-route-id="@Model.Id"
-                               class="btn btn-light">
-                                <i class="bi bi-arrow-left"></i> Back to Course
-                            </a>
+                            <h1 class="h3 mb-0 text-white">@ViewBag.Title</h1>
+                            @if(IsUpdate) {
+                                <a asp-action="Details" asp-controller="Courses" asp-route-id="@Model.Id"
+                                   class="btn btn-light">
+                                    <i class="bi bi-arrow-left"></i> Back to Course
+                                </a>
+                            }
+                            else {
+                                <a asp-action="Index" asp-controller="Courses"
+                                   class="btn btn-light">
+                                    <i class="bi bi-arrow-left"></i> Back to Courses
+                                </a>
+                            }
+                           
                         </div>
                     </div>
 
                     <form asp-action="Upsert" asp-controller="Courses" method="post" id="updateCourseForm" enctype="multipart/form-data">
                         <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="ImgUrl" />
                         @* <input hidden asp-for="@Model.CreatedByUserID" /> *@
 
                         <div class="row">
@@ -28,6 +40,38 @@
                             <div class="col-md-6 pe-md-4">
                                 <div class="mb-4 p-4 bg-light rounded-3">
                                     <h5 class="mb-3 text-primary border-bottom pb-2">Basic Information</h5>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-semibold">
+                                            <i class="bi bi-image me-2"></i>Course Image
+                                        </label>
+                                        <div class="d-flex gap-3 align-items-start">
+                                            <div class="position-relative" style="width: 200px; height: 120px;">
+                                                <img id="courseImagePreview"
+                                                     src="@Model.ImgUrl"
+                                                     class="img-fluid rounded shadow-sm"
+                                                     style="width: 200px; height: 120px; object-fit: cover;">
+                                                @if (!string.IsNullOrEmpty(Model.ImgUrl))
+                                                {
+                                                    <input type="hidden" asp-for="ImgUrl" />
+                                                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2"
+                                                            onclick="removeCourseImage(this)">
+                                                        <i class="bi bi-x"></i>
+                                                    </button>
+                                                }
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <input type="file"
+                                                       asp-for="@Model.ImageFile"
+                                                       id="courseImageInput"
+                                                       class="form-control">
+                                                <small class="text-muted d-block mt-2">
+                                                    Recommended size: 1280x720 pixels (16:9 ratio)<br>
+                                                    Maximum file size: 2MB<br>
+                                                    Supported formats: JPG, PNG
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="mb-3">
                                         <label asp-for="Name" class="form-label fw-semibold">
                                             <i class="bi bi-book me-2"></i>Course Name
@@ -46,7 +90,7 @@
                                         <label asp-for="Duration" class="form-label fw-semibold">
                                             <i class="bi bi-book me-2"></i>Duration
                                         </label>
-                                        <input asp-for="Duration" class="form-control form-control-lg shadow-sm" required>
+                                        <input asp-for="Duration" placeholder="hh:mm:ss" pattern="[0-9]{1,2}:[0-5][0-9]:[0-5][0-9]" class="form-control form-control-lg shadow-sm" required>
                                         <span asp-validation-for="Duration" class="text-danger"></span>
                                     </div>
                                     <div class="mb-3">
@@ -61,7 +105,7 @@
                                 <!-- Update button moved to left column -->
                                 <div class="d-grid gap-2">
                                     <button type="submit" class="btn btn-primary btn-lg shadow">
-                                        <i class="bi bi-check2-circle me-2"></i>Update Course
+                                        <i class="bi bi-check2-circle me-2"></i>SAVE
                                     </button>
                                 </div>
                             </div>
@@ -86,8 +130,8 @@
                                                 var chapter = Model.CourseChapters.ToList()[i];
                                                 var collapseId = $"collapse-{chapter.Id}";
 
-                                                <div class="accordion-item chapter-card mb-3 shadow-sm border" data-chapter-index="@i">
-                                                    <div class="accordion-header">
+                                                <div class="accordion-item chapter-card mb-3 shadow-sm border bg-light-blue" data-chapter-index="@i">
+                                                    <div class="accordion-header p-3">
                                                         <div class="d-flex align-items-center w-100">
                                                             <button class="btn btn-link text-primary fw-bold me-2" type="button"
                                                                     data-bs-toggle="collapse" data-bs-target="#@collapseId"
@@ -95,10 +139,16 @@
                                                                 <i class="bi bi-chevron-down"></i>
                                                             </button>
                                                             <input type="hidden" name="CourseChapters[@i].Id" value="@chapter.Id" />
-                                                            <input type="text" class="form-control chapter-name flex-grow-1"
-                                                                   name="CourseChapters[@i].Name"
-                                                                   value="@chapter.Name" required
-                                                                   placeholder="Enter chapter name">
+                                                            <div class="flex-grow-1">
+                                                                <input type="text" class="form-control chapter-name mb-2"
+                                                                       name="CourseChapters[@i].Name"
+                                                                       value="@chapter.Name" required
+                                                                       placeholder="Enter chapter name">
+                                                                <textarea class="form-control"
+                                                                          name="CourseChapters[@i].Description"
+                                                                          rows="2"
+                                                                          placeholder="Enter chapter description">@chapter.Description</textarea>
+                                                            </div>
 
                                                             <button type="button" class="btn btn-outline-danger btn-sm ms-2 me-2"
                                                                     onclick="removeChapter(this)">
@@ -122,7 +172,7 @@
                                                                                 <i class="bi bi-play-circle text-primary fs-5"></i>
                                                                                 <input type="hidden" name="CourseChapters[@i].Resources[@j].Id" value="@resource.Id" />
                                                                                 <div class="flex-grow-1">
-                                                                                    <input type="text" class="form-control"
+                                                                                    <input type="text" class="form-control mb-2"
                                                                                            name="CourseChapters[@i].Resources[@j].Title"
                                                                                            value="@resource.Title" required
                                                                                            placeholder="Enter resource title">
@@ -153,19 +203,25 @@
                                         }
                                         <!--Template for new chapter-->
                                         <template id="chapterTemplate">
-                                            <div class="accordion-item chapter-card mb-3 shadow-sm border" data-chapter-index="__CHAPTER_INDEX__">
-                                                <div class="accordion-header">
-                                                    <div class="d-flex align-items-center w-100">
+                                            <div class="accordion-item chapter-card mb-3 shadow-sm border bg-light-blue" data-chapter-index="__CHAPTER_INDEX__">
+                                                <div class="accordion-header border-bottom">
+                                                    <div class="d-flex align-items-center w-100 p-3">
                                                         <button class="btn btn-link text-primary fw-bold me-2" type="button"
                                                                 data-bs-toggle="collapse" data-bs-target="#collapse-__CHAPTER_ID__"
                                                                 aria-expanded="true" aria-controls="collapse-__CHAPTER_ID__">
                                                             <i class="bi bi-chevron-down"></i>
                                                         </button>
                                                         <input type="hidden" name="CourseChapters[__CHAPTER_INDEX__].Id" value="0" />
-                                                        <input type="text" class="form-control chapter-name flex-grow-1"
-                                                               name="CourseChapters[__CHAPTER_INDEX__].Name"
-                                                               value="" required
-                                                               placeholder="Enter chapter name">
+                                                        <div class="flex-grow-1">
+                                                            <input type="text" class="form-control chapter-name mb-2"
+                                                                   name="CourseChapters[__CHAPTER_INDEX__].Name"
+                                                                   value="" required
+                                                                   placeholder="Enter chapter name">
+                                                            <textarea class="form-control"
+                                                                      name="CourseChapters[__CHAPTER_INDEX__].Description"
+                                                                      rows="2"
+                                                                      placeholder="Enter chapter description"></textarea>
+                                                        </div>
                                                         <button type="button" class="btn btn-outline-danger btn-sm ms-2 me-2"
                                                                 onclick="removeChapter(this)">
                                                             <i class="bi bi-trash"></i>

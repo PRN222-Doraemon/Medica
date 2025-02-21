@@ -120,6 +120,7 @@ function updateResourceIndexes(chapter) {
     });
 }
 
+
 // Add validation for the form
 document.getElementById('updateCourseForm').addEventListener('submit', function (e) {
     const chapters = document.querySelectorAll('.chapter-card');
