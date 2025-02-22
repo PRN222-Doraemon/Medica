@@ -94,5 +94,11 @@ namespace Infrastructure.Services
         {
             return null;
         }
+
+        public bool IsSignedIn(ClaimsPrincipal principal)
+        {
+            if (principal == null) return false;
+            return _signInManager.IsSignedIn(principal);
+        }
     }
 }

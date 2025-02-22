@@ -42,6 +42,7 @@ namespace Infrastructure.Extensions
                     o.Cookie.IsEssential = true;
 
                     o.LoginPath = "/Accounts/Login";
+                    o.LogoutPath = "/Home/Index";
                     o.AccessDeniedPath = "/Accounts/AccessDenied";
                     o.ExpireTimeSpan = TimeSpan.FromMinutes(30); // Non-Activiy time is 30 minutes
                     o.SlidingExpiration = true; // Extend the ticket if active
