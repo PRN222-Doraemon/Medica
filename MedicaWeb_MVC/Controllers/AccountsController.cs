@@ -34,6 +34,11 @@ namespace MedicaWeb_MVC.Controllers
         [HttpGet]
         public IActionResult Login([FromQuery] string? returnUrl = null)
         {
+            if (_accountService.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Courses");
+            }
+
             // Set returnUrl if accessing the authorize view
             returnUrl ??= Url.Content("~/");
 
@@ -67,6 +72,11 @@ namespace MedicaWeb_MVC.Controllers
         [HttpGet]
         public IActionResult Register([FromQuery] string? returnUrl = null)
         {
+            if (_accountService.IsSignedIn(User))
+            {
+                return RedirectToAction("Index", "Courses");
+            }
+
             // Set returnUrl if accessing the authorize view
             returnUrl ??= Url.Content("~/");
 
@@ -101,7 +111,6 @@ namespace MedicaWeb_MVC.Controllers
             return View(registerVM);
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
