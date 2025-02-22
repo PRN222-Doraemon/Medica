@@ -24,7 +24,6 @@ namespace MedicaWeb_MVC.Extensions
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<ICloudinaryService, CloudinaryService>();
 
-
             // config cloudinary
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
 

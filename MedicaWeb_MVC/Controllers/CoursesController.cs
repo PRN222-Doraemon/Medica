@@ -3,10 +3,12 @@ using Core.Entities;
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Courses;
+using MedicaWeb_MVC.Hubs;
 using MedicaWeb_MVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 
 namespace MedicaWeb_MVC.Controllers
 {
@@ -18,14 +20,16 @@ namespace MedicaWeb_MVC.Controllers
         private readonly IGenericRepository<Category> _categoryRepo;
         private readonly IMapper _mapper;
         private readonly IAccountService _accountService;
+        private readonly IHubContext<MedicaHubs> _hub;
         public CoursesController(ICourseService courseService, IGenericRepository<Category> categoryRepo,
-            IMapper mapper, IAccountService accountService, ICloudinaryService cloudinaryService)
+            IMapper mapper, IAccountService accountService, ICloudinaryService cloudinaryService, IHubContext<MedicaHubs> hub)
         {
             _courseService = courseService;
             _categoryRepo = categoryRepo;
             _mapper = mapper;
             _accountService = accountService;
             _cloudinaryService = cloudinaryService;
+            _hub = hub;
         }
 
         public async Task<IActionResult> Index([FromQuery] CourseParams courseParams)
@@ -128,6 +132,7 @@ namespace MedicaWeb_MVC.Controllers
                         await _courseService.UpdateCourseAsync(course);
                         TempData["success"] = "Successfully updated a new course!";
                     }
+                    await _hub.Clients.All.SendAsync("ReceiveUpsert");
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)

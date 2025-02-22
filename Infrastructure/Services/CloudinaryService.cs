@@ -14,14 +14,14 @@ namespace Infrastructure.Services
 
         public CloudinaryService(IConfiguration configuration)
         {
-            //var cloudinarySettings = configuration.GetSection("CloudinarySettings").Get<CloudinarySettings>();
-            //var account = new Account(
-            //    cloudinarySettings.CloudName,
-            //    cloudinarySettings.ApiKey,
-            //    cloudinarySettings.ApiSecret
-            //);
-            //_cloudinary = new Cloudinary(account);
-            //_folderName = cloudinarySettings.FolderName;
+            var cloudinarySettings = configuration.GetSection("CloudinarySettings").Get<CloudinarySettings>();
+            var account = new Account(
+                cloudinarySettings.CloudName,
+                cloudinarySettings.ApiKey,
+                cloudinarySettings.ApiSecret
+            );
+            _cloudinary = new Cloudinary(account);
+            _folderName = cloudinarySettings.FolderName;
         }
 
         public async Task<string> UploadAsync(IFormFile file)
@@ -31,16 +31,16 @@ namespace Infrastructure.Services
 
             using (var stream = file.OpenReadStream())
             {
-                var uploadParams = new ImageUploadParams
+                string extension = Path.GetExtension(file.FileName).ToLower();
+                string resourceType = (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".gif")
+                ? "image" 
+                : "raw";
+                var uploadParams = new RawUploadParams
                 {
                     File = new FileDescription(file.FileName, stream),
                     Folder = _folderName,
-                    // Có thể thêm các transformation
-                    Transformation = new Transformation()
-                        .Width(800)
-                        .Height(600)
-                        .Crop("fill")
-                        .Quality(80)
+                    Overwrite = true,
+                    PublicId = file.FileName,
                 };
 
                 var uploadResult = await _cloudinary.UploadAsync(uploadParams);
