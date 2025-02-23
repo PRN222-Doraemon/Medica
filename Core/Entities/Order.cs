@@ -13,6 +13,7 @@ namespace Core.Entities
         public decimal TotalPrice { get; set; }
 
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
+        public virtual IEnumerable<Classroom> Classes { get; set; } = new List<Classroom>();
     }
     public enum OrderStatus
     {

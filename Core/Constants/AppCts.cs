@@ -22,6 +22,8 @@ namespace Core.Constants
             public static string CourseChapterPath = Path.Combine(JsonPath, "CourseChapterData.json");
             public static string ResourcePath = Path.Combine(JsonPath, "ResourceData.json");
             public static string CommentPath = Path.Combine(JsonPath, "CommentData.json");
+            public static string OrderPath = Path.Combine(JsonPath, "OrderData.json");
+            public static string OrderDetailPath = Path.Combine(JsonPath, "OrderDetailData.json");
         }
 
         /// <summary>
@@ -33,6 +35,7 @@ namespace Core.Constants
             public const int MAX_VISIBLE_CHAPTERS = 3;
             public const int MAX_VISIBLE_RESOURCES = 10;
             public const int MAX_VISIBLE_COURSES = 6;
+            public const int MAX_VISIBLE_MYLEARNING = 3;
         }
 
         /// <summary>
