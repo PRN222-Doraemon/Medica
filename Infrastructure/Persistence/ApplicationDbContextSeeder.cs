@@ -52,6 +52,8 @@ namespace Infrastructure.Persistence
             await new JsonDataSeeder<Resource>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.ResourcePath).SeedAsync();
             await new JsonDataSeeder<Comment>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.CommentPath).SeedAsync();
             await new JsonDataSeeder<Feedback>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.FeedbackPath).SeedAsync();
+            await new JsonDataSeeder<Order>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.OrderPath).SeedAsync();
+            await new JsonDataSeeder<OrderDetail>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.OrderDetailPath).SeedAsync();
         }
     }
 }

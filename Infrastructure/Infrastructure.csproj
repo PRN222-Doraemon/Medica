@@ -77,6 +77,12 @@
 	  <None Update="Persistence\Seeders\FakeData\FeedbackData.json">
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
+	  <None Update="Persistence\Seeders\FakeData\OrderData.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Persistence\Seeders\FakeData\OrderDetailData.json">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
   </ItemGroup>
 
 </Project>
