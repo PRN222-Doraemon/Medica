@@ -1,4 +1,5 @@
 ﻿using Core.Entities.Identity;
+using System.Runtime.Serialization;
 
 namespace Core.Entities
 {
@@ -14,19 +15,17 @@ namespace Core.Entities
         public Student Student { get; set; }
 
 
-        // 1 Lecturer - M Feedback
-        public int LecturerId { get; set; }
-        public Lecturer Lecturer { get; set; }
+        // 1 Course - M Feedback
+        public int CourseId { get; set; }
+        public Course Course { get; set; }
 
-
-        // 1 Classroom - M Feedback
-        public int ClassroomId { get; set; }
-        public Classroom Classroom { get; set; }
     }
 
     public enum FeedbackStatus
     {
+        [EnumMember(Value = "Enabled")]
         Enabled,
+        [EnumMember(Value = "Disabled")]
         Disabled
     }
 }

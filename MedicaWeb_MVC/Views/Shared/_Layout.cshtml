@@ -31,17 +31,19 @@
 		</div>
 	</main>
 
-	@* Footer *@
-	<partial name="ReusableViews/_Footer" />
-
 	@* jQuery and Libraries - Load them at the bottom to optimize performance *@
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/lib/toastr.js/toastr.min.js"></script>
 	<script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
-	<script src="~/lib/datatables.net/datatables.min.js" />
+	<script src="~/lib/datatables.net/datatables.min.js"></script>
 	<script src="~/lib/datatables.net-bs5/datatables.bootstrap5.min.js" asp-append-version="true"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
+
+	@* Applied All Page Partial Views *@
+	<partial name="ReusableViews/_Notification" />
+	<partial name="ReusableViews/_Footer" />
+
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

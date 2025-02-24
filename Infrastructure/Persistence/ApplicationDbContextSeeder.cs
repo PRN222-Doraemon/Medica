@@ -48,10 +48,12 @@ namespace Infrastructure.Persistence
             await new JsonDataSeeder<Category>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.CategoryPath).SeedAsync();
             await new JsonDataSeeder<Course>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.CoursePath).SeedAsync();
             await new JsonDataSeeder<Classroom>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.ClassroomPath).SeedAsync();
-            await new JsonDataSeeder<Feedback>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.FeedbackPath).SeedAsync();
             await new JsonDataSeeder<CourseChapter>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.CourseChapterPath).SeedAsync();
             await new JsonDataSeeder<Resource>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.ResourcePath).SeedAsync();
             await new JsonDataSeeder<Comment>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.CommentPath).SeedAsync();
+            await new JsonDataSeeder<Feedback>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.FeedbackPath).SeedAsync();
+            await new JsonDataSeeder<Order>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.OrderPath).SeedAsync();
+            await new JsonDataSeeder<OrderDetail>(_fileReader, _dbContext).AddRelativeFilePath(AppCts.SeederRelativePath.OrderDetailPath).SeedAsync();
         }
     }
 }

@@ -24,16 +24,10 @@ namespace Infrastructure.Configs
                 s => (FeedbackStatus)Enum.Parse(typeof(FeedbackStatus), s))
                 .HasColumnType("varchar(50)");
 
-            // 1 Lecturer - M Feedback
-            builder.HasOne(c => c.Lecturer)
+            // 1 Course - M Feedback
+            builder.HasOne(c => c.Course)
                 .WithMany(l => l.Feedbacks)
-                .HasForeignKey(c => c.LecturerId)
-                .OnDelete(DeleteBehavior.ClientCascade);
-
-            // 1 Classroom - M Feedback
-            builder.HasOne(c => c.Classroom)
-                .WithMany(l => l.Feedbacks)
-                .HasForeignKey(c => c.ClassroomId)
+                .HasForeignKey(c => c.CourseId)
                 .OnDelete(DeleteBehavior.ClientCascade);
 
             // 1 Student - M Feedback

@@ -1,4 +1,5 @@
-﻿using Core.Entities.Identity;
+﻿using Core.Constants;
+using Core.Entities.Identity;
 using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure.Persistence.Seeders.FakeData
@@ -14,21 +15,21 @@ namespace Infrastructure.Persistence.Seeders.FakeData
         {
             List<ApplicationRole> roles = new List<ApplicationRole>
             {
-                new(UserRoles.Student)
+                new(AppCts.Roles.Student)
                 {
-                    NormalizedName = UserRoles.Student.ToUpper()
+                    NormalizedName = AppCts.Roles.Student.ToUpper()
                 },
-                new(UserRoles.Admin)
+                new(AppCts.Roles.Admin)
                 {
-                    NormalizedName = UserRoles.Admin.ToUpper()
+                    NormalizedName = AppCts.Roles.Admin.ToUpper()
                 },
-                new(UserRoles.Employee)
+                new(AppCts.Roles.Employee)
                 {
-                    NormalizedName = UserRoles.Employee.ToUpper()
+                    NormalizedName = AppCts.Roles.Employee.ToUpper()
                 },
-                new(UserRoles.Lecturer)
+                new(AppCts.Roles.Lecturer)
                 {
-                    NormalizedName = UserRoles.Lecturer.ToUpper()
+                    NormalizedName = AppCts.Roles.Lecturer.ToUpper()
                 },
             };
 
@@ -175,19 +176,19 @@ namespace Infrastructure.Persistence.Seeders.FakeData
                 switch (user.FirstName.ToLower())
                 {
                     case "student":
-                        await userManager.AddToRoleAsync(user, UserRoles.Student);
+                        await userManager.AddToRoleAsync(user, AppCts.Roles.Student);
                         break;
 
                     case "employee":
-                        await userManager.AddToRoleAsync(user, UserRoles.Employee);
+                        await userManager.AddToRoleAsync(user, AppCts.Roles.Employee);
                         break;
 
                     case "admin":
-                        await userManager.AddToRoleAsync(user, UserRoles.Admin);
+                        await userManager.AddToRoleAsync(user, AppCts.Roles.Admin);
                         break;
 
                     case "lecturer":
-                        await userManager.AddToRoleAsync(user, UserRoles.Lecturer);
+                        await userManager.AddToRoleAsync(user, AppCts.Roles.Lecturer);
                         break;
                 }
             }

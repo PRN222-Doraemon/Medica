@@ -42,6 +42,24 @@
         "litera/bootstrap.rtl.min.css",
         "litera/bootstrap.rtl.min.css.map"
       ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "@microsoft/signalR@latest",
+      "destination": "wwwroot/lib/signalR/",
+      "files": [
+        "dist/browser/signalr.js",
+        "dist/browser/signalr.min.js"
+      ]
+    },
+    {
+      "provider": "unpkg",
+      "library": "@microsoft/signalr@latest",
+      "destination": "wwwroot/signalr/",
+      "files": [
+        "dist/browser/signalr.js",
+        "dist/browser/signalr.min.js"
+      ]
     }
   ]
 }

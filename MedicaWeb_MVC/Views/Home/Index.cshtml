@@ -1,13 +1,47 @@
-﻿@{
+﻿@model IEnumerable<CourseVM>
+
+@{
 	ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-	<h1 class="display-4">Welcome</h1>
-	<h2>Example body text</h2>
-	<p>Nullam quis risus eget <a href="#">urna mollis ornare</a> vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.</p>
-	<p><small>This line of text is meant to be treated as fine print.</small></p>
-	<p>The following is <strong>rendered as bold text</strong>.</p>
-	<p>The following is <em>rendered as italicized text</em>.</p>
-	<p>An abbreviation of the word attribute is <abbr title="attribute">attr</abbr>.</p>
+<div class="container text-center mt-5">
+	<!-- Hero Section -->
+	<h1 class="display-4 fw-bold text-primary">Welcome to Doreamon Hub</h1>
+	<p class="lead text-muted">Expand your knowledge with our interactive science courses.</p>
+
+	<!-- Action Buttons -->
+	<div class="mt-4">
+		<a asp-controller="Accounts" asp-action="Login" class="btn btn-primary btn-lg me-2">Login</a>
+		<a asp-controller="Accounts" asp-action="Register" class="btn btn-outline-secondary btn-lg">Register</a>
+
+	</div>
+
+	<hr class="my-5">
+
+	<!-- Courses Section -->
+	<div class="container my-5">
+		<h2 class="text-center text-primary mb-4">Explore Our Courses</h2>
+		<div class="row row-cols-1 row-cols-md-3 g-4">
+			@foreach (var c in Model)
+			{
+				<div class="col">
+					<div class="card h-100 shadow-lg border-0">
+						<img src="@c.ImgUrl" class="card-img-top" alt="@c.Name" style="height: 200px; object-fit: cover;">
+						<div class="card-body d-flex flex-column">
+							<h5 class="card-title">@c.Name</h5>
+							<p class="card-text flex-grow-1">@c.Description</p>
+							<a asp-action="Details" asp-controller="Courses" asp-route-id="@c.Id" class="btn btn-primary mt-auto">
+								<i class="bi bi-chat-left-text"></i> Feedbacks: @c.Feedbacks.Count()
+							</a>
+						</div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+
+	<hr class="my-5">
+
+	<!-- Footer -->
+	<p class="text-muted">Join thousands of learners exploring the wonders of science.</p>
 </div>

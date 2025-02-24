@@ -1,0 +1,49 @@
+﻿.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e73df 0%, #224abe 100%);
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #f8f9fa;
+    color: #4e73df;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: rgba(78, 115, 223, 0.25);
+}
+
+.chapter-card {
+    transition: all 0.3s ease;
+}
+
+    .chapter-card:hover {
+        transform: translateY(-2px);
+    }
+
+.resource-item {
+    transition: all 0.3s ease;
+}
+
+    .resource-item:hover {
+        transform: translateX(5px);
+    }
+
+.form-control:focus {
+    border-color: #4e73df;
+    box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+.bg-light-blue {
+    background-color: #f0f8ff !important; 
+}
+.bg-gradient-primary {
+    background: linear-gradient(45deg, #4e73df 0%, #224abe 100%);
+}
+
+#courseImagePreview {
+    transition: all 0.3s ease;
+}
+
+    #courseImagePreview:hover {
+        opacity: 0.8;
+    }
+

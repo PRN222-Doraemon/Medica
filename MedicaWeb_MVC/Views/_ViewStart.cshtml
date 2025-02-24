@@ -1,14 +1,12 @@
-﻿@using Core.Entities.Identity
+﻿@{
+	// if (User.IsInRole(AppCts.Roles.Admin))
+	// {
+	// 	Layout = "_LayoutAdmin";
+	// }
+	// else
+	// {
+	// 	Layout = "_Layout";
+	// }
 
-@{
-	if (User.IsInRole(UserRoles.Admin))
-	{
-		Layout = "_LayoutAdmin";
-	} else if (User.IsInRole(UserRoles.Lecturer))
-	{
-		Layout = "_LayoutLecturer";
-	} else
-	{
-		Layout = "_LayoutLecturer";
-	}
+	Layout = "_Layout";
 }
