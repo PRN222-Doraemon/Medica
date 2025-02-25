@@ -1,0 +1,15 @@
+﻿@model int
+@{
+    var prevDisabled = Model == 1 ? "disabled" : "";
+    var nextDisabled = Model == ViewBag.TotalPages ? "disabled" : "";
+}
+
+<div class="paging-bar">
+    <a class="btn btn-primary" asp-controller="YourControllerName" asp-action="Index" asp-route-page="@(Model - 1)" class="@(prevDisabled)">Previous</a>
+    <span>Page @Model of @ViewBag.TotalPages</span>
+    <a class="btn btn-primary" asp-controller="YourControllerName" asp-action="Index" asp-route-page="@(Model + 1)" class="@(nextDisabled)">Next</a>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

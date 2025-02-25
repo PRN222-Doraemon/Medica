@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+@* Head & Metadata *@
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>@ViewData["Title"] - MedicaWeb_MVC</title>
+
+	@* CSSs *@
+	<link rel="stylesheet" href="~/lib/bootswatch/litera/bootstrap.min.css" />
+	<link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.min.css" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css" />
+	<link rel="stylesheet" href="~/lib/datatables.net-bs5/datatables.bootstrap5.min.css" />
+	<link rel="stylesheet" href="~/MedicaWeb_MVC.styles.css" asp-append-version="true" />
+</head>
+
+@* Body *@
+<body class="d-flex flex-column min-vh-100">
+
+	@* Container *@
+	<div class="row flex-grow-1">
+		<!-- Sidebar - Takes up 3 columns -->
+		<aside class="col-md-3 col-xl-2 col-12">
+			<partial name="ReusableViews/_SideBarLecturer" />
+		</aside>
+
+		<!-- Main Content - Takes up 9 columns -->
+		<main role="main" class="col-md-9 col-xl-10 col-12 p-3">
+			<div class="container-fluid">
+				@RenderBody()
+			</div>
+		</main>
+	</div>
+
+	@* Footer *@
+	<partial name="ReusableViews/_Footer" />
+
+	@* jQuery and Libraries - Load them at the bottom to optimize performance *@
+	<script src="~/lib/jquery/dist/jquery.min.js"></script>
+	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="~/lib/toastr.js/toastr.min.js"></script>
+	<script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js"></script>
+	<script src="~/lib/datatables.net/datatables.min.js" />
+	<script src="~/lib/datatables.net-bs5/datatables.bootstrap5.min.js" asp-append-version="true"></script>
+	<script src="~/js/site.js" asp-append-version="true"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
