@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Constants;
 using Core.Entities;
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
@@ -6,6 +7,7 @@ using Core.Specifications.Courses;
 using MedicaWeb_MVC.Hubs;
 using MedicaWeb_MVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
@@ -61,6 +63,10 @@ namespace MedicaWeb_MVC.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var course = await _courseService.GetCourseByIdAsync(id);
+            if (course == null)
+            {
+                return NotFound();
+            }
             return View(_mapper.Map<CourseVM>(course));
         }
         public async Task<IActionResult> Upsert(int? id)
@@ -86,6 +92,7 @@ namespace MedicaWeb_MVC.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = AppCts.Roles.Lecturer)]
         public async Task<IActionResult> Upsert(CourseCreateVM courseVM)
         {
             if (ModelState.IsValid)
@@ -115,8 +122,10 @@ namespace MedicaWeb_MVC.Controllers
                     if (courseVM.Id == 0)
                     {
                         course = _mapper.Map<Course>(courseVM);
-                        // created by user ID value is just for testing, it will be updated later
-                        course.CreatedByUserID = 1;
+
+                        var user = await _accountService.GetUserByClaimsAsync(HttpContext.User);
+                        course.CreatedByUserID = user.Id;                     
+
                         await _courseService.CreateCourseAsync(course);
                         TempData["success"] = "Successfully created a new course!";
                     }
@@ -144,6 +153,30 @@ namespace MedicaWeb_MVC.Controllers
             ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }
             );
             return View(courseVM);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                ViewData["Title"] = "Delete Course";
+                var course = await _courseService.GetCourseByIdAsync(id);
+                if (course == null)
+                {
+                    return NotFound();
+                }
+                await _courseService.DeleteCourseAsync(id);
+                TempData["success"] = "Successfully deleted.";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = ex.Message;
+            }
+            ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
+            ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }
+            );
+            return RedirectToAction(nameof(Details), id);
         }
     }
 }

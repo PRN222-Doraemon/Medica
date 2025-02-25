@@ -31,11 +31,6 @@ namespace Infrastructure.Configs
                    .WithMany(cc => cc.Resources)
                    .HasForeignKey(r => r.CourseChapterID)
                    .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasOne(r => r.CreatedBy)
-                   .WithMany(e => e.Resources)
-                   .HasForeignKey(r => r.CreatedByUserID)
-                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

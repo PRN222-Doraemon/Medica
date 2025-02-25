@@ -14,8 +14,7 @@ namespace Core.Specifications.Courses
             AddInclude(x => x.Category);
             AddInclude(x => x.CreatedBy);
             CustomIncludes.Add(x => x.Include(c => c.CourseChapters)
-                                    .ThenInclude(cc => cc.Resources)
-                                    .ThenInclude(r => r.CreatedBy));
+                                    .ThenInclude(cc => cc.Resources));
             CustomIncludes.Add(x => x.Include(c => c.Comments)
                                     .ThenInclude(cc => cc.SrcComment));
             CustomIncludes.Add(x => x.Include(c => c.Comments)
@@ -38,8 +37,7 @@ namespace Core.Specifications.Courses
             AddInclude(x => x.CreatedBy);
             AddInclude(x => x.Category);
             CustomIncludes.Add(x => x.Include(c => c.CourseChapters)
-                                    .ThenInclude(cc => cc.Resources)
-                                    .ThenInclude(r => r.CreatedBy));
+                                    .ThenInclude(cc => cc.Resources));
             CustomIncludes.Add(x => x.Include(c => c.Comments)
                                     .ThenInclude(cc => cc.SrcComment));
             CustomIncludes.Add(x => x.Include(c => c.Comments)
