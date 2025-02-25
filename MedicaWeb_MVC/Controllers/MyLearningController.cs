@@ -1,11 +1,13 @@
 ﻿using AutoMapper;
-using Core.Entities;
+using Core.Constants;
 using Core.Interfaces.Services;
 using MedicaWeb_MVC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicaWeb_MVC.Controllers
 {
+    [Authorize(Roles = AppCts.Roles.Student)]
     public class MyLearningController : Controller
     {
         private readonly IOrderService _orderService;

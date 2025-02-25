@@ -4,6 +4,7 @@ using Core.Entities;
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Courses;
+using Core.ViewModels;
 using MedicaWeb_MVC.Hubs;
 using MedicaWeb_MVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;

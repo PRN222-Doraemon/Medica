@@ -1,4 +1,6 @@
-﻿namespace MedicaWeb_MVC.ViewModels
+﻿using Core.ViewModels;
+
+namespace MedicaWeb_MVC.ViewModels
 {
     public class ListVM<T>
     {
