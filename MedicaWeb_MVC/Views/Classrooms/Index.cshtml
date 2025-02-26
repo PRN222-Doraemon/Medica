@@ -2,19 +2,17 @@
 @model ListVM<ClassVM>
 @{
     var Course = ViewData["Course"] as CourseVM;
+    var Lecturers = ViewData["Lecturers"] as IEnumerable<LecturerVM>;
 }
 
 <div class="container-fluid px-0">
     <nav aria-label="breadcrumb" class="bg-white py-2 border-bottom">
         <div class="container d-flex justify-content-between align-items-center">
             <ol class="breadcrumb m-0 bg-transparent">
-                <li class="breadcrumb-item"><a href="#"><i class="bi bi-house-door-fill"></i></a></li>
-                <li class="breadcrumb-item"><a href="#">Data Science</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Data Analysis</li>
+                <li class="breadcrumb-item"><a asp-controller="Courses" asp-action="Index"><i class="bi bi-house-door-fill"></i></a></li>
+                <li class="breadcrumb-item"><a asp-controller="Courses" asp-action="Details" asp-route-id="@Course?.Id">@Course?.Name</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Classes</li>
             </ol>
-            <button class="btn btn-outline-primary">
-                <i class="bi bi-bookmark"></i> Save
-            </button>
         </div>
     </nav>
 
@@ -23,7 +21,7 @@
         <div class="container position-relative">
             <!-- Background graphic -->
             <div class="position-absolute end-0 top-0 h-100" style="z-index: 0;">
-                <img src="@(Course?.Name)" alt="Background graphic" class="h-100">
+                <img src="@(Course?.ImgUrl)" alt="Background graphic" class="h-100">
             </div>
 
             <!-- Content -->
@@ -42,11 +40,12 @@
                     <div class="d-flex align-items-center mb-4">
                         <span class="me-2">Lecturers:</span>
                         <div class="d-flex align-items-center">
-                            @foreach(var classroom in Model.Items) {
-                                <img src="@classroom.LecturerImgUrl" alt="Lecturer" class="rounded-circle me-1" style="width: 30px; height: 30px;">
+                            @foreach(var lecturer in Lecturers) {
+                                <img src="@lecturer.ImageUrl" alt="Lecturer" class="rounded-circle me-1" style="width: 30px; height: 30px;">
                             }
-                            @foreach(var classroom in Model.Items) {
-                                <a href="@classroom.LecturerId" class="me-2">@classroom.LecturerName</a>
+                            @foreach (var lecturer in Lecturers)
+                            {
+                                <a href="@lecturer.Id" class="me-2">@lecturer.FullName</a>
                             }
                         </div>
                     </div>
@@ -81,7 +80,7 @@
                     </a>
                     @foreach (var filter in Enum.GetValues(typeof(ClassroomStatus)).Cast<ClassroomStatus>())
                     {
-                        @if (filter != ClassroomStatus.Active && filter != ClassroomStatus.Cancelled)
+                        @if (filter == ClassroomStatus.Ongoing || filter == ClassroomStatus.Upcoming)
                         {
                             <a asp-action="Index" asp-controller="Classrooms" asp-route-classroomStatus="@filter.ToString()"
                             asp-route-courseId="@Course?.Id"
@@ -105,9 +104,9 @@
                         <div class="card shadow-sm h-100 rounded-3 overflow-hidden border border-primary-subtle">
                             <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
                                 <div class="d-flex align-items-center justify-content-between">
-                                    <img src="@classroom.LecturerImgUrl" alt="Lecturer" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                    <img src="@classroom.Lecturer.ImageUrl" alt="Lecturer" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
                                     <div>
-                                        <h6 class="mb-0">Mr. @classroom.LecturerName</h6>
+                                        <h6 class="mb-0">Mr. @classroom.Lecturer.FullName</h6>
                                     </div>
                                 </div>
                                 <button class="btn @(classroom.ComputedStatus == ClassroomStatus.Completed ? "btn-secondary" :
