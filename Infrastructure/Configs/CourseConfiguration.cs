@@ -16,6 +16,8 @@ namespace Infrastructure.Configs
             builder.Property(c => c.Description)
                    .HasColumnType("varchar(1000)")
                    .HasMaxLength(1000);
+            builder.Property(c => c.Price).HasColumnType("decimal(18,4)");
+
 
             builder.Property(c => c.ImgUrl)
                    .HasColumnType("varchar(500)")

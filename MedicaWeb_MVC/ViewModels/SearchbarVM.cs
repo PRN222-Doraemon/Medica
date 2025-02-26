@@ -1,4 +1,4 @@
-﻿namespace Core.ViewModels
+﻿namespace MedicaWeb_MVC.ViewModels
 {
     public class SearchbarVM
     {

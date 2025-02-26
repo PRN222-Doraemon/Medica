@@ -3,6 +3,7 @@ using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications;
 using Core.Specifications.Courses;
+using Microsoft.Identity.Client;
 
 namespace Infrastructure.Services
 {

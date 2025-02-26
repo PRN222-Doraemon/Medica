@@ -9,7 +9,5 @@
         //1 Employee - 1 User
         public virtual ApplicationUser User { get; set; }
 
-        //1 Employee - M Resources
-        public ICollection<Resource> Resources { get; set; } = new HashSet<Resource>();
     }
 }

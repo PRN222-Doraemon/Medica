@@ -1,4 +1,5 @@
-﻿@model ListVM<CourseVM>
+﻿@using MedicaWeb_MVC.ViewModels
+@model ListVM<CourseVM>
 
 <div class="container py-4">
     <!-- Search and Filter Header -->
@@ -16,10 +17,13 @@
                     </select>
                 </div>
             </form>
-            <a class="btn btn-primary d-flex align-items-center gap-2" asp-controller="Courses" asp-action="Upsert">
-                <i class="bi bi-plus-lg"></i>
-                Create new
-            </a>
+            @if(User.IsInRole(AppCts.Roles.Lecturer)) {
+                <a class="btn btn-primary d-flex align-items-center gap-2" asp-controller="Courses" asp-action="Upsert">
+                    <i class="bi bi-plus-lg"></i>
+                    Create new
+                </a>
+            }
+            
         </div>
     </div>
 

@@ -1,4 +1,5 @@
 ﻿@using Core.Constants
+@using MedicaWeb_MVC.ViewModels
 @model CourseVM
 @{
     ViewData["Title"] = "Course Detail";
@@ -20,10 +21,18 @@
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-start mb-3">
                     <h1 class="display-5 fw-bold mb-0">@Model.Name</h1>
-                    <a asp-action="Upsert" asp-controller="Courses" asp-route-id="@Model.Id"
-                       class="btn btn-outline-primary">
-                        <i class="bi bi-pencil"></i> Update Course
-                    </a>
+                    @if(User.IsInRole(AppCts.Roles.Lecturer)) {
+                        <div>
+                            <a asp-action="Upsert" asp-controller="Courses" asp-route-id="@Model.Id"
+                               class="btn btn-outline-primary">
+                                <i class="bi bi-pencil"></i> Update
+                            </a>
+                            <a asp-action="Delete" asp-controller="Courses" asp-route-id="@Model.Id"
+                               class="btn btn-outline-danger">
+                                <i class="bi bi-trash"></i> Delete
+                            </a>
+                        </div>                     
+                    }                 
                 </div>
 
                 <div class="d-flex align-items-center flex-wrap gap-2 mb-3">
@@ -226,7 +235,7 @@
             <div class="card shadow-sm position-sticky" style="top: 2rem;">
                 <img src="@Model.ImgUrl" class="card-img-top" alt="@Model.Name">
                 <div class="card-body">
-                    <button class="btn btn-primary btn-lg w-100 mb-4">View Classes</button>
+                    <a asp-action="Index" asp-controller="Classrooms" asp-route-courseId="@Model.Id" class="btn btn-primary btn-lg w-100 mb-4">View Classes</a>
 
                     <h5 class="mb-3">This course includes:</h5>
                     <ul class="list-unstyled mb-0">

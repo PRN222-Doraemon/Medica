@@ -1,4 +1,5 @@
-﻿@model CourseCreateVM
+﻿@using MedicaWeb_MVC.ViewModels
+@model CourseCreateVM
 @{
     bool IsUpdate = false;
     if(ViewBag.Title == "Update Course") {
@@ -33,7 +34,7 @@
                     <form asp-action="Upsert" asp-controller="Courses" method="post" id="updateCourseForm" enctype="multipart/form-data">
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="ImgUrl" />
-                        @* <input hidden asp-for="@Model.CreatedByUserID" /> *@
+                        @* <input hidden asp-for="@Model.CreatedByUserID" />  *@
 
                         <div class="row">
                             <!-- Left Column - Basic Information -->
@@ -166,7 +167,6 @@
                                                                     {
                                                                         var resource = chapter.Resources.ToList()[j];
                                                                         <input hidden name="CourseChapters[@i].Resources[@j].FileUrl" value="@resource.FileUrl" />
-                                                                        <input hidden name="CourseChapters[@i].Resources[@j].CreatedByUserID" value="@resource.CreatedByUserID" />
                                                                         <div class="resource-item mb-3 p-3 bg-white rounded shadow-sm" data-resource-index="@j">
                                                                             <div class="d-flex flex-column">
                                                                                 <!-- Resource Header -->

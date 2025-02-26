@@ -13,18 +13,19 @@ namespace Core.Specifications.Courses
         {
             AddInclude(x => x.Category);
             AddInclude(x => x.CreatedBy);
-            CustomIncludes.Add(x => x.Include(c => c.CourseChapters)
-                                    .ThenInclude(cc => cc.Resources)
-                                    .ThenInclude(r => r.CreatedBy));
-            CustomIncludes.Add(x => x.Include(c => c.Comments)
+            AddCustomInclude(x => x.Include(c => c.CourseChapters)
+                                    .ThenInclude(cc => cc.Resources));
+            AddCustomInclude(x => x.Include(c => c.Comments)
                                     .ThenInclude(cc => cc.SrcComment));
-            CustomIncludes.Add(x => x.Include(c => c.Comments)
+            AddCustomInclude(x => x.Include(c => c.Comments)
                                     .ThenInclude(cc => cc.User));
-            CustomIncludes.Add(x => x.Include(c => c.Comments)
+            AddCustomInclude(x => x.Include(c => c.Comments)
                                     .ThenInclude(cc => cc.ReplyComments)
                                     .ThenInclude(rc => rc.User));
-            CustomIncludes.Add(x => x.Include(c => c.Feedbacks)
+            AddCustomInclude(x => x.Include(c => c.Feedbacks)
                                     .ThenInclude(f => f.Student));
+            AddCustomInclude(x => x.Include(c => c.Classrooms)
+                                    .ThenInclude(f => f.OrderDetails));
             if (applyPaging)
             {
                 ApplyPaging(courseParam.PageSize * (courseParam.Page - 1),
@@ -37,18 +38,19 @@ namespace Core.Specifications.Courses
         {
             AddInclude(x => x.CreatedBy);
             AddInclude(x => x.Category);
-            CustomIncludes.Add(x => x.Include(c => c.CourseChapters)
-                                    .ThenInclude(cc => cc.Resources)
-                                    .ThenInclude(r => r.CreatedBy));
-            CustomIncludes.Add(x => x.Include(c => c.Comments)
+            AddCustomInclude(x => x.Include(c => c.CourseChapters)
+                                    .ThenInclude(cc => cc.Resources));
+            AddCustomInclude(x => x.Include(c => c.Comments)
                                     .ThenInclude(cc => cc.SrcComment));
-            CustomIncludes.Add(x => x.Include(c => c.Comments)
+            AddCustomInclude(x => x.Include(c => c.Comments)
                                     .ThenInclude(cc => cc.User));
-            CustomIncludes.Add(x => x.Include(c => c.Comments)
+            AddCustomInclude(x => x.Include(c => c.Comments)
                                     .ThenInclude(cc => cc.ReplyComments)
                                     .ThenInclude(rc => rc.User));
-            CustomIncludes.Add(x => x.Include(c => c.Feedbacks)
+            AddCustomInclude(x => x.Include(c => c.Feedbacks)
                                     .ThenInclude(f => f.Student));
+            AddCustomInclude(x => x.Include(c => c.Classrooms)
+                                    .ThenInclude(f => f.OrderDetails));
         }
     }
 }
