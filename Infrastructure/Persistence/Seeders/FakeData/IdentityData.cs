@@ -55,7 +55,8 @@ namespace Infrastructure.Persistence.Seeders.FakeData
                     Status = UserStatus.Enabled,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
-                    DateOfBirth = new DateTime(2000, 1, 1)
+                    DateOfBirth = new DateTime(2000, 1, 1),
+                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTUE7jXHro7BdwC8kOvXnqQ7m1SwUP6MH6iK_ZLmKKjiG8tkhq7q_tytzMTXBtGsSRp0Y&usqp=CAU"
                 },
                 new Student
                 {
@@ -68,7 +69,8 @@ namespace Infrastructure.Persistence.Seeders.FakeData
                     Status = UserStatus.Enabled,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
-                    DateOfBirth = new DateTime(2000, 2, 2)
+                    DateOfBirth = new DateTime(2000, 2, 2),
+                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTUE7jXHro7BdwC8kOvXnqQ7m1SwUP6MH6iK_ZLmKKjiG8tkhq7q_tytzMTXBtGsSRp0Y&usqp=CAU"
                 },
                 new Student
                 {
@@ -81,7 +83,8 @@ namespace Infrastructure.Persistence.Seeders.FakeData
                     Status = UserStatus.Enabled,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
-                    DateOfBirth = new DateTime(2000, 3, 3)
+                    DateOfBirth = new DateTime(2000, 3, 3),
+                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTUE7jXHro7BdwC8kOvXnqQ7m1SwUP6MH6iK_ZLmKKjiG8tkhq7q_tytzMTXBtGsSRp0Y&usqp=CAU"
                 },
                 new Student
                 {
@@ -94,7 +97,8 @@ namespace Infrastructure.Persistence.Seeders.FakeData
                     Status = UserStatus.Enabled,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
-                    DateOfBirth = new DateTime(2000, 4, 4)
+                    DateOfBirth = new DateTime(2000, 4, 4),
+                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTUE7jXHro7BdwC8kOvXnqQ7m1SwUP6MH6iK_ZLmKKjiG8tkhq7q_tytzMTXBtGsSRp0Y&usqp=CAU"
                 },
                 new ApplicationUser
                 {
@@ -106,7 +110,8 @@ namespace Infrastructure.Persistence.Seeders.FakeData
                     LastName = "One",
                     Status = UserStatus.Enabled,
                     CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
+                    UpdatedAt = DateTime.UtcNow,
+                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTUE7jXHro7BdwC8kOvXnqQ7m1SwUP6MH6iK_ZLmKKjiG8tkhq7q_tytzMTXBtGsSRp0Y&usqp=CAU"
                 },
                 new Lecturer
                 {
@@ -119,7 +124,8 @@ namespace Infrastructure.Persistence.Seeders.FakeData
                     Status = UserStatus.Enabled,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
-                    DateOfBirth = new DateTime(1982, 2, 2)
+                    DateOfBirth = new DateTime(1982, 2, 2),
+                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTUE7jXHro7BdwC8kOvXnqQ7m1SwUP6MH6iK_ZLmKKjiG8tkhq7q_tytzMTXBtGsSRp0Y&usqp=CAU"
                 },
                 new Lecturer
                 {
@@ -132,7 +138,8 @@ namespace Infrastructure.Persistence.Seeders.FakeData
                     Status = UserStatus.Enabled,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow,
-                    DateOfBirth = new DateTime(1985, 3, 3)
+                    DateOfBirth = new DateTime(1985, 3, 3),
+                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTUE7jXHro7BdwC8kOvXnqQ7m1SwUP6MH6iK_ZLmKKjiG8tkhq7q_tytzMTXBtGsSRp0Y&usqp=CAU"
                 },
                 new Employee
                 {
@@ -145,7 +152,8 @@ namespace Infrastructure.Persistence.Seeders.FakeData
                     Status = UserStatus.Enabled,
                     CreatedAt = DateTime.UtcNow,
                     DepartmentId = 1,
-                    UpdatedAt = DateTime.UtcNow
+                    UpdatedAt = DateTime.UtcNow,
+                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTUE7jXHro7BdwC8kOvXnqQ7m1SwUP6MH6iK_ZLmKKjiG8tkhq7q_tytzMTXBtGsSRp0Y&usqp=CAU"
                 },
                 new Employee
                 {
@@ -158,7 +166,8 @@ namespace Infrastructure.Persistence.Seeders.FakeData
                     Status = UserStatus.Enabled,
                     DepartmentId = 2,
                     CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
+                    UpdatedAt = DateTime.UtcNow,
+                    ImageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQTUE7jXHro7BdwC8kOvXnqQ7m1SwUP6MH6iK_ZLmKKjiG8tkhq7q_tytzMTXBtGsSRp0Y&usqp=CAU"
                 },
             };
             return users;

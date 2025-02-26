@@ -13,9 +13,7 @@ namespace MedicaWeb_MVC.ViewModels
         public DateOnly EndDate { get; set; }
         public DateTime UpdatedAt { get; set; }
         public CourseVM Course { get; set; }
-        public int LecturerId { get; set; }
-        public string LecturerName { get; set; }
-        public string LecturerImgUrl { get; set; }
+        public LecturerVM Lecturer { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
         public int TotalEnrolls => OrderDetails.Count();
         public ClassroomStatus Status { get; set; }

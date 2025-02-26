@@ -2,6 +2,7 @@
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications;
+using System.Net.WebSockets;
 
 namespace Infrastructure.Services
 {
@@ -29,7 +30,8 @@ namespace Infrastructure.Services
 
         public async Task<IEnumerable<Classroom>> GetClassesAsync(ISpecification<Classroom> spec)
         {
-            return await _unitOfWork.Repository<Classroom>().ListAsync(spec);
+            var classes = await _unitOfWork.Repository<Classroom>().ListAsync(spec);
+            return classes;
         }
 
         public Task UpdateClassAsync(Classroom classroom)
