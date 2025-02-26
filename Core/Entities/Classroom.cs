@@ -13,7 +13,6 @@ namespace Core.Entities
 
         public string Description { get; set; }
         public int MaxParticipant { get; set; }
-        public decimal Price { get; set; }
 
         // 1 course - M classroom 
         public int CourseId { get; set; }

@@ -6,7 +6,6 @@
     "EndDate": "2025-06-01",
     "Description": "Advanced Mathematics Course",
     "MaxParticipant": 30,
-    "Price": 299.99,
     "CourseId": 2,
     "LecturerId": 6
   },
@@ -17,7 +16,6 @@
     "EndDate": "2025-07-01",
     "Description": "Introduction to Programming",
     "MaxParticipant": 25,
-    "Price": 199.99,
     "CourseId": 1,
     "LecturerId": 7
   },
@@ -28,7 +26,6 @@
     "EndDate": "2025-08-01",
     "Description": "Data Structures and Algorithms",
     "MaxParticipant": 40,
-    "Price": 349.99,
     "CourseId": 2,
     "LecturerId": 7
   },
@@ -39,7 +36,6 @@
     "EndDate": "2025-09-01",
     "Description": "Physics for Engineers",
     "MaxParticipant": 20,
-    "Price": 259.99,
     "CourseId": 3,
     "LecturerId": 6
   }

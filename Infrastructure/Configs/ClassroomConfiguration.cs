@@ -14,7 +14,6 @@ namespace Infrastructure.Configs
             builder.Property(c => c.Description)
                 .HasColumnType("varchar(500)").HasMaxLength(500);
             builder.Property(c => c.MaxParticipant).IsRequired();
-            builder.Property(c => c.Price).HasColumnType("decimal(18,4)");
 
             builder.Property(c => c.Mode)
                 .HasConversion(
