@@ -33,7 +33,7 @@ namespace Infrastructure.Services
             {
                 string extension = Path.GetExtension(file.FileName).ToLower();
                 string resourceType = (extension == ".jpg" || extension == ".jpeg" || extension == ".png" || extension == ".gif")
-                ? "image" 
+                ? "image"
                 : "raw";
                 var uploadParams = new RawUploadParams
                 {

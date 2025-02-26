@@ -7,7 +7,7 @@ namespace MedicaWeb_MVC.ViewModels
         public int Id { get; set; }
         public ClassroomMode Mode { get; set; }
         public string? Description { get; set; }
-        public int MaxParticipant {  get; set; }
+        public int MaxParticipant { get; set; }
 
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }

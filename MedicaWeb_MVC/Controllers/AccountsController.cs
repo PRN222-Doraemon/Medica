@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using CloudinaryDotNet;
 using Core.Constants;
 using Core.Entities.Identity;
 using Core.Interfaces.Services;
 using MedicaWeb_MVC.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicaWeb_MVC.Controllers

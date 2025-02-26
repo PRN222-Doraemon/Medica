@@ -2,7 +2,6 @@
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Orders;
-using System.Net.WebSockets;
 
 namespace Infrastructure.Services
 {
@@ -22,7 +21,7 @@ namespace Infrastructure.Services
             var classes = orderDetails.Select(od => od.Classroom).ToList();
             if (classroomStatus.HasValue)
             {
-                switch(classroomStatus)
+                switch (classroomStatus)
                 {
                     case ClassroomStatus.Upcoming:
                         classes = classes.Where(c => c.StartDate > DateOnly.FromDateTime(DateTime.UtcNow)).ToList();

@@ -1,6 +1,4 @@
-﻿using Core.Entities;
-
-namespace Core.Specifications.Orders
+﻿namespace Core.Specifications.Orders
 {
     public class OrderParams
     {

@@ -1,5 +1,4 @@
 ﻿using Core.Entities;
-using Core.Specifications.Courses;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Specifications.Classes

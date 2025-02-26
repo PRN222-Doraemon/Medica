@@ -1,5 +1,4 @@
 ﻿using Core.Entities;
-using System.Runtime.Serialization;
 
 namespace MedicaWeb_MVC.ViewModels
 {

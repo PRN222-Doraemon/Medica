@@ -30,7 +30,7 @@ namespace MedicaWeb_MVC.Controllers
                 Classes = _mapper.Map<IEnumerable<ClassVM>>(classes),
                 SelectedStatus = selectedStatus
             };
-            return View(myLearning);    
+            return View(myLearning);
         }
     }
 }
