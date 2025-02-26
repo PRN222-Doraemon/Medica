@@ -8,6 +8,7 @@ namespace MedicaWeb_MVC.ViewModels
         public string Name { get; set; } = string.Empty;
         public string? Description { get; set; }
         public string? ImgUrl { get; set; }
+        public decimal Price { get; set; }
         public int CategoryID { get; set; }
         public string CategoryName { get; set; } = string.Empty;
         public int CreatedByUserID { get; set; }

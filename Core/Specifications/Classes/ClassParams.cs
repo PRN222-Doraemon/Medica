@@ -15,5 +15,7 @@ namespace Core.Specifications.Classes
         public int? CourseId { get; set; }
         public ClassroomStatus? ClassroomStatus { get; set; }
         public string? SortOrder { get; set; }
+        public DateOnly? StartDate { get; set; }
+        public DateOnly? EndDate { get; set; }
     }
 }
