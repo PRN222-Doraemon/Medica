@@ -53,6 +53,9 @@
                             <i class="bi bi-clock"></i>
                             <span>Updated @course.UpdatedAt</span>
                         </div>
+                        <span class=" fw-bold text-dark fs-5">
+                            ₫ @($"{course.Price:N0}")
+                        </span>
                     </div>
                     <div class="card-footer bg-white border-top-0">
                         <a asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id" class="btn btn-outline-primary btn-sm w-100">
