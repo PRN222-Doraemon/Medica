@@ -1,5 +1,4 @@
 ﻿using Core.Entities;
-using Core.ViewModels;
 
 namespace MedicaWeb_MVC.ViewModels
 {

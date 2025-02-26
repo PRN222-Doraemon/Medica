@@ -4,11 +4,9 @@ using Core.Entities;
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Courses;
-using Core.ViewModels;
 using MedicaWeb_MVC.Hubs;
 using MedicaWeb_MVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
@@ -125,7 +123,7 @@ namespace MedicaWeb_MVC.Controllers
                         course = _mapper.Map<Course>(courseVM);
 
                         var user = await _accountService.GetUserByClaimsAsync(HttpContext.User);
-                        course.CreatedByUserID = user.Id;                     
+                        course.CreatedByUserID = user.Id;
 
                         await _courseService.CreateCourseAsync(course);
                         TempData["success"] = "Successfully created a new course!";

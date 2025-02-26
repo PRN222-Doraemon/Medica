@@ -1,5 +1,4 @@
-﻿using Core.Entities.Identity;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Core.Entities
 {
