@@ -6,7 +6,7 @@ namespace Core.Entities
     public class Classroom : BaseEntity
     {
         public ClassroomMode Mode { get; set; }
-        public ClassroomStatus Status { get; set; }
+        public ClassroomStatus Status { get; set; } = ClassroomStatus.Active;
 
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
@@ -42,6 +42,13 @@ namespace Core.Entities
         Active,
 
         [EnumMember(Value = "Cancelled")]
-        Cancelled
+        Cancelled,
+        [EnumMember(Value = "Completed")]
+        Completed,
+        [EnumMember(Value = "Ongoing")]
+        Ongoing,
+        [EnumMember(Value = "Up Coming")]
+        Upcoming
+
     }
 }

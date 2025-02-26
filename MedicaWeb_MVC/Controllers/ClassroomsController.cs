@@ -32,14 +32,12 @@ namespace MedicaWeb_MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> IndexAsync([FromQuery] ClassParams classParams)
         {
-            ViewData["Categories"] = new SelectList(
-                 await _unitOfWork.Repository<Category>().ListAllAsync(),
-                 "Id",
-                 "Name",
-                 classParams.CategoryId);
-            ViewData["Status"] = new SelectList(
-                new List<string> { ClassroomStatus.Active.ToString(), ClassroomStatus.Cancelled.ToString() },
-                selectedValue: classParams.ClassroomStatus?.ToString());
+            if (classParams.CourseId != null)
+            {
+                var courseSpec = new CourseSpecification(classParams.CourseId.Value);
+                var course = await _unitOfWork.Repository<Course>().GetEntityWithSpec(courseSpec);
+                ViewData["Course"] = _mapper.Map<CourseVM>(course);
+            }
 
             var spec = new ClassSpecification(classParams);
             var countSpec = new ClassSpecification(classParams, false);
@@ -50,7 +48,8 @@ namespace MedicaWeb_MVC.Controllers
             {
                 Items = _mapper.Map<IEnumerable<ClassVM>>(classes),
                 PagingInfo = new PagingVM { CurrentPage = classParams.Page, TotalItems = totalClasses },
-                SearchValue = new SearchbarVM { Controller = "LecturerClassroom", Action = "Index", SearchText = classParams.Search }
+                SearchValue = new SearchbarVM { Controller = "LecturerClassroom", Action = "Index", SearchText = classParams.Search },
+                ClassroomStatus = classParams.ClassroomStatus
             };
             return View(model);
 

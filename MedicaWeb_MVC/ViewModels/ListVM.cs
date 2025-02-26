@@ -1,4 +1,5 @@
-﻿using Core.ViewModels;
+﻿using Core.Entities;
+using Core.ViewModels;
 
 namespace MedicaWeb_MVC.ViewModels
 {
@@ -7,5 +8,6 @@ namespace MedicaWeb_MVC.ViewModels
         public IEnumerable<T> Items { get; set; } = new List<T>();
         public PagingVM? PagingInfo { get; set; }
         public SearchbarVM? SearchValue { get; set; }
+        public ClassroomStatus? ClassroomStatus { get; set; }
     }
 }
