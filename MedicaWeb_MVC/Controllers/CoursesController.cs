@@ -126,6 +126,7 @@ namespace MedicaWeb_MVC.Controllers
                         course.CreatedByUserID = user.Id;
 
                         await _courseService.CreateCourseAsync(course);
+                        await _hub.Clients.All.SendAsync("ReceiveUpsert", _mapper.Map<CourseVM>(course), false);
                         TempData["success"] = "Successfully created a new course!";
                     }
                     // Update course
@@ -138,9 +139,9 @@ namespace MedicaWeb_MVC.Controllers
                         }
                         _mapper.Map(courseVM, course);
                         await _courseService.UpdateCourseAsync(course);
+                        await _hub.Clients.All.SendAsync("ReceiveUpsert", _mapper.Map<CourseVM>(course), true);
                         TempData["success"] = "Successfully updated a new course!";
                     }
-                    await _hub.Clients.All.SendAsync("ReceiveUpsert");
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
