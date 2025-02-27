@@ -5,13 +5,11 @@ namespace Core.Specifications.Classes
 {
     public class ClassSpecification : BaseSpecification<Classroom>
     {
-        public ClassSpecification(ClassParams classParams, bool applyPaging = true, bool filterByStatus = true) :
+        public ClassSpecification(ClassParams classParams, bool applyPaging = true) :
             base(x => (string.IsNullOrEmpty(classParams.Search) || x.Course.Name.ToLower().Contains(classParams.Search)) &&
             (!classParams.CategoryId.HasValue || classParams.CategoryId == x.Course.Category.Id) &&
             (!classParams.CourseId.HasValue || classParams.CourseId == x.Course.Id) &&
-
-            (!classParams.ClassroomStatus.HasValue || !filterByStatus || 
-            (x.Status == ClassroomStatus.Active &&
+            (!classParams.ClassroomStatus.HasValue || (x.Status == ClassroomStatus.Active &&
             ((classParams.ClassroomStatus == ClassroomStatus.Upcoming && x.StartDate > DateOnly.FromDateTime(DateTime.Today)) ||
             (classParams.ClassroomStatus == ClassroomStatus.Completed && x.EndDate < DateOnly.FromDateTime(DateTime.Today)) ||
             (classParams.ClassroomStatus == ClassroomStatus.Ongoing && x.EndDate < DateOnly.FromDateTime(DateTime.Today) && x.EndDate > DateOnly.FromDateTime(DateTime.Today))))))

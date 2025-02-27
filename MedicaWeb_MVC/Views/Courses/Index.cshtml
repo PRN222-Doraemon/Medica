@@ -29,10 +29,10 @@
 
 
     <!-- Course Grid -->
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div id="courseList" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         @foreach (var course in Model.Items)
         {
-            <div class="col">
+            <div class="col" id="@course.Id">
                 <div class="card h-100 shadow-sm">
                     <img src="@course.ImgUrl" class="card-img-top" alt="Course Image"
                          style="height: 200px; object-fit: cover;">
