@@ -10,11 +10,11 @@ namespace Core.Specifications.Feedbacks
             AddInclude(x => x.Course);
         }
 
-        public FeedbackSpecification(FeedbackParams specParams, bool applyPaging = true, bool filterByStatus = true) : base(x =>
+        public FeedbackSpecification(FeedbackParams specParams, bool applyPaging = false) : base(x =>
             (string.IsNullOrEmpty(x.FeedbackContent) || x.FeedbackContent.ToLower().Contains(specParams.searchContent!)) &&
             (!specParams.CourseId.HasValue || x.CourseId == specParams.CourseId) &&
             (!specParams.StudentId.HasValue || x.StudentId == specParams.StudentId) &&
-            (!filterByStatus || !specParams.Status.HasValue || specParams.Status == x.Status)
+            (!specParams.Status.HasValue || specParams.Status.Value == x.Status)
         )
         {
             AddInclude(x => x.Student);
