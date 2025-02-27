@@ -35,14 +35,15 @@ namespace MedicaWeb_MVC.Controllers
                 var courseSpec = new CourseSpecification(classParams.CourseId.Value);
                 var course = await _unitOfWork.Repository<Course>().GetEntityWithSpec(courseSpec);
                 ViewData["Course"] = _mapper.Map<CourseVM>(course);
+                ViewData["Lecturers"] = _mapper.Map<CourseVM>(course).Classrooms
+                .Select(c => c.Lecturer).GroupBy(l => l.Id).Select(g => g.First()).ToList();
             }
             var spec = new ClassSpecification(classParams);
             var countSpec = new ClassSpecification(classParams, false);
             var classes = await _classService.GetClassesAsync(spec);
             var totalClasses = (await _classService.GetClassesAsync(countSpec)).Count();
 
-            ViewData["Lecturers"] = _mapper.Map<IEnumerable<ClassVM>>(await _classService.GetClassesAsync(new ClassSpecification(classParams, false, false)))
-                .Select(c => c.Lecturer).GroupBy(l => l.Id).Select(g => g.First()).ToList();
+            
 
             var model = new ListVM<ClassVM>
             {

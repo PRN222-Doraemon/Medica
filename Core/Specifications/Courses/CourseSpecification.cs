@@ -26,6 +26,8 @@ namespace Core.Specifications.Courses
                                     .ThenInclude(f => f.Student));
             AddCustomInclude(x => x.Include(c => c.Classrooms)
                                     .ThenInclude(f => f.OrderDetails));
+            AddCustomInclude(x => x.Include(c => c.Classrooms)
+                                    .ThenInclude(f => f.Lecturer));
             if (applyPaging)
             {
                 ApplyPaging(courseParam.PageSize * (courseParam.Page - 1),
@@ -51,6 +53,8 @@ namespace Core.Specifications.Courses
                                     .ThenInclude(f => f.Student));
             AddCustomInclude(x => x.Include(c => c.Classrooms)
                                     .ThenInclude(f => f.OrderDetails));
+            AddCustomInclude(x => x.Include(c => c.Classrooms)
+                                    .ThenInclude(f => f.Lecturer));
         }
     }
 }
