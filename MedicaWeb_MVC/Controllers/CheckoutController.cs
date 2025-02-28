@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Interfaces.Services;
 using MedicaWeb_MVC.ViewModels;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicaWeb_MVC.Controllers
@@ -50,7 +51,6 @@ namespace MedicaWeb_MVC.Controllers
             return View(_mapper.Map<IEnumerable<CartItem>, IEnumerable<CartItemVM>>(cartItems));
         }
 
-        // Return the session id for Checkout UI
         [HttpPost]
         public async Task<IActionResult> Checkout()
         {
@@ -65,8 +65,8 @@ namespace MedicaWeb_MVC.Controllers
             }
 
             // Create Checkout Session with return session id back to view
-            var baseUrl = $"{Request.Scheme}://${Request.Host}";
-            var successUrl = $"{baseUrl}/Checkout/Success?session_id={{CHECKOUT_SESSION_ID}}";
+            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+            var successUrl = $"{baseUrl}/Checkout/Success?sessionId={{CHECKOUT_SESSION_ID}}";
             var cancelUrl = $"{baseUrl}/Checkout/Cancel";
             var sessionId = await _paymentService.CreateCheckoutSessionAsync(
                 cartItems,
@@ -74,6 +74,32 @@ namespace MedicaWeb_MVC.Controllers
                 successUrl,
                 cancelUrl);
             return Json(new { sessionId = sessionId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Success([FromQuery] string sessionId)
+        {
+            var user = await _accountService.GetUserByClaimsAsync(User);
+            if (user == null) return Unauthorized();
+
+            try
+            {
+                var order = await _orderService.CreateOrderFromCartAsync(user.Id, sessionId);
+                TempData["success"] = "Order placed successfully!";
+                return View(order);
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = $"Order creation failed: {ex.Message}";
+                return RedirectToAction(nameof(OrderSummary));
+            }
+        }
+
+        [HttpGet]
+        public IActionResult Cancel()
+        {
+            TempData["Info"] = "Checkout was cancelled.";
+            return RedirectToAction(nameof(OrderSummary));
         }
     }
 }

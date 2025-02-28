@@ -27,4 +27,8 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\js\checkouts\" />
+	</ItemGroup>
 </Project>

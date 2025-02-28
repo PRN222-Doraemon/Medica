@@ -1,5 +1,5 @@
-﻿function addClassToCart(classRoomId) {
-    fetch("/Cart/AddToCart", {
+﻿async function addClassToCart(classRoomId) {
+    await fetch("/Cart/AddToCart", {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ classRoomId: parseInt(classRoomId) })

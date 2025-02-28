@@ -67,14 +67,21 @@ namespace Infrastructure.Services
                 Metadata = new Dictionary<string, string> { { "UserId", userId.ToString() } }
             };
 
-            var service = new SessionService();
-            var session = await service.CreateAsync(options);
+            var sessionService = new SessionService();
+            var session = await sessionService.CreateAsync(options);
             return session.Id;
         }
 
-        public Task<string> VerifyPaymentAsync(string sessionId)
+        public async Task<string> VerifyPaymentAsync(string sessionId)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(sessionId))
+            {
+                throw new ArgumentException("Session Id is null");
+            }
+
+            var sessionService = new SessionService();
+            var session = await sessionService.GetAsync(sessionId);
+            return null;
         }
     }
 }

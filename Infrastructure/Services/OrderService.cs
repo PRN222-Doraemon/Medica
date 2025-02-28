@@ -54,6 +54,15 @@ namespace Infrastructure.Services
         public Task<Order> CreateOrderFromCartAsync(int userId, string sessionId)
         {
             throw new NotImplementedException();
+            // 1. Verify the payment
+
+            // 2. If successful than create order, add to the database
+
+            // 3. Clearing the cart
+
+
+            // 4. User is direct to the order summary
+
         }
 
 

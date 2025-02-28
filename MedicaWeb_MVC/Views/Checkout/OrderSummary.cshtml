@@ -1,4 +1,5 @@
 ﻿@model List<CartItemVM>
+
 @inject IConfiguration configuration
 
 @{
@@ -46,32 +47,27 @@
 			</tfoot>
 		</table>
 	</div>
-	<button id="checkout-button" class="btn btn-success mt-2">Checkout</button>
+	<button class="btn btn-success mt-2" onclick="openStripeSessionCheckout()">Checkout</button>
 </div>
 
 
 @section Scripts {
 	<script src="https://js.stripe.com/v3/"></script>
 	<script>
-		const stripe = Stripe("@stripePublishableKey");
-		document.getElementById('checkout-button').addEventListener('click', async () => {
-			try {
-				const response = await fetch('Checkout/Checkout', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' }
+		async function openStripeSessionCheckout() {
+			const stripe = Stripe("@stripePublishableKey");
+
+			await fetch('Checkout/Checkout', {
+				method: 'POST',
+				'headers': { 'Content-Type': 'application/json' }
+			})
+				.then(res => res.json())
+				.then(data => {
+					stripe.redirectToCheckout({ sessionId: data.sessionId })
+				})
+				.catch(err => {
+					alert(err.message);
 				});
-				const data = await response.json();
-				if (data.error) {
-					alert(data.error);
-					return;
-				}
-				const result = await stripe.redirectToCheckout({ sessionId: data.sessionId });
-				if (result.error) {
-					alert(result.error.message);
-				}
-			} catch (error) {
-				alert('An error occurred: ' + error.message);
-			}
-		});
+		};
 	</script>
 }
