@@ -4,62 +4,71 @@
     "FeedbackContent": "Great lecture, very informative!",
     "Status": "Enabled",
     "StudentId": 1,
-    "CourseId": 1
+    "CourseId": 1,
+    "CreatedAt": "2025-02-27 00:07:51.5766667"
   },
   {
     "Rating": 3.8,
     "FeedbackContent": "The session was good, but could use more examples.",
     "Status": "Enabled",
     "StudentId": 2,
-    "CourseId": 1
+    "CourseId": 1,
+    "CreatedAt": "2025-02-27 00:07:51.5766667"
   },
   {
     "Rating": 5.0,
     "FeedbackContent": "Best class I've ever attended!",
     "Status": "Enabled",
     "StudentId": 3,
-    "CourseId": 1
+    "CourseId": 1,
+    "CreatedAt": "2025-02-27 00:07:51.5766667"
   },
   {
     "Rating": 2.5,
     "FeedbackContent": "The lecture was a bit difficult to follow.",
     "Status": "Enabled",
     "StudentId": 1,
-    "CourseId": 2
+    "CourseId": 2,
+    "CreatedAt": "2025-02-27 00:07:51.5766667"
   },
   {
     "Rating": 2.5,
     "FeedbackContent": "The lecture was a bit difficult to follow.",
     "Status": "Enabled",
     "StudentId": 2,
-    "CourseId": 2
+    "CourseId": 2,
+    "CreatedAt": "2025-02-27 00:07:51.5766667"
   },
   {
     "Rating": 2.5,
     "FeedbackContent": "The lecture was a bit difficult to follow.",
     "Status": "Enabled",
     "StudentId": 3,
-    "CourseId": 2
+    "CourseId": 2,
+    "CreatedAt": "2025-02-27 00:07:51.5766667"
   },
   {
     "Rating": 2.5,
     "FeedbackContent": "The lecture was a bit difficult to follow.",
     "Status": "Disabled",
     "StudentId": 1,
-    "CourseId": 3
+    "CourseId": 3,
+    "CreatedAt": "2025-02-27 00:07:51.5766667"
   },
   {
     "Rating": 2.5,
     "FeedbackContent": "The lecture was a bit difficult to follow.",
     "Status": "Enabled",
     "StudentId": 2,
-    "CourseId": 3
+    "CourseId": 3,
+    "CreatedAt": "2025-01-28 00:03:51.4266667"
   },
   {
     "Rating": 2.5,
     "FeedbackContent": "The lecture was a bit difficult to follow.",
     "Status": "Enabled",
     "StudentId": 3,
-    "CourseId": 3
+    "CourseId": 3,
+    "CreatedAt": "2025-01-28 00:03:51.4266667"
   }
 ]

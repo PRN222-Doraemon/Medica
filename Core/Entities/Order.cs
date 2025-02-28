@@ -23,8 +23,5 @@ namespace Core.Entities
         Cancelled,
         [EnumMember(Value = "Paid")]
         Paid
-
     }
-
-
 }

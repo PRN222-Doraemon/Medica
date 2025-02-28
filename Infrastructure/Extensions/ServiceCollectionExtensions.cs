@@ -22,6 +22,12 @@ namespace Infrastructure.Extensions
                     opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
                 });
 
+                // Register the Redis with IDistributed API
+                services.AddStackExchangeRedisCache(opt =>
+                {
+                    opt.Configuration = configuration["Redis:ConnectionString"];
+                });
+
                 // Configure Identity and Authentication & Authorization
                 services.AddIdentity<ApplicationUser, ApplicationRole>(o =>
                 {

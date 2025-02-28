@@ -5,6 +5,11 @@ namespace Core.Specifications.Classes
 {
     public class ClassSpecification : BaseSpecification<Classroom>
     {
+        public ClassSpecification(int id) : base(x => x.Id == id) {
+            AddInclude(x => x.Course);
+            AddInclude(x => x.Lecturer);
+        }
+
         public ClassSpecification(ClassParams classParams, bool applyPaging = true) :
             base(x => (string.IsNullOrEmpty(classParams.Search) || x.Course.Name.ToLower().Contains(classParams.Search)) &&
             (!classParams.CategoryId.HasValue || classParams.CategoryId == x.Course.Category.Id) &&
