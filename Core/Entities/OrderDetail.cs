@@ -7,7 +7,5 @@
         public int ClassroomID { get; set; }
         public Classroom Classroom { get; set; }
         public decimal Price { get; set; }
-
-
     }
 }

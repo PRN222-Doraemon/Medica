@@ -7,11 +7,24 @@ namespace Infrastructure.Services
 {
     public class OrderService : IOrderService
     {
+        // ==============================
+        // === Fields & Props
+        // ==============================
+
         private readonly IUnitOfWork _unitOfWork;
+
+        // ==============================
+        // === Constructors
+        // ==============================
+
         public OrderService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
+
+        // ==============================
+        // === Methods
+        // ==============================
 
         public async Task<IEnumerable<Classroom>> GetMyLearningByStudentId(int studentId, ClassroomStatus? classroomStatus)
         {
@@ -36,6 +49,17 @@ namespace Infrastructure.Services
                 }
             }
             return classes;
+        }
+
+        public Task<Order> CreateOrderFromCartAsync(int userId, string sessionId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Task<Order> GetOrderByIdAsync(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

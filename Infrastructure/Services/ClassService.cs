@@ -8,11 +8,25 @@ namespace Infrastructure.Services
 {
     public class ClassService : IClassService
     {
+        // ==============================
+        // === Fields & Props
+        // ==============================
+
         private readonly IUnitOfWork _unitOfWork;
+
+        // ==============================
+        // === Constructors
+        // ==============================
+
         public ClassService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
+
+        // ==============================
+        // === Methods
+        // ==============================
+
         public Task CreateClassAsync(Classroom classroom)
         {
             throw new NotImplementedException();
@@ -21,6 +35,11 @@ namespace Infrastructure.Services
         public Task DeleteClassAsync(int id)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Classroom?> GetClassAsync(ISpecification<Classroom> spec)
+        {
+            return await _unitOfWork.Repository<Classroom>().GetEntityWithSpec(spec);
         }
 
         public Task<Course> GetClassByIdAsync(int id)

@@ -26,7 +26,10 @@ namespace MedicaWeb_MVC.Extensions
             services.AddScoped<IDashboardService, DashboardService>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<ICloudinaryService, CloudinaryService>();
+
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IPaymentService, StripePaymentService>();
 
             // config cloudinary
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
