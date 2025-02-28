@@ -62,7 +62,7 @@ namespace Infrastructure.Services
             {
                 ClassRoomId = classRoomId,
                 CourseId = classRoom.CourseId,
-                CouresName = classRoom.Course.Name,
+                CourseName = classRoom.Course.Name,
                 Price = classRoom.Course.Price,
             });
 

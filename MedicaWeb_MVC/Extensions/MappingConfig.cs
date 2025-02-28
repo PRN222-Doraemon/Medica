@@ -65,8 +65,8 @@ namespace MedicaWeb_MVC.Extensions
                 // ==============================
                 // === Cart
                 // ==============================
-                config.CreateMap<CartItem, CartItemVM>()
-                .ForMember(d => d.CourseName, u => u.MapFrom(s => s.CouresName));
+
+                config.CreateMap<CartItem, CartItemVM>();
             });
         }
     }

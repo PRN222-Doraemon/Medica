@@ -10,7 +10,7 @@ namespace Core.Entities
     {
         public int ClassRoomId { get; set; }
         public int CourseId { get; set; }
+        public string CourseName { get; set; }
         public decimal Price { get; set; }
-        public string CouresName { get; set; }
     }
 }
