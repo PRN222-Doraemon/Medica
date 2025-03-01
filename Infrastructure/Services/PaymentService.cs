@@ -16,32 +16,15 @@ namespace Infrastructure.Services
     public class StripePaymentService : IPaymentService
     {
         // ==============================
-        // === Fields & Props
-        // ==============================
-
-        private readonly IConfiguration _config;
-        private readonly IUnitOfWork _unitOfWork;
-
-        // ==============================
-        // === Constructors
-        // ==============================
-
-        public StripePaymentService(IUnitOfWork unitOfWork)
-        {
-            _unitOfWork = unitOfWork;
-        }
-
-        // ==============================
         // === Methods
         // ==============================
-
-
         public async Task<string> CreateCheckoutSessionAsync(List<CartItem> cartItems, int userId, string successfulUrl, string cancelUrl)
         {
             // If cart items is empty
             if (!cartItems.Any()) throw new ArgumentException("Invalid Cart for checkout");
 
-            // Retrieve all courses based on courseId
+            // Retrieve course on course id
+
 
             // Stripe Options 
             var options = new SessionCreateOptions
@@ -70,18 +53,6 @@ namespace Infrastructure.Services
             var sessionService = new SessionService();
             var session = await sessionService.CreateAsync(options);
             return session.Id;
-        }
-
-        public async Task<string> VerifyPaymentAsync(string sessionId)
-        {
-            if (string.IsNullOrEmpty(sessionId))
-            {
-                throw new ArgumentException("Session Id is null");
-            }
-
-            var sessionService = new SessionService();
-            var session = await sessionService.GetAsync(sessionId);
-            return null;
         }
     }
 }

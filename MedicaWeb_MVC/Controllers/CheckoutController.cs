@@ -1,6 +1,9 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
+using Core.Specifications.Classes;
+using Core.Specifications.Courses;
 using MedicaWeb_MVC.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,18 +20,23 @@ namespace MedicaWeb_MVC.Controllers
         private readonly IAccountService _accountService;
         private readonly IPaymentService _paymentService;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _configuration;
         private readonly IOrderService _orderService;
+        private readonly IUnitOfWork _unitOfWork;
 
         // ==============================
         // === Constructors
         // ==============================
-        public CheckoutController(ICartService cartService, IAccountService accountService, IPaymentService paymentService, IMapper mapper, IOrderService orderService)
+
+        public CheckoutController(ICartService cartService, IAccountService accountService, IPaymentService paymentService, IMapper mapper, IConfiguration configuration, IOrderService orderService, IUnitOfWork unitOfWork)
         {
             _cartService = cartService;
             _accountService = accountService;
             _paymentService = paymentService;
             _mapper = mapper;
+            _configuration = configuration;
             _orderService = orderService;
+            _unitOfWork = unitOfWork;
         }
 
         // ==============================
@@ -48,7 +56,30 @@ namespace MedicaWeb_MVC.Controllers
                 TempData["error"] = "Your cart is empty.";
                 return RedirectToAction("Index", "Cart");
             }
-            return View(_mapper.Map<IEnumerable<CartItem>, IEnumerable<CartItemVM>>(cartItems));
+
+            var cartItemsVM = _mapper.Map<IEnumerable<CartItem>, IEnumerable<CartItemVM>>(cartItems);
+
+            foreach (var item in cartItemsVM)
+            {
+                var course = await _unitOfWork.Repository<Course>().GetEntityWithSpec(new CourseSpecification(item.CourseId));
+                var classroom = await _unitOfWork.Repository<Classroom>().GetEntityWithSpec(new ClassSpecification(item.ClassRoomId));
+
+                if (course != null)
+                {
+                    item.Duration = course.Duration;
+                    item.Description = course.Description;
+                    item.ImageUrl = course.ImgUrl;
+                }
+
+                if (classroom != null)
+                {
+                    item.InstructorName = classroom.Lecturer.FullName;
+                    item.StartDate = classroom.StartDate;
+                    item.Mode = classroom.Mode;
+                }
+            }
+
+            return View(cartItemsVM);
         }
 
         [HttpPost]
@@ -66,39 +97,29 @@ namespace MedicaWeb_MVC.Controllers
 
             // Create Checkout Session with return session id back to view
             var baseUrl = $"{Request.Scheme}://{Request.Host}";
-            var successUrl = $"{baseUrl}/Checkout/Success?sessionId={{CHECKOUT_SESSION_ID}}";
-            var cancelUrl = $"{baseUrl}/Checkout/Cancel";
+            var successUrl = $"{baseUrl}/{_configuration["Stripe:SuccessUrl"]}";
+            var cancelUrl = $"{baseUrl}/{_configuration["Stripe:CancelUrl"]}";
+
             var sessionId = await _paymentService.CreateCheckoutSessionAsync(
                 cartItems,
                 user.Id,
                 successUrl,
                 cancelUrl);
-            return Json(new { sessionId = sessionId });
+
+            return Json(new { sessionId });
         }
 
         [HttpGet]
-        public async Task<IActionResult> Success([FromQuery] string sessionId)
+        public async Task<IActionResult> Success()
         {
-            var user = await _accountService.GetUserByClaimsAsync(User);
-            if (user == null) return Unauthorized();
-
-            try
-            {
-                var order = await _orderService.CreateOrderFromCartAsync(user.Id, sessionId);
-                TempData["success"] = "Order placed successfully!";
-                return View(order);
-            }
-            catch (Exception ex)
-            {
-                TempData["error"] = $"Order creation failed: {ex.Message}";
-                return RedirectToAction(nameof(OrderSummary));
-            }
+            TempData["success"] = "Payment received. Your order is being processed.";
+            return View();
         }
 
         [HttpGet]
         public IActionResult Cancel()
         {
-            TempData["Info"] = "Checkout was cancelled.";
+            TempData["error"] = "Checkout was cancelled.";
             return RedirectToAction(nameof(OrderSummary));
         }
     }

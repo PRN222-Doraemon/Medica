@@ -21,17 +21,15 @@ namespace Infrastructure.Services
         // ==============================
 
         private readonly IDistributedCache _cache;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IClassService _classService;
 
         // ==============================
         // === Constructors
         // ==============================
 
-        public CartService(IDistributedCache cache, IUnitOfWork unitOfWork, IClassService classService)
+        public CartService(IDistributedCache cache, IClassService classService)
         {
             _cache = cache;
-            _unitOfWork = unitOfWork;
             _classService = classService;
         }
 

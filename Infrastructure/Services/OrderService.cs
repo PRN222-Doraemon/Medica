@@ -12,14 +12,16 @@ namespace Infrastructure.Services
         // ==============================
 
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ICartService _cartService;
 
         // ==============================
         // === Constructors
         // ==============================
 
-        public OrderService(IUnitOfWork unitOfWork)
+        public OrderService(IUnitOfWork unitOfWork, ICartService cartService)
         {
             _unitOfWork = unitOfWork;
+            _cartService = cartService;
         }
 
         // ==============================
@@ -51,24 +53,25 @@ namespace Infrastructure.Services
             return classes;
         }
 
-        public Task<Order> CreateOrderFromCartAsync(int userId, string sessionId)
-        {
-            throw new NotImplementedException();
-            // 1. Verify the payment
+        //public async Task<Order> CreateOrderFromCartAsync(int userId)
+        //{
+        //    // 1. Get item from cart
+        //    var cartItems = await _cartService.GetCartItemsAsync(userId);
+        //    if (cartItems == null || !cartItems.Any()) throw new InvalidOperationException("Cart is empty");
 
-            // 2. If successful than create order, add to the database
+        //    // 2. If successful than create order, add to the database
+        //    var order = new Order() { 
 
-            // 3. Clearing the cart
+        //    }
 
+        //    // 3. Clearing the cart
 
-            // 4. User is direct to the order summary
+        //    // 4. User is direct to the order summary
+        //}
 
-        }
+        //public Task<Order> GetOrderByIdAsync(int id)
+        //{
 
-
-        public Task<Order> GetOrderByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+        //}
     }
 }
