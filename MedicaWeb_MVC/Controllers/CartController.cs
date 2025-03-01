@@ -18,7 +18,6 @@ namespace MedicaWeb_MVC.Controllers
         // === Fields & Props
         // ==============================
 
-        private readonly IOrderService _orderService;
         private readonly ICartService _cartService;
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
@@ -27,9 +26,8 @@ namespace MedicaWeb_MVC.Controllers
         // === Constructors
         // ==============================
 
-        public CartController(IOrderService orderService, ICartService cartService, IAccountService accountService, IMapper mapper)
+        public CartController(ICartService cartService, IAccountService accountService, IMapper mapper)
         {
-            _orderService = orderService;
             _cartService = cartService;
             _accountService = accountService;
             _mapper = mapper;
@@ -50,6 +48,7 @@ namespace MedicaWeb_MVC.Controllers
             return View(_mapper.Map<IEnumerable<CartItem>, IEnumerable<CartItemVM>>(cartItems));
         }
 
+        // /Cart/AddToCart
         [HttpPost]
         public async Task<IActionResult> AddToCart([FromBody] AddToCartDto addToCartDto)
         {
