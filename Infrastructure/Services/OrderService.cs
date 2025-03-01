@@ -2,6 +2,7 @@
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Orders;
+using Stripe.Checkout;
 
 namespace Infrastructure.Services
 {
@@ -23,6 +24,7 @@ namespace Infrastructure.Services
             _unitOfWork = unitOfWork;
             _cartService = cartService;
         }
+
 
         // ==============================
         // === Methods
@@ -53,25 +55,43 @@ namespace Infrastructure.Services
             return classes;
         }
 
-        //public async Task<Order> CreateOrderFromCartAsync(int userId)
-        //{
-        //    // 1. Get item from cart
-        //    var cartItems = await _cartService.GetCartItemsAsync(userId);
-        //    if (cartItems == null || !cartItems.Any()) throw new InvalidOperationException("Cart is empty");
+        public Task<Order> UpdateOrderStatus(int orderId, OrderStatus orderStatus, string paymentIntentId)
+        {
+            throw new NotImplementedException();
+        }
+        public async Task<Order> CreateOrderFromCartAsync(int studentId, string paymentIntentId)
+        {
+            // Get item from cart
+            var cartItems = await _cartService.GetCartItemsAsync(studentId);
+            if (cartItems == null || !cartItems.Any()) throw new InvalidOperationException("Cart is empty");
 
-        //    // 2. If successful than create order, add to the database
-        //    var order = new Order() { 
+            // Create new order
+            var order = new Order
+            {
+                StudentId = studentId,
+                PaymentIntentId = paymentIntentId,
+                Status = OrderStatus.Pending,
+                OrderTime = DateTime.UtcNow,
+                TotalPrice = cartItems.Select(o => o.Price).Sum(),
+                OrderDetails = cartItems.Select(item => new OrderDetail
+                {
+                    ClassroomID = item.ClassRoomId,
+                    Price = item.Price
+                }).ToList()
+            };
 
-        //    }
+            // Commit and Delete cart if commit successfully
+            _unitOfWork.Repository<Order>().Add(order);
+            if (await _unitOfWork.CompleteAsync() > 0)
+            {
+                await _cartService.DeleteCartAsync(studentId);
+            }
+            else
+            {
+                throw new InvalidOperationException("Failed to create order.");
+            }
 
-        //    // 3. Clearing the cart
-
-        //    // 4. User is direct to the order summary
-        //}
-
-        //public Task<Order> GetOrderByIdAsync(int id)
-        //{
-
-        //}
+            return order;
+        }
     }
 }
