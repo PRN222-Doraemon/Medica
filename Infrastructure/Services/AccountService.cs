@@ -100,5 +100,10 @@ namespace Infrastructure.Services
             if (principal == null) return false;
             return _signInManager.IsSignedIn(principal);
         }
+
+        public async Task<List<ApplicationUser>> GetAllRegisteredUserAsync()
+        {
+            return await _userManager.Users.ToListAsync();
+        }
     }
 }

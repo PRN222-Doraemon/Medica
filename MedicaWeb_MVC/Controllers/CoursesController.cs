@@ -171,7 +171,7 @@ namespace MedicaWeb_MVC.Controllers
             }
             catch (Exception ex)
             {
-                TempData["Error"] = ex.Message;
+                TempData["error"] = ex.Message;
             }
             ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
             ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }

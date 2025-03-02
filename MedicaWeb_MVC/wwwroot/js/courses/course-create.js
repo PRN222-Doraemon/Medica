@@ -41,7 +41,6 @@ function updateChapterIndices() {
         });
     });
 }
-
 function updateResourceIndices(chapter) {
     const resources = chapter.querySelectorAll('.resource-item');
     const chapterIndex = chapter.dataset.chapterIndex;

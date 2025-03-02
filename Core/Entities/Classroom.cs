@@ -40,7 +40,6 @@ namespace Core.Entities
     {
         [EnumMember(Value = "Active")]
         Active,
-
         [EnumMember(Value = "Cancelled")]
         Cancelled,
         [EnumMember(Value = "Completed")]

@@ -26,7 +26,6 @@ namespace MedicaWeb_MVC.Extensions
                 config.CreateMap<Course, CourseCreateVM>()
                 .ForMember(dest => dest.CategoryName, u => u.MapFrom(src => src.Category.Name));
 
-
                 config.CreateMap<CourseCreateVM, Course>()
                 .ForMember(dest => dest.CreatedByUserID, opt => opt.Ignore())
                 .ForMember(dest => dest.Comments, opt => opt.Ignore())
@@ -59,8 +58,21 @@ namespace MedicaWeb_MVC.Extensions
                 // ==============================
                 // === Classrooms
                 // ==============================
+
                 config.CreateMap<Classroom, ClassVM>();
 
+                // ==============================
+                // === Cart
+                // ==============================
+
+                config.CreateMap<CartItem, CartItemVM>()
+                   .ForMember(dest => dest.Quantity, opt => opt.Ignore())
+                   .ForMember(dest => dest.InstructorName, opt => opt.Ignore())
+                   .ForMember(dest => dest.StartDate, opt => opt.Ignore())
+                   .ForMember(dest => dest.Duration, opt => opt.Ignore())
+                   .ForMember(dest => dest.Mode, opt => opt.Ignore())
+                   .ForMember(dest => dest.Description, opt => opt.Ignore())
+                   .ReverseMap();
             });
         }
     }

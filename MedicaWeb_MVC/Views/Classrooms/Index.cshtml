@@ -1,168 +1,162 @@
 ﻿@using MedicaWeb_MVC.ViewModels
 @model ListVM<ClassVM>
 @{
-    var Course = ViewData["Course"] as CourseVM;
-    var Lecturers = ViewData["Lecturers"] as IEnumerable<LecturerVM>;
+	var Course = ViewData["Course"] as CourseVM;
+	var Lecturers = ViewData["Lecturers"] as IEnumerable<LecturerVM>;
 }
 
 <div class="container-fluid px-0">
-    <nav aria-label="breadcrumb" class="bg-white py-2 border-bottom">
-        <div class="container d-flex justify-content-between align-items-center">
-            <ol class="breadcrumb m-0 bg-transparent">
-                <li class="breadcrumb-item"><a asp-controller="Courses" asp-action="Index"><i class="bi bi-house-door-fill"></i></a></li>
-                <li class="breadcrumb-item"><a asp-controller="Courses" asp-action="Details" asp-route-id="@Course?.Id">@Course?.Name</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Classes</li>
-            </ol>
-        </div>
-    </nav>
+	<nav aria-label="breadcrumb" class="bg-white py-2 border-bottom">
+		<div class="container d-flex justify-content-between align-items-center">
+			<ol class="breadcrumb m-0 bg-transparent">
+				<li class="breadcrumb-item"><a asp-controller="Courses" asp-action="Index"><i class="bi bi-house-door-fill"></i></a></li>
+				<li class="breadcrumb-item"><a asp-controller="Courses" asp-action="Details" asp-route-id="@Course?.Id">@Course?.Name</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Classes</li>
+			</ol>
+		</div>
+	</nav>
 
 
-    <div class="container-fluid bg-primary-subtle py-5">
-        <div class="container position-relative">
-            <!-- Background graphic -->
-            <div class="position-absolute end-0 top-0 h-100" style="z-index: 0;">
-                <img src="@(Course?.ImgUrl)" alt="Background graphic" class="h-100">
-            </div>
+	<div class="container-fluid bg-primary-subtle py-5">
+		<div class="container position-relative">
+			<!-- Background graphic -->
+			<div class="position-absolute end-0 top-0 h-100" style="z-index: 0;">
+				<img src="@(Course?.ImgUrl)" alt="Background graphic" class="h-100">
+			</div>
 
-            <!-- Content -->
-            
-            <div class="row position-relative" style="z-index: 1;">
-                <div class="col-lg-8">
-                    <!-- Course Title -->
-                    <h1 class="display-5 fw-bold mb-3">@Course?.Name</h1>
-                    
-                    <!-- Course Description -->
-                    <p class="mb-4">
-                        @Course?.Description
-                    </p>
+			<!-- Content -->
 
-                    <!-- Instructors -->
-                    <div class="d-flex align-items-center mb-4">
-                        <span class="me-2">Lecturers:</span>
-                        <div class="d-flex align-items-center">
-                            @foreach(var lecturer in Lecturers) {
-                                <img src="@lecturer.ImageUrl" alt="Lecturer" class="rounded-circle me-1" style="width: 30px; height: 30px;">
-                            }
-                            @foreach (var lecturer in Lecturers)
-                            {
-                                <a href="@lecturer.Id" class="me-2">@lecturer.FullName</a>
-                            }
-                        </div>
-                    </div>
+			<div class="row position-relative" style="z-index: 1;">
+				<div class="col-lg-8">
+					<!-- Course Title -->
+					<h1 class="display-5 fw-bold mb-3">@Course?.Name</h1>
 
-                    <!-- Enroll Button -->
-                    <div class="mb-3">
-                        <button class="btn btn-primary px-4 py-2">Best Seller</button>
-                    </div>
+					<!-- Course Description -->
+					<p class="mb-4">
+						@Course?.Description
+					</p>
 
-                    <!-- Enrollment Count -->
-                    <div class="mb-5">
-                        <span class="fw-bold">@Course?.TotalEnrolls</span> already enrolled
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-    </div>
-    
+					<!-- Instructors -->
+					<div class="d-flex align-items-center mb-4">
+						<span class="me-2">Lecturers:</span>
+						<div class="d-flex align-items-center">
+							@foreach (var lecturer in Lecturers)
+							{
+								<img src="@lecturer.ImageUrl" alt="Lecturer" class="rounded-circle me-1" style="width: 30px; height: 30px;">
+							}
+							@foreach (var lecturer in Lecturers)
+							{
+								<a href="@lecturer.Id" class="me-2">@lecturer.FullName</a>
+							}
+						</div>
+					</div>
 
-    <!-- Class Cards -->
-    
-    <div class="container mt-n4 mb-5">
-        <h3 class="mb-4 mt-4">Available Classes For @Course?.Name</h3>
-        
-            <!-- Filter Buttons -->
-            <div class="mb-4">
-                <div class="d-flex gap-2 flex-wrap">
-                    <a asp-action="Index" asp-controller="Classrooms" asp-route-courseId="@Course?.Id"
-                    class="btn btn-lg px-4 @(!Model.ClassroomStatus.HasValue ? "btn-primary" : "btn-outline-primary")  rounded-pill">
-                        <i class="bi bi-grid-3x3-gap-fill me-2"></i> All
-                    </a>
-                    @foreach (var filter in Enum.GetValues(typeof(ClassroomStatus)).Cast<ClassroomStatus>())
-                    {
-                    @if (filter == ClassroomStatus.Ongoing || filter == ClassroomStatus.Upcoming || filter == ClassroomStatus.Completed)
-                        {
-                            <a asp-action="Index" asp-controller="Classrooms" asp-route-classroomStatus="@filter.ToString()"
-                            asp-route-courseId="@Course?.Id"
-                            class="btn btn-lg px-4 @(Model.ClassroomStatus == filter ? "btn-primary" : "btn-outline-primary") rounded-pill">
-                                <i class="bi @(filter == ClassroomStatus.Completed ? "bi-check-circle" :
+					<!-- Enroll Button -->
+					<div class="mb-3">
+						<button class="btn btn-primary px-4 py-2">Best Seller</button>
+					</div>
+
+					<!-- Enrollment Count -->
+					<div class="mb-5">
+						<span class="fw-bold">@Course?.TotalEnrolls</span> already enrolled
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+
+	<!-- Class Cards -->
+
+	<div class="container mt-n4 mb-5">
+		<h3 class="mb-4 mt-4">Available Classes For @Course?.Name</h3>
+
+		<!-- Filter Buttons -->
+		<div class="mb-4">
+			<div class="d-flex gap-2 flex-wrap">
+				<a asp-action="Index" asp-controller="Classrooms" asp-route-courseId="@Course?.Id"
+				   class="btn btn-lg px-4 @(!Model.ClassroomStatus.HasValue ? "btn-primary" : "btn-outline-primary")  rounded-pill">
+					<i class="bi bi-grid-3x3-gap-fill me-2"></i> All
+				</a>
+				@foreach (var filter in Enum.GetValues(typeof(ClassroomStatus)).Cast<ClassroomStatus>())
+				{
+					@if (filter == ClassroomStatus.Ongoing || filter == ClassroomStatus.Upcoming)
+					{
+						<a asp-action="Index" asp-controller="Classrooms" asp-route-classroomStatus="@filter.ToString()"
+						   asp-route-courseId="@Course?.Id"
+						   class="btn btn-lg px-4 @(Model.ClassroomStatus == filter ? "btn-primary" : "btn-outline-primary") rounded-pill">
+							<i class="bi @(filter == ClassroomStatus.Completed ? "bi-check-circle" :
                              filter == ClassroomStatus.Upcoming ? "bi-calendar-event" : "bi-play-circle") me-2"></i>
-                                @filter.ToString().Replace("_", " ")
-                            </a>
-                        }
+							@filter.ToString().Replace("_", " ")
+						</a>
+					}
 
-                    }
-                </div>
-            </div>
-        @if (Model.Items != null && Model.Items.Count() > 0)
-        {
-            <div class="row row-cols-1 row-cols-md-3 g-4">
-                @foreach (var classroom in Model.Items.Take(3))
-                {
-                    <!-- Card 1 -->
-                    <div class="col">
-                        <div class="card shadow-sm h-100 rounded-3 overflow-hidden border border-primary-subtle">
-                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <img src="@classroom.Lecturer.ImageUrl" alt="Lecturer" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
-                                    <div>
-                                        <h6 class="mb-0">Mr. @classroom.Lecturer.FullName</h6>
-                                    </div>
-                                </div>
-                                <button class="btn @(classroom.ComputedStatus == ClassroomStatus.Completed ? "btn-secondary" :
+				}
+			</div>
+		</div>
+		@if (Model.Items != null && Model.Items.Count() > 0)
+		{
+			<div class="row row-cols-1 row-cols-md-3 g-4">
+				@foreach (var classroom in Model.Items.Take(3))
+				{
+					<!-- Card 1 -->
+					<div class="col">
+						<div class="card shadow-sm h-100 rounded-3 overflow-hidden border border-primary-subtle">
+							<div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+								<div class="d-flex align-items-center justify-content-between">
+									<img src="@classroom.Lecturer.ImageUrl" alt="Lecturer" class="rounded-circle me-2" style="width: 40px; height: 40px; object-fit: cover;">
+									<div>
+										<h6 class="mb-0">Mr. @classroom.Lecturer.FullName</h6>
+									</div>
+								</div>
+								<button class="btn @(classroom.ComputedStatus == ClassroomStatus.Completed ? "btn-secondary" :
                                                  classroom.ComputedStatus == ClassroomStatus.Upcoming ? "btn-success" :
                                                  classroom.ComputedStatus == ClassroomStatus.Ongoing ? "btn-warning" :
                                                  "btn-danger")">
-                                    @classroom.ComputedStatus
-                                </button>
+									@classroom.ComputedStatus
+								</button>
 
-                            </div>
+							</div>
 
-                            <div class="card-body">
-                                <p class="card-text mb-3" style="height: 4.5rem; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
-                                    @classroom.Description
-                                </p>
+							<div class="card-body">
+								<p class="card-text mb-3" style="height: 4.5rem; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;">
+									@classroom.Description
+								</p>
 
-                                <div class="d-flex flex-wrap mb-3">
-                                    <div class="me-3 mb-2">
-                                        <span class="badge bg-info">@classroom.Mode</span>
-                                    </div>
-                                    <div class="me-3 mb-2">
-                                        <small class="text-muted d-block">Start Date</small>
-                                        <span>@classroom.StartDate</span>
-                                    </div>
-                                    <div class="me-3 mb-2">
-                                        <small class="text-muted d-block">End Date</small>
-                                        <span>@classroom.EndDate</span>
-                                    </div>
-                                </div>
+								<div class="d-flex flex-wrap mb-3">
+									<div class="me-3 mb-2">
+										<span class="badge bg-info">@classroom.Mode</span>
+									</div>
+									<div class="me-3 mb-2">
+										<small class="text-muted d-block">Start Date</small>
+										<span>@classroom.StartDate</span>
+									</div>
+									<div class="me-3 mb-2">
+										<small class="text-muted d-block">End Date</small>
+										<span>@classroom.EndDate</span>
+									</div>
+								</div>
 
-                                <hr>
+								<hr>
 
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <div class="d-flex align-items-center">
-                                        <i class="bi bi-people-fill me-1 text-muted"></i>
-                                        <small class="text-muted">@classroom.TotalEnrolls / @classroom.MaxParticipant participants</small>
-                                    </div>
-                                </div>
+								<div class="d-flex justify-content-between align-items-center mb-3">
+									<div class="d-flex align-items-center">
+										<i class="bi bi-people-fill me-1 text-muted"></i>
+										<small class="text-muted">@classroom.TotalEnrolls / @classroom.MaxParticipant participants</small>
+									</div>
+								</div>
 
-                                <div class="progress mb-3" style="height: 8px;">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: @(@classroom.TotalEnrolls/classroom.MaxParticipant * 100)%;"
-                                    aria-valuenow="@classroom.TotalEnrolls" aria-valuemin="0" aria-valuemax="@classroom.MaxParticipant"></div>
-                                </div>
-                            </div>
+								<div class="progress mb-3" style="height: 8px;">
+									<div class="progress-bar bg-success" role="progressbar" style="width: @(@classroom.TotalEnrolls/classroom.MaxParticipant * 100)%;"
+										 aria-valuenow="@classroom.TotalEnrolls" aria-valuemin="0" aria-valuemax="@classroom.MaxParticipant"></div>
+								</div>
+							</div>
 
                             <div class="card-footer bg-white border-top-0 mb-3">
                                 <div class="d-flex gap-2 justify-content-between align-items-center">
-                                    @if(classroom.ComputedStatus == ClassroomStatus.Upcoming) {
-                                        <button class="btn btn-outline-primary w-100">Add to cart</button>
-                                        <button class="btn btn-primary w-100">Enroll</button>
-                                    }
-                                    else {
-                                        <button class="btn btn-outline-primary w-100 disabled">Add to cart</button>
-                                        <button class="btn btn-primary w-100 disabled">Enroll</button>
-                                    }
-                                    
+                                    <button class="btn btn-outline-primary w-100">Add to cart</button>
+                                    <button class="btn btn-primary w-100">Enroll</button>
                                 </div>
                             </div>
                         </div>
@@ -174,12 +168,16 @@
         {
             <span>There is no available classes for this course</span>
 
-        }
+		}
 
-        </div>
+	</div>
 
-    <div>
-        @await Html.PartialAsync("~/Views/Shared/ReusableViews/_Paging.cshtml", Model.PagingInfo)
-    </div>
-    
-    </div>
+	<div>
+		@await Html.PartialAsync("~/Views/Shared/ReusableViews/_Paging.cshtml", Model.PagingInfo)
+	</div>
+
+</div>
+
+@section Scripts {
+	<script src="~/js/classrooms/addClassToCart.js"></script>
+    }

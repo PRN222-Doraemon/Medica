@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Stripe;
 
 namespace Infrastructure.Extensions
 {
@@ -21,6 +22,15 @@ namespace Infrastructure.Extensions
                 {
                     opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
                 });
+
+                // Register the Redis with IDistributed API
+                services.AddStackExchangeRedisCache(opt =>
+                {
+                    opt.Configuration = configuration["Redis:ConnectionString"];
+                });
+
+                // Configure Stripe API key
+                StripeConfiguration.ApiKey = configuration["Stripe:SecretKey"];
 
                 // Configure Identity and Authentication & Authorization
                 services.AddIdentity<ApplicationUser, ApplicationRole>(o =>

@@ -1,0 +1,63 @@
+﻿@model List<CartItemVM>
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white text-center">
+            <h2><i class="bi bi-cart"></i> Your Cart</h2>
+        </div>
+        <div class="card-body">
+            @if (!Model.Any())
+            {
+                <div class="alert alert-warning text-center">
+                    <i class="bi bi-exclamation-triangle"></i> Your cart is empty.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover table-bordered text-center align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Image</th>
+                                <th>Course</th>
+                                <th>Lecturer</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <img src="@item.ImageUrl" alt="@item.CourseName" class="img-thumbnail rounded" style="width: 80px; height: 80px; object-fit: cover;">
+                                    </td>
+                                    <td>@item.CourseName</td>
+                                    <td>@(string.IsNullOrEmpty(item.InstructorName) ? "N/A" : item.InstructorName)</td>
+                                    <td class="text-success fw-bold">@item.Price.ToString("C")</td>
+                                    <td>@item.Quantity</td>
+                                    <td class="text-success fw-bold">@((item.Price * item.Quantity).ToString("C"))</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-primary">
+                                <td colspan="5" class="fw-bold text-end">Total</td>
+                                <td class="fw-bold text-success">
+                                    @Model.Sum(i => i.Price * i.Quantity).ToString("C")
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a asp-controller="Checkout" asp-action="OrderSummary" class="btn btn-lg btn-primary shadow-sm">
+                        <i class="bi bi-credit-card"></i> Go to Checkout
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
