@@ -8,6 +8,7 @@
         public string? ImgUrl { get; set; }
         public IFormFile? ImageFile { get; set; }
         public int CategoryID { get; set; }
+        public decimal Price { get; set; }
         public string? CategoryName { get; set; }
         //public int CreatedByUserID { get; set; }
         public TimeSpan Duration { get; set; }

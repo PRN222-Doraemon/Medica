@@ -176,7 +176,7 @@ namespace MedicaWeb_MVC.Controllers
             ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
             ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }
             );
-            return RedirectToAction(nameof(Details), id);
+            return RedirectToAction(nameof(Index), id);
         }
     }
 }

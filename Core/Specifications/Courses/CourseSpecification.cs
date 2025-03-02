@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Core.Specifications.Courses
 {
@@ -28,6 +29,7 @@ namespace Core.Specifications.Courses
                                     .ThenInclude(f => f.OrderDetails));
             AddCustomInclude(x => x.Include(c => c.Classrooms)
                                     .ThenInclude(f => f.Lecturer));
+            AddOrderBy(x => x.Status);
             if (applyPaging)
             {
                 ApplyPaging(courseParam.PageSize * (courseParam.Page - 1),

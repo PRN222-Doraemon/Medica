@@ -20,7 +20,13 @@
             <!-- Course Header -->
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <h1 class="display-5 fw-bold mb-0">@Model.Name</h1>
+                    <div>
+                        <h1 class="display-5 fw-bold mb-0">@Model.Name</h1>
+                        <span class="badge rounded-pill @(Model.Status.ToString() == "Active" ? "bg-success" : "bg-secondary")">
+                            @Model.Status
+                        </span>
+                    </div>
+                    
                     @if(User.IsInRole(AppCts.Roles.Lecturer)) {
                         <div>
                             <a asp-action="Upsert" asp-controller="Courses" asp-route-id="@Model.Id"

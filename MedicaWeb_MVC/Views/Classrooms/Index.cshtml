@@ -80,7 +80,7 @@
                     </a>
                     @foreach (var filter in Enum.GetValues(typeof(ClassroomStatus)).Cast<ClassroomStatus>())
                     {
-                        @if (filter == ClassroomStatus.Ongoing || filter == ClassroomStatus.Upcoming)
+                    @if (filter == ClassroomStatus.Ongoing || filter == ClassroomStatus.Upcoming || filter == ClassroomStatus.Completed)
                         {
                             <a asp-action="Index" asp-controller="Classrooms" asp-route-classroomStatus="@filter.ToString()"
                             asp-route-courseId="@Course?.Id"
@@ -154,8 +154,15 @@
 
                             <div class="card-footer bg-white border-top-0 mb-3">
                                 <div class="d-flex gap-2 justify-content-between align-items-center">
-                                    <button class="btn btn-outline-primary w-100">Add to cart</button>
-                                    <button class="btn btn-primary w-100">Enroll</button>
+                                    @if(classroom.ComputedStatus == ClassroomStatus.Upcoming) {
+                                        <button class="btn btn-outline-primary w-100">Add to cart</button>
+                                        <button class="btn btn-primary w-100">Enroll</button>
+                                    }
+                                    else {
+                                        <button class="btn btn-outline-primary w-100 disabled">Add to cart</button>
+                                        <button class="btn btn-primary w-100 disabled">Enroll</button>
+                                    }
+                                    
                                 </div>
                             </div>
                         </div>
