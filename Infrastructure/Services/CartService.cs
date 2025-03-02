@@ -61,6 +61,7 @@ namespace Infrastructure.Services
                 ClassRoomId = classRoomId,
                 CourseId = classRoom.CourseId,
                 CourseName = classRoom.Course.Name,
+                ImageUrl = classRoom.Course.ImgUrl ?? string.Empty,
                 Price = classRoom.Course.Price,
             });
 

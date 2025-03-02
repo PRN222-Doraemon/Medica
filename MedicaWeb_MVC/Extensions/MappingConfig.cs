@@ -66,7 +66,6 @@ namespace MedicaWeb_MVC.Extensions
                 // ==============================
 
                 config.CreateMap<CartItem, CartItemVM>()
-                   .ForMember(dest => dest.ImageUrl, opt => opt.Ignore())
                    .ForMember(dest => dest.Quantity, opt => opt.Ignore())
                    .ForMember(dest => dest.InstructorName, opt => opt.Ignore())
                    .ForMember(dest => dest.StartDate, opt => opt.Ignore())
