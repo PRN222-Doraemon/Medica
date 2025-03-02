@@ -496,3 +496,4 @@ $RECYCLE.BIN/
 .vscode
 /MedicaWeb_MVC/appsettings.json
 /MedicaWeb_MVC/appsettings.Development.json
+/docker-compose.yml
