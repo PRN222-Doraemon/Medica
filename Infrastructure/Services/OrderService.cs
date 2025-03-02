@@ -55,11 +55,7 @@ namespace Infrastructure.Services
             return classes;
         }
 
-        public Task<Order> UpdateOrderStatus(int orderId, OrderStatus orderStatus, string paymentIntentId)
-        {
-            throw new NotImplementedException();
-        }
-        public async Task<Order> CreateOrderFromCartAsync(int studentId, string paymentIntentId)
+        public async Task<Order> CreateOrderFromCartAsync(string paymentIntentId, int studentId)
         {
             // Get item from cart
             var cartItems = await _cartService.GetCartItemsAsync(studentId);
@@ -92,6 +88,22 @@ namespace Infrastructure.Services
             }
 
             return order;
+        }
+
+        public async Task<Order> GetOrderByPaymentIntentId(string paymentIntentId)
+        {
+            var spec = new OrderSpecification(paymentIntentId);
+            return await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
+        }
+
+        public async Task UpdateOrderStatusAsync(Order order, OrderStatus orderStatus)
+        {
+            if (order != null)
+            {
+                order.Status = orderStatus;
+                _unitOfWork.Repository<Order>().Update(order);
+                await _unitOfWork.CompleteAsync();
+            }
         }
     }
 }

@@ -5,6 +5,13 @@ namespace Core.Specifications.Orders
 {
     public class OrderSpecification : BaseSpecification<Order>
     {
+        public OrderSpecification(string paymentIntentId)
+            : base(o => o.PaymentIntentId.Equals(paymentIntentId))
+        {
+            AddInclude(o => o.Student);
+            AddInclude(o => o.OrderDetails);
+        }
+
         public OrderSpecification(OrderParams orderParams)
             : base(o => (!orderParams.StudentID.HasValue || orderParams.StudentID == o.StudentId))
         {
