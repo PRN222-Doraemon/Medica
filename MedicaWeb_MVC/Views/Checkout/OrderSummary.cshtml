@@ -3,95 +3,95 @@
 @inject IConfiguration configuration
 
 @{
-    var stripePublishableKey = configuration["Stripe:PublishableKey"];
+	var stripePublishableKey = configuration["Stripe:PublishableKey"];
 }
 
 <div class="container mt-5">
-    <div class="card shadow-lg">
-        <div class="card-header bg-primary text-white text-center">
-            <h2><i class="bi bi-cart-check"></i> Order Summary</h2>
-        </div>
-        <div class="card-body">
-            @if (!Model.Any())
-            {
-                <div class="alert alert-warning text-center">
-                    <i class="bi bi-exclamation-triangle"></i> Your cart is empty.
-                </div>
-            }
-            else
-            {
-                <div class="table-responsive">
-                    <table class="table table-hover table-bordered align-middle">
-                        <thead class="table-dark text-center">
-                            <tr>
-                                <th>Image</th>
-                                <th>Course</th>
-                                <th>Description</th>
-                                <th>Start Date</th>
-                                <th>Duration</th>
-                                <th>Mode</th>
-                                <th>Instructor</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr class="text-center">
-                                    <td>
-                                        <img src="@item.ImageUrl" alt="@item.CourseName"
-                                             class="img-thumbnail rounded" style="width: 80px; height: 80px; object-fit: cover;">
-                                    </td>
-                                    <td class="fw-bold">@item.CourseName</td>
-                                    <td>@(item.Description ?? "N/A")</td>
-                                    <td>@item.StartDate.ToString("yyyy-MM-dd")</td>
-                                    <td>@item.Duration</td>
-                                    <td><span class="badge bg-info text-white">@item.Mode</span></td>
-                                    <td>@(string.IsNullOrEmpty(item.InstructorName) ? "N/A" : item.InstructorName)</td>
-                                    <td class="text-success fw-bold">@item.Price.ToString("C")</td>
-                                </tr>
-                            }
-                        </tbody>
-                        <tfoot>
-                            <tr class="table-primary text-center">
-                                <td colspan="7" class="fw-bold text-end">Total</td>
-                                <td class="fw-bold text-white bg-success">
-                                    @Model.Sum(i => i.Price).ToString("C")
-                                </td>
-                            </tr>
-                        </tfoot>
-                    </table>
-                </div>
+	<div class="card shadow-lg">
+		<div class="card-header bg-primary text-white text-center">
+			<h2><i class="bi bi-cart-check"></i> Order Summary</h2>
+		</div>
+		<div class="card-body">
+			@if (!Model.Any())
+			{
+				<div class="alert alert-warning text-center">
+					<i class="bi bi-exclamation-triangle"></i> Your cart is empty.
+				</div>
+			}
+			else
+			{
+				<div class="table-responsive">
+					<table class="table table-hover table-bordered align-middle">
+						<thead class="table-dark text-center">
+							<tr>
+								<th>Image</th>
+								<th>Course</th>
+								<th>Description</th>
+								<th>Start Date</th>
+								<th>Duration</th>
+								<th>Mode</th>
+								<th>Instructor</th>
+								<th>Price</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model)
+							{
+								<tr class="text-center">
+									<td>
+										<img src="@item.ImageUrl" alt="@item.CourseName"
+											 class="img-thumbnail rounded" style="width: 80px; height: 80px; object-fit: cover;">
+									</td>
+									<td class="fw-bold">@item.CourseName</td>
+									<td>@(item.Description ?? "N/A")</td>
+									<td>@item.StartDate.ToString("yyyy-MM-dd")</td>
+									<td>@item.Duration</td>
+									<td><span class="badge bg-info text-white">@item.Mode</span></td>
+									<td>@(string.IsNullOrEmpty(item.InstructorName) ? "N/A" : item.InstructorName)</td>
+									<td class="text-success fw-bold">@item.Price.ToString("C")</td>
+								</tr>
+							}
+						</tbody>
+						<tfoot>
+							<tr class="table-primary text-center">
+								<td colspan="7" class="fw-bold text-end">Total</td>
+								<td class="fw-bold text-white bg-success">
+									@Model.Sum(i => i.Price).ToString("C")
+								</td>
+							</tr>
+						</tfoot>
+					</table>
+				</div>
 
-                <div class="text-center mt-4">
-                    <button class="btn btn-lg btn-success shadow-sm" onclick="openStripeSessionCheckout()">
-                        <i class="bi bi-credit-card"></i> Proceed to Checkout
-                    </button>
-                </div>
-            }
-        </div>
-    </div>
+				<div class="text-center mt-4">
+					<button class="btn btn-lg btn-success shadow-sm" onclick="openStripeSessionCheckout()">
+						<i class="bi bi-credit-card"></i> Proceed to Checkout
+					</button>
+				</div>
+			}
+		</div>
+	</div>
 </div>
 
 @section Scripts {
-    <script src="https://js.stripe.com/v3/"></script>
-    <script>
-        async function openStripeSessionCheckout() {
-            const stripe = Stripe("@stripePublishableKey");
+	<script src="https://js.stripe.com/v3/"></script>
+	<script>
+		async function openStripeSessionCheckout() {
+			const stripe = Stripe("@stripePublishableKey");
 
-            try {
-                const response = await fetch('/Checkout/Checkout', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' }
-                });
+			try {
+				const response = await fetch('/Checkout/Checkout', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' }
+				});
 
-                if (!response.ok) throw new Error("Failed to create checkout session");
+				if (!response.ok) throw new Error("Failed to create checkout session");
 
-                const data = await response.json();
-                stripe.redirectToCheckout({ sessionId: data.sessionId });
-            } catch (err) {
-                alert("⚠️ Error: " + err.message);
-            }
-        }
-    </script>
+				const data = await response.json();
+				stripe.redirectToCheckout({ sessionId: data.sessionId });
+			} catch (err) {
+				alert("⚠️ Error: " + err.message);
+			}
+		}
+	</script>
 }
