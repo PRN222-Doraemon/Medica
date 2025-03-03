@@ -38,5 +38,23 @@ namespace Infrastructure.Services
             var spec = new FeedbackSpecification(id);
             return await _unitOfWork.Repository<Feedback>().GetEntityWithSpec(spec);
         }
+
+        public async Task UpdateFeedBack(Feedback feedback)
+        {
+            _unitOfWork.Repository<Feedback>().Update(feedback);
+            await _unitOfWork.Repository<Feedback>().SaveAllAsync();
+        }
+        public async Task CreateFeedBack(Feedback feedback)
+        {
+            _unitOfWork.Repository<Feedback>().Add(feedback);
+            await _unitOfWork.Repository<Feedback>().SaveAllAsync();
+        }
+
+        public async Task DeleteFeedback(Feedback feedback)
+        {
+            feedback.Status = FeedbackStatus.Disabled;
+            _unitOfWork.Repository<Feedback>().Update(feedback);
+            await _unitOfWork.Repository<Feedback>().SaveAllAsync();
+        }
     }
 }

@@ -48,6 +48,9 @@ namespace MedicaWeb_MVC.Extensions
                 .ForMember(dest => dest.StudentName, u => u.MapFrom(src => $"{src.Student.FirstName} {src.Student.LastName}"))
                 .ForMember(dest => dest.StudentImgUrl, u => u.MapFrom(src => src.Student.ImageUrl));
 
+                config.CreateMap<FeedbackUpsertVM, Feedback>()
+                .ForMember(dest => dest.StudentId, opt => opt.Ignore());
+
                 // ==============================
                 // === Accounts
                 // ==============================
