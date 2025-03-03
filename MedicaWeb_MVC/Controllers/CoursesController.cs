@@ -18,15 +18,15 @@ namespace MedicaWeb_MVC.Controllers
     {
         private readonly ICourseService _courseService;
         private readonly ICloudinaryService _cloudinaryService;
-        private readonly IGenericRepository<Category> _categoryRepo;
+        private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
         private readonly IAccountService _accountService;
         private readonly IHubContext<MedicaHubs> _hub;
-        public CoursesController(ICourseService courseService, IGenericRepository<Category> categoryRepo,
+        public CoursesController(ICourseService courseService, ICategoryService categoryService,
             IMapper mapper, IAccountService accountService, ICloudinaryService cloudinaryService, IHubContext<MedicaHubs> hub)
         {
             _courseService = courseService;
-            _categoryRepo = categoryRepo;
+            _categoryService = categoryService;
             _mapper = mapper;
             _accountService = accountService;
             _cloudinaryService = cloudinaryService;
@@ -36,7 +36,7 @@ namespace MedicaWeb_MVC.Controllers
         public async Task<IActionResult> Index([FromQuery] CourseParams courseParams)
         {
             ViewData["Categories"] = new SelectList(
-                await _categoryRepo.ListAllAsync(),
+                await _categoryService.GetAllCategories(),
                 "Id",
                 "Name",
                 courseParams.CategoryID);
@@ -70,7 +70,7 @@ namespace MedicaWeb_MVC.Controllers
         }
         public async Task<IActionResult> Upsert(int? id)
         {
-            ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
+            ViewData["Categories"] = new SelectList(await _categoryService.GetAllCategories(), "Id", "Name");
             ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() });
 
             // create a new course
@@ -149,7 +149,7 @@ namespace MedicaWeb_MVC.Controllers
                     TempData["error"] = ex.InnerException?.Message ?? ex.Message;
                 }
             }
-            ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
+            ViewData["Categories"] = new SelectList(await _categoryService.GetAllCategories(), "Id", "Name");
             ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }
             );
             return View(courseVM);
@@ -173,7 +173,7 @@ namespace MedicaWeb_MVC.Controllers
             {
                 TempData["error"] = ex.Message;
             }
-            ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
+            ViewData["Categories"] = new SelectList(await _categoryService.GetAllCategories(), "Id", "Name");
             ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }
             );
             return RedirectToAction(nameof(Index), id);
