@@ -12,7 +12,7 @@ namespace Infrastructure.Repositories
     /// Perform database operations read, add, update, delete.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
         // ===================================
         // === Fields & Props

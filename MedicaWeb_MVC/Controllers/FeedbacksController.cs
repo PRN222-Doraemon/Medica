@@ -38,7 +38,7 @@ namespace MedicaWeb_MVC.Controllers
             {
                 TempData["error"] = "Fail to create a feedback";
             }
-            return RedirectToAction("Details", "CoursesController", feedbackVM.CourseId);
+            return RedirectToAction("Details", "Courses", new { id = feedbackVM.CourseId });
         }
 
         [HttpPost]
@@ -61,7 +61,7 @@ namespace MedicaWeb_MVC.Controllers
             {
                 TempData["error"] = "Fail to create a feedback";
             }
-            return RedirectToAction("Details", "CoursesController", feedbackVM.CourseId);
+            return RedirectToAction("Details", "Courses", feedbackVM.CourseId);
         }
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
@@ -73,7 +73,7 @@ namespace MedicaWeb_MVC.Controllers
             }
             await _feedbackService.DeleteFeedback(feedback);
             TempData["success"] = "Successfully delete";
-            return RedirectToAction("Details", "CoursesController", feedback.CourseId);
+            return RedirectToAction("Details", "Courses", feedback.CourseId);
             
         }
     }

@@ -3,6 +3,8 @@
 @{
 	var Course = ViewData["Course"] as CourseVM;
 	var Lecturers = ViewData["Lecturers"] as IEnumerable<LecturerVM>;
+	var ClassUpsertVM = new ClassUpsertVM();
+	ClassUpsertVM.CourseId = Course.Id;
 }
 
 <div class="container-fluid px-0">
@@ -55,6 +57,9 @@
 					<div class="mb-3">
 						<button class="btn btn-primary px-4 py-2">Best Seller</button>
 					</div>
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createClassModal">
+						<i class="bi bi-plus-circle me-2"></i> Create Class
+					</button>
 
 					<!-- Enrollment Count -->
 					<div class="mb-5">
@@ -176,8 +181,12 @@
 		@await Html.PartialAsync("~/Views/Shared/ReusableViews/_Paging.cshtml", Model.PagingInfo)
 	</div>
 
+
+	<!--Create/Update class-->
+	@await Html.PartialAsync("Create", ClassUpsertVM) 
+
 </div>
 
 @section Scripts {
 	<script src="~/js/classrooms/addClassToCart.js"></script>
-    }
+}

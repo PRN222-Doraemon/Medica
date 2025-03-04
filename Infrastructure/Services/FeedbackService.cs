@@ -46,6 +46,8 @@ namespace Infrastructure.Services
         }
         public async Task CreateFeedBack(Feedback feedback)
         {
+            feedback.CreatedAt = DateTime.Now;
+            feedback.UpdatedAt = DateTime.Now;
             _unitOfWork.Repository<Feedback>().Add(feedback);
             await _unitOfWork.Repository<Feedback>().SaveAllAsync();
         }

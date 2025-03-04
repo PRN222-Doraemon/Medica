@@ -27,9 +27,10 @@ namespace Infrastructure.Services
         // === Methods
         // ==============================
 
-        public Task CreateClassAsync(Classroom classroom)
+        public async Task CreateClassAsync(Classroom classroom)
         {
-            throw new NotImplementedException();
+            _unitOfWork.Repository<Classroom>().Add(classroom); 
+            await _unitOfWork.CompleteAsync();
         }
 
         public Task DeleteClassAsync(int id)

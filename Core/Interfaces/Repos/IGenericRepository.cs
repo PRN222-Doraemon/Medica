@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Entities.Identity;
 using Core.Specifications;
 
 namespace Core.Interfaces.Repos
@@ -7,7 +8,7 @@ namespace Core.Interfaces.Repos
     /// Create a new repository with type T without creating a new class.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IGenericRepository<T> where T : BaseEntity
+    public interface IGenericRepository<T> where T : class
     {
         Task<IReadOnlyList<T>> ListAllAsync();
         Task<T> GetByIdAsync(int id);

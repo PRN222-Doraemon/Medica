@@ -4,8 +4,10 @@ using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Classes;
 using Core.Specifications.Courses;
+using Infrastructure.Services;
 using MedicaWeb_MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MedicaWeb_MVC.Controllers
 {
@@ -13,27 +15,32 @@ namespace MedicaWeb_MVC.Controllers
     public class ClassroomsController : Controller
     {
         private readonly ILogger<ClassroomsController> _logger;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IClassService _classService;
+        private readonly ICourseService _courseService;
+        private readonly ILecturerService _lecturerService;
         private readonly IMapper _mapper;
 
         public ClassroomsController(
             ILogger<ClassroomsController> logger,
-            IUnitOfWork unitOfWork, IClassService classService, IMapper mapper)
+            ICourseService courseService, IClassService classService, IMapper mapper, ILecturerService lecturerService)
         {
             _logger = logger;
-            _unitOfWork = unitOfWork;
             _classService = classService;
+            _courseService = courseService;
             _mapper = mapper;
+            _lecturerService = lecturerService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> IndexAsync([FromQuery] ClassParams classParams)
+        public async Task<IActionResult> Index([FromQuery] ClassParams classParams)
         {
+            ViewData["LecturerIds"] = new SelectList(
+                await _lecturerService.GetLecturersAsync(),
+                "Id",
+                "FullName");
             if (classParams.CourseId != null)
             {
-                var courseSpec = new CourseSpecification(classParams.CourseId.Value);
-                var course = await _unitOfWork.Repository<Course>().GetEntityWithSpec(courseSpec);
+                var course = await _courseService.GetCourseByIdAsync(classParams.CourseId.Value);
                 ViewData["Course"] = _mapper.Map<CourseVM>(course);
                 ViewData["Lecturers"] = _mapper.Map<CourseVM>(course).Classrooms
                 .Select(c => c.Lecturer).GroupBy(l => l.Id).Select(g => g.First()).ToList();
@@ -55,34 +62,26 @@ namespace MedicaWeb_MVC.Controllers
             return View(model);
 
         }
+        
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> ClassroomDetails(int id)
+        [HttpPost]
+        public async Task<IActionResult> Create(ClassUpsertVM classUpsertVM)
         {
-            var classroom = await _unitOfWork.Repository<Classroom>().GetByIdAsync(id);
-            return View(classroom);
-        }
-
-        //[HttpGet("search")]
-        //public async Task<IActionResult> Search(LecturerClassroomVM lecturerClassroomVM)
-        //{
-        //    var specification = new classroom(lecturerClassroomVM);
-        //    var classrooms = await _unitOfWork.Repository<Classroom>().ListAsync(specification);
-        //    var categories = await _unitOfWork.Repository<Category>().ListAllAsync();
-
-        //    var viewModel = new LecturerClassroomVM
-        //    {
-        //        Classrooms = classrooms.ToList(),
-        //        Categories = categories.ToList()
-        //    };
-
-        //    return View("Index", viewModel);
-        //}
-
-        [HttpGet("create")]
-        public IActionResult Create()
-        {
-            return View();
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                    var classroom = _mapper.Map<Classroom>(classUpsertVM);
+                    await _classService.CreateClassAsync(classroom);
+                    TempData["success"] = "Successfully create a new class";
+                }
+                catch (Exception ex)
+                {
+                    TempData["error"] = ex.ToString();
+                }
+                return RedirectToAction(nameof(Index), new { CourseId = classUpsertVM.CourseId});
+            }
+            return RedirectToAction(nameof(Index), new { CourseId = classUpsertVM.CourseId });
         }
 
         //[HttpGet("details/{id}")]
