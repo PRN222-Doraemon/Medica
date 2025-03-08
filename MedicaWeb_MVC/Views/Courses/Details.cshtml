@@ -20,7 +20,13 @@
             <!-- Course Header -->
             <div class="mb-4">
                 <div class="d-flex justify-content-between align-items-start mb-3">
-                    <h1 class="display-5 fw-bold mb-0">@Model.Name</h1>
+                    <div>
+                        <h1 class="display-5 fw-bold mb-0">@Model.Name</h1>
+                        <span class="badge rounded-pill @(Model.Status.ToString() == "Active" ? "bg-success" : "bg-secondary")">
+                            @Model.Status
+                        </span>
+                    </div>
+                    
                     @if(User.IsInRole(AppCts.Roles.Lecturer)) {
                         <div>
                             <a asp-action="Upsert" asp-controller="Courses" asp-route-id="@Model.Id"
@@ -162,27 +168,27 @@
                         <span class="text-muted">(@Model.Reviews ratings)</span>
                     </div>
 
-                    @foreach (var review in Model.Feedbacks)
+                    @foreach (var review in Model.Feedbacks.Select((value, index) => new { value, index }))
                     {
-                        <div class="border-bottom pb-4 mb-4">
+                        <div class="border-bottom pb-4 mb-4 @(review.index >= AppCts.Display.MAX_VISIBLE_REVIEWS ? "hidden-review" : "")">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div class="d-flex gap-3">
                                     <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
                                          style="width: 48px; height: 48px;">
-                                        <span class="fw-semibold">@review.StudentName.Substring(0, 2).ToUpper()</span>
+                                        <span class="fw-semibold">@review.value.StudentName.Substring(0, 2).ToUpper()</span>
                                     </div>
 
                                     <div>
                                         <div class="d-flex align-items-center gap-2 mb-1">
-                                            <span class="fw-semibold">@review.StudentName</span>
+                                            <span class="fw-semibold">@review.value.StudentName</span>
                                             <div class="text-warning">
                                                 @for (int i = 1; i <= 5; i++)
                                                 {
-                                                    <i class="bi bi-star-@(i <= review.Rating ? "fill" : "")"></i>
+                                                    <i class="bi bi-star-@(i <= review.value.Rating ? "fill" : "")"></i>
                                                 }
                                             </div>
                                         </div>
-                                        <div class="text-muted small">@review.CreatedDate</div>
+                                        <div class="text-muted small">@review.value.UpdatedAt</div>
                                     </div>
                                 </div>
 
@@ -196,9 +202,9 @@
                                 </div>
                             </div>
 
-                            <p class="mb-3">@review.FeedbackContent</p>
+                            <p class="mb-3">@review.value.FeedbackContent</p>
 
-                            @if (review.FeedbackContent.Length > 150)
+                            @if (review.value.FeedbackContent.Length > 150)
                             {
                                 <button class="btn btn-link text-primary p-0 mb-3">Show more</button>
                             }
@@ -217,16 +223,52 @@
                         </div>
                     }
 
-                    @if (Model.Reviews > AppCts.Display.MAX_VISIBLE_REVIEWS)
-                    {
-                        <div class="text-center">
-                            <button id="viewMoreReviews" class="btn btn-outline-primary" onclick="toggleReviews()">
-                                Show more reviews
-                                <i class="bi bi-chevron-down ms-1"></i>
-                            </button>
-                        </div>
-                    }
+                    @if (Model.Reviews > AppCts.Display.MAX_VISIBLE_REVIEWS) 
+                    { 
+                        <div class="text-center"> 
+                             <button id="viewMoreReviews" class="btn btn-outline-primary" onclick="toggleReviews()"> 
+                                 Show more reviews 
+                                 <i class="bi bi-chevron-down ms-1"></i> 
+                            </button> 
+                        </div> 
+                     } 
+
+                    
                 </div>
+            </div>
+
+            <!-- Review Submission Form -->
+            <div class=" card mt-4 p-4">
+                <form asp-action="Create" asp-controller="Feedbacks" method="post">
+                    <input type="hidden" name="CourseId" value="@Model.Id" />
+
+                    <div class="text-center mb-2">
+                        <h2 class="fw-bold mb-2 fs-5" style="color:#333344;">How would you rate this course?</h2>
+                        <p class="fs-6 mb-2">Select Rating</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            @for (int i = 5; i >= 1; i--)
+                            {
+                                <input type="radio" class="rating-input d-none" name="Rating" id="rating-@i" value="@i" required />
+                                <label for="rating-@i" class="rating-label" style="cursor:pointer;">
+                                    <svg width="40" height="40" viewBox="0 0 60 60" class="star-icon">
+                                        <path d="M30 4.5L37.1793 22.5377L56.7055 24.2541L42.0651 37.2623L46.4866 56.2459L30 46.35L13.5134 56.2459L17.9349 37.2623L3.29452 24.2541L22.8207 22.5377L30 4.5Z"
+                                              stroke="#FFA500" stroke-width="3"></path>
+                                    </svg>
+                                </label>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="reviewContent" class="form-label fw-semibold">Your Review</label>
+                        <textarea class="form-control form-control-lg" id="reviewContent" name="FeedbackContent" rows="4"
+                                  placeholder="Share your experience with this course..." required></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">Submit Feedback</button>
+                    </div>
+                </form>
             </div>
         </div>
 
@@ -244,7 +286,7 @@
                     <ul class="list-unstyled mb-0">
                         <li class="d-flex align-items-center gap-2 mb-3">
                             <i class="bi bi-camera-video text-primary"></i>
-                            <span>@Model.Duration on-demand video</span>
+                            <span>@Model.Duration on demand video</span>
                         </li>
                         <li class="d-flex align-items-center gap-2 mb-3">
                             <i class="bi bi-download text-primary"></i>
@@ -264,3 +306,34 @@
         </div>
     </div>
 </div>
+
+<style>
+    /* Star rating styles */
+    .star-icon {
+        fill: transparent;
+        transition: all 0.2s ease;
+    }
+
+    .rating-label {
+        cursor: pointer;
+    }
+
+        .rating-label:hover {
+            transform: scale(1.1); 
+            transition: transform 0.2s ease;
+            fill: #FFA500;
+        }
+
+        /* Highlight stars */
+        .rating-label.active .star-icon,
+        .rating-label.hover .star-icon {
+            fill: #FFA500;
+        }
+
+    .hidden-review {
+        display: none;
+    }
+</style>
+
+
+<script src="~/js/courses/course-details.js"></script>

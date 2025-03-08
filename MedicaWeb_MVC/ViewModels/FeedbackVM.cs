@@ -10,6 +10,6 @@ namespace MedicaWeb_MVC.ViewModels
         public int StudentId { get; set; }
         public string StudentName { get; set; } = string.Empty;
         public string StudentImgUrl { get; set; } = string.Empty;
-        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

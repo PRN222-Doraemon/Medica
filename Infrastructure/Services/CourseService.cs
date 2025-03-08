@@ -28,10 +28,14 @@ namespace Infrastructure.Services
             await _unitOfWork.CompleteAsync();
         }
 
-        public async Task<Course> GetCourseByIdAsync(int id)
+        public async Task<Course?> GetCourseByIdAsync(int id)
         {
             var spec = new CourseSpecification(id);
             var course = await _unitOfWork.Repository<Course>().GetEntityWithSpec(spec);
+            if(course != null)
+            {
+                course.Feedbacks = course.Feedbacks.OrderByDescending(f => f.CreatedAt).ToList();
+            }
             return course;
         }
 

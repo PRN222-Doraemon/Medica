@@ -2,6 +2,8 @@
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications;
+using Core.Specifications.Classes;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net.WebSockets;
 
 namespace Infrastructure.Services
@@ -27,14 +29,22 @@ namespace Infrastructure.Services
         // === Methods
         // ==============================
 
-        public Task CreateClassAsync(Classroom classroom)
+        public async Task CreateClassAsync(Classroom classroom)
         {
-            throw new NotImplementedException();
+            _unitOfWork.Repository<Classroom>().Add(classroom); 
+            await _unitOfWork.CompleteAsync();
         }
 
-        public Task DeleteClassAsync(int id)
+        public async Task DeleteClassAsync(int id)
         {
-            throw new NotImplementedException();
+            var classroom = await GetClassByIdAsync(id);
+            if (classroom == null)
+                throw new KeyNotFoundException("This classroom does not exist");
+            if(classroom.OrderDetails != null && classroom.OrderDetails.Count > 0)
+                throw new InvalidOperationException("Deletion failed: This class cannot be deleted because there are enrolled students");
+            classroom.Status = ClassroomStatus.Cancelled;
+            _unitOfWork.Repository<Classroom>().Update(classroom);
+            await _unitOfWork.Repository<Classroom>().SaveAllAsync();
         }
 
         public async Task<Classroom?> GetClassAsync(ISpecification<Classroom> spec)
@@ -42,9 +52,10 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<Classroom>().GetEntityWithSpec(spec);
         }
 
-        public Task<Course> GetClassByIdAsync(int id)
+        public async Task<Classroom> GetClassByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var spec = new ClassSpecification(id);
+            return await _unitOfWork.Repository<Classroom>().GetEntityWithSpec(spec);
         }
 
         public async Task<IEnumerable<Classroom>> GetClassesAsync(ISpecification<Classroom> spec)
@@ -53,9 +64,10 @@ namespace Infrastructure.Services
             return classes;
         }
 
-        public Task UpdateClassAsync(Classroom classroom)
+        public async Task UpdateClassAsync(Classroom classroom)
         {
-            throw new NotImplementedException();
+            _unitOfWork.Repository<Classroom>().Update(classroom);
+            await _unitOfWork.Repository<Classroom>().SaveAllAsync();
         }
     }
 }

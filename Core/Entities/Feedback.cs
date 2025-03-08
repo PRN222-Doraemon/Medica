@@ -7,7 +7,7 @@ namespace Core.Entities
     {
         public decimal Rating { get; set; }
         public string FeedbackContent { get; set; }
-        public FeedbackStatus Status { get; set; }
+        public FeedbackStatus Status { get; set; } = FeedbackStatus.Enabled;
 
 
         // 1 Student - M Feedback

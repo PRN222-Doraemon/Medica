@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Specifications
 {
-    public class SpecificationEvaluator<T> where T : BaseEntity
+    public class SpecificationEvaluator<T> where T : class
     {
         /// <summary>
         /// Receives a queryable set of entities and chains expression 
