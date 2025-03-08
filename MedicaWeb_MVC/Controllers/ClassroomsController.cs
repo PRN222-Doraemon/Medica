@@ -135,6 +135,20 @@ namespace MedicaWeb_MVC.Controllers
             return RedirectToAction(nameof(Index), new { CourseId = classUpsertVM.CourseId });
         }
 
+        public async Task<IActionResult> Delete(int id, int courseId)
+        {
+            try
+            {
+                await _classService.DeleteClassAsync(id);
+                TempData["success"] = "Successfully delete this class";
+            }
+            catch(Exception e)
+            {
+                TempData["error"] = "Fail to delete this class";
+            }
+            return RedirectToAction(nameof(Index), new { courseId = courseId });
+        }
+
         //[HttpGet("details/{id}")]
         //public async Task<IActionResult> Details(int id)
         //{

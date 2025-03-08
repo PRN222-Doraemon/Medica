@@ -169,8 +169,14 @@
 									</div>
 							}
 							else {
-									<a class="btn btn-primary w-100" asp-controller="Classrooms" asp-action="Upsert" 
-									asp-route-id="@classroom.Id" asp-route-courseId="@Course?.Id">Update</a>
+									<div class="d-flex gap-2 justify-content-between align-items-center">
+										<a class="btn btn-primary w-100" asp-controller="Classrooms" asp-action="Upsert"
+										   asp-route-id="@classroom.Id" asp-route-courseId="@Course?.Id">Update</a>
+										<a class="btn btn-danger w-100" asp-controller="Classrooms" asp-action="Delete"
+										   asp-route-id="@classroom.Id" asp-route-courseId="@Course?.Id"
+										   onclick="return confirm('Are you sure you want to delete this class?');">Delete</a>
+									</div>
+									
 							}
                                 
                             </div>

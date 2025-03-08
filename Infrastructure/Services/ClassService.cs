@@ -3,6 +3,7 @@ using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications;
 using Core.Specifications.Classes;
+using Microsoft.AspNetCore.Http.HttpResults;
 using System.Net.WebSockets;
 
 namespace Infrastructure.Services
@@ -34,9 +35,14 @@ namespace Infrastructure.Services
             await _unitOfWork.CompleteAsync();
         }
 
-        public Task DeleteClassAsync(int id)
+        public async Task DeleteClassAsync(int id)
         {
-            throw new NotImplementedException();
+            var classroom = await GetClassByIdAsync(id);
+            if (classroom == null)
+                throw new Exception("This classroom does not exist");
+            classroom.Status = ClassroomStatus.Cancelled;
+            _unitOfWork.Repository<Classroom>().Update(classroom);
+            await _unitOfWork.Repository<Classroom>().SaveAllAsync();
         }
 
         public async Task<Classroom?> GetClassAsync(ISpecification<Classroom> spec)
