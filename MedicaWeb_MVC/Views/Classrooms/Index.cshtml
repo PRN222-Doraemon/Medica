@@ -3,7 +3,7 @@
 @{
 	var Course = ViewData["Course"] as CourseVM;
 	var Lecturers = ViewData["Lecturers"] as IEnumerable<LecturerVM>;
-	var ClassUpsertVM = new ClassUpsertVM();
+	var ClassUpsertVM = ViewData["Classroom"] as ClassUpsertVM ?? new ClassUpsertVM();
 	ClassUpsertVM.CourseId = Course.Id;
 }
 
@@ -54,13 +54,16 @@
 					</div>
 
 					<!-- Enroll Button -->
-					<div class="mb-3">
-						<button class="btn btn-primary px-4 py-2">Best Seller</button>
-					</div>
-					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createClassModal">
-						<i class="bi bi-plus-circle me-2"></i> Create Class
-					</button>
-
+					@if(User.IsInRole(AppCts.Roles.Employee)) {
+						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createClassModal">
+							<i class="bi bi-plus-circle me-2"></i> Create Class
+						</button>
+					}
+					else {
+						<div class="mb-3">
+							<button class="btn btn-primary px-4 py-2">Best Seller</button>
+						</div>
+					}
 					<!-- Enrollment Count -->
 					<div class="mb-5">
 						<span class="fw-bold">@Course?.TotalEnrolls</span> already enrolled
@@ -159,10 +162,17 @@
 							</div>
 
                             <div class="card-footer bg-white border-top-0 mb-3">
-                                <div class="d-flex gap-2 justify-content-between align-items-center">
-                                    <button class="btn btn-outline-primary w-100">Add to cart</button>
-                                    <button class="btn btn-primary w-100">Enroll</button>
-                                </div>
+							@if(User.IsInRole(AppCts.Roles.Student)) {
+									<div class="d-flex gap-2 justify-content-between align-items-center">
+										<button class="btn btn-outline-primary w-100">Add to cart</button>
+										<button class="btn btn-primary w-100">Enroll</button>
+									</div>
+							}
+							else {
+									<a class="btn btn-primary w-100" asp-controller="Classrooms" asp-action="Upsert" 
+									asp-route-id="@classroom.Id" asp-route-courseId="@Course?.Id">Update</a>
+							}
+                                
                             </div>
                         </div>
                     </div>

@@ -8,6 +8,7 @@ using Infrastructure.Services;
 using MedicaWeb_MVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 
 namespace MedicaWeb_MVC.Controllers
 {
@@ -38,6 +39,24 @@ namespace MedicaWeb_MVC.Controllers
                 await _lecturerService.GetLecturersAsync(),
                 "Id",
                 "FullName");
+
+            // save data for update popup
+            bool isUpdate = TempData["IsUpdate"] != null && (bool)TempData["IsUpdate"];
+            ClassUpsertVM classroom = TempData["Classroom"] != null
+                ? JsonConvert.DeserializeObject<ClassUpsertVM>(TempData["Classroom"].ToString())
+                : null;
+
+            ViewData["IsUpdate"] = isUpdate;
+            ViewData["Classroom"] = classroom;
+            if(isUpdate)
+            {
+                @ViewData["Title"] = "Update Class";
+            }
+            else
+            {
+                @ViewData["Title"] = "Create Class";
+            }
+
             if (classParams.CourseId != null)
             {
                 var course = await _courseService.GetCourseByIdAsync(classParams.CourseId.Value);
@@ -62,18 +81,51 @@ namespace MedicaWeb_MVC.Controllers
             return View(model);
 
         }
-        
 
+        [HttpGet("Upsert")]
+        public async Task<IActionResult> Upsert(int? id, int courseId)
+        {
+            ViewData["LecturerIds"] = new SelectList(
+                await _lecturerService.GetLecturersAsync(),
+                "Id",
+                "FullName");
+            ViewData["IsUpdate"] = false;
+
+            // update class
+            if (id != null)
+            {
+                var classroom = await _classService.GetClassByIdAsync(id.Value);
+                if (classroom == null)
+                {
+                    return NotFound();
+                }
+                TempData["Classroom"] = JsonConvert.SerializeObject(_mapper.Map<ClassUpsertVM>(classroom));
+                TempData["IsUpdate"] = true;
+            }
+
+            return RedirectToAction(nameof(Index), new {CourseId = courseId});
+        }
         [HttpPost]
-        public async Task<IActionResult> Create(ClassUpsertVM classUpsertVM)
+        public async Task<IActionResult> Upsert(ClassUpsertVM classUpsertVM)
         {
             if(ModelState.IsValid)
             {
                 try
                 {
-                    var classroom = _mapper.Map<Classroom>(classUpsertVM);
-                    await _classService.CreateClassAsync(classroom);
-                    TempData["success"] = "Successfully create a new class";
+                    Classroom classroom;
+                    if(classUpsertVM.Id == 0)
+                    {
+                        classroom = _mapper.Map<Classroom>(classUpsertVM);
+                        await _classService.CreateClassAsync(classroom);
+                        TempData["success"] = "Successfully create a new class";
+                    }
+                    else
+                    {
+                        classroom = await _classService.GetClassByIdAsync(classUpsertVM.Id);
+                        _mapper.Map(classUpsertVM, classroom);
+                        await _classService.UpdateClassAsync(classroom);
+                        TempData["success"] = "Successfully update class";
+                    }
                 }
                 catch (Exception ex)
                 {

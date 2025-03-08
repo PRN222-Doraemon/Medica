@@ -2,6 +2,7 @@
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications;
+using Core.Specifications.Classes;
 using System.Net.WebSockets;
 
 namespace Infrastructure.Services
@@ -43,9 +44,10 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<Classroom>().GetEntityWithSpec(spec);
         }
 
-        public Task<Course> GetClassByIdAsync(int id)
+        public async Task<Classroom> GetClassByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var spec = new ClassSpecification(id);
+            return await _unitOfWork.Repository<Classroom>().GetEntityWithSpec(spec);
         }
 
         public async Task<IEnumerable<Classroom>> GetClassesAsync(ISpecification<Classroom> spec)

@@ -5,6 +5,7 @@ namespace MedicaWeb_MVC.ViewModels
 {
     public class ClassUpsertVM
     {
+        public int Id { get; set; } 
         public ClassroomMode Mode { get; set; }
         [Required(ErrorMessage = "Start date is required.")]
         [DataType(DataType.Date)]

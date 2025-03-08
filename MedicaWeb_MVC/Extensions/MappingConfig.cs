@@ -64,6 +64,7 @@ namespace MedicaWeb_MVC.Extensions
 
                 config.CreateMap<Classroom, ClassVM>();
                 config.CreateMap<ClassUpsertVM, Classroom>();
+                config.CreateMap<Classroom, ClassUpsertVM>();
 
                 // ==============================
                 // === Cart
