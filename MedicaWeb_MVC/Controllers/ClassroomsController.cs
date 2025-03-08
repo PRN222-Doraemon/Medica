@@ -128,7 +128,8 @@ namespace MedicaWeb_MVC.Controllers
                 }
                 catch (Exception ex)
                 {
-                    TempData["error"] = ex.ToString();
+                    TempData["error"] = "Failed to update this class due to an unexpected error.";
+                    Console.WriteLine(ex);
                 }
                 return RedirectToAction(nameof(Index), new { CourseId = classUpsertVM.CourseId});
             }
@@ -142,9 +143,22 @@ namespace MedicaWeb_MVC.Controllers
                 await _classService.DeleteClassAsync(id);
                 TempData["success"] = "Successfully delete this class";
             }
-            catch(Exception e)
+            catch(KeyNotFoundException e)
             {
-                TempData["error"] = "Fail to delete this class";
+                TempData["error"] = "Class not found. Please check again.";
+                Console.WriteLine(e);
+            }
+            catch (InvalidOperationException e)
+            {
+                TempData["error"] = "Unable to delete this class due to invalid state.";
+                Console.WriteLine(e);
+
+            }
+            catch (Exception e)
+            {
+                TempData["error"] = "Failed to delete this class due to an unexpected error.";
+                Console.WriteLine(e);
+
             }
             return RedirectToAction(nameof(Index), new { courseId = courseId });
         }

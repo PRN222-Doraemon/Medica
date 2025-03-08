@@ -39,7 +39,9 @@ namespace Infrastructure.Services
         {
             var classroom = await GetClassByIdAsync(id);
             if (classroom == null)
-                throw new Exception("This classroom does not exist");
+                throw new KeyNotFoundException("This classroom does not exist");
+            if(classroom.OrderDetails != null && classroom.OrderDetails.Count > 0)
+                throw new InvalidOperationException("Deletion failed: This class cannot be deleted because there are enrolled students");
             classroom.Status = ClassroomStatus.Cancelled;
             _unitOfWork.Repository<Classroom>().Update(classroom);
             await _unitOfWork.Repository<Classroom>().SaveAllAsync();

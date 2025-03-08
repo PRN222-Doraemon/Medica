@@ -8,6 +8,7 @@ namespace Core.Specifications.Classes
         public ClassSpecification(int id) : base(x => x.Id == id) {
             AddInclude(x => x.Course);
             AddInclude(x => x.Lecturer);
+            AddInclude(x => x.OrderDetails);
         }
 
         public ClassSpecification(ClassParams classParams, bool applyPaging = true) :
@@ -21,6 +22,8 @@ namespace Core.Specifications.Classes
         {
             AddCustomInclude(c => c.Include(c => c.Course).ThenInclude(c => c.Category));
             AddInclude(c => c.Lecturer);
+            AddInclude(x => x.OrderDetails);
+
             switch (classParams.SortOrder)
             {
                 case "newest":
