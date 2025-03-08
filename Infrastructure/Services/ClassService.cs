@@ -56,9 +56,10 @@ namespace Infrastructure.Services
             return classes;
         }
 
-        public Task UpdateClassAsync(Classroom classroom)
+        public async Task UpdateClassAsync(Classroom classroom)
         {
-            throw new NotImplementedException();
+            _unitOfWork.Repository<Classroom>().Update(classroom);
+            await _unitOfWork.Repository<Classroom>().SaveAllAsync();
         }
     }
 }

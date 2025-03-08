@@ -12,7 +12,6 @@ using Newtonsoft.Json;
 
 namespace MedicaWeb_MVC.Controllers
 {
-    [Route("[controller]")]
     public class ClassroomsController : Controller
     {
         private readonly ILogger<ClassroomsController> _logger;
@@ -82,7 +81,7 @@ namespace MedicaWeb_MVC.Controllers
 
         }
 
-        [HttpGet("Upsert")]
+        [HttpGet]
         public async Task<IActionResult> Upsert(int? id, int courseId)
         {
             ViewData["LecturerIds"] = new SelectList(
