@@ -26,7 +26,6 @@ namespace MedicaWeb_MVC.Extensions
                 config.CreateMap<Course, CourseCreateVM>()
                 .ForMember(dest => dest.CategoryName, u => u.MapFrom(src => src.Category.Name));
 
-
                 config.CreateMap<CourseCreateVM, Course>()
                 .ForMember(dest => dest.CreatedByUserID, opt => opt.Ignore())
                 .ForMember(dest => dest.Comments, opt => opt.Ignore())
@@ -49,21 +48,36 @@ namespace MedicaWeb_MVC.Extensions
                 .ForMember(dest => dest.StudentName, u => u.MapFrom(src => $"{src.Student.FirstName} {src.Student.LastName}"))
                 .ForMember(dest => dest.StudentImgUrl, u => u.MapFrom(src => src.Student.ImageUrl));
 
+                config.CreateMap<FeedbackUpsertVM, Feedback>()
+                .ForMember(dest => dest.StudentId, opt => opt.Ignore());
+
                 // ==============================
                 // === Accounts
                 // ==============================
 
                 config.CreateMap<RegisterVM, ApplicationUser>();
+                config.CreateMap<Lecturer, LecturerVM>();
 
                 // ==============================
-                // === Orders
+                // === Classrooms
                 // ==============================
-                config.CreateMap<Classroom, ClassVM>()
-                .ForMember(dest => dest.CourseName, u => u.MapFrom(src => src.Course.Name))
-                .ForMember(dest => dest.CourseId, u => u.MapFrom(src => src.Course.Id))
-                .ForMember(dest => dest.CourseImgUrl, u => u.MapFrom(src => src.Course.ImgUrl))
-                .ForMember(dest => dest.LecturerName, u => u.MapFrom(src => src.Lecturer.FullName));
 
+                config.CreateMap<Classroom, ClassVM>();
+                config.CreateMap<ClassUpsertVM, Classroom>();
+                config.CreateMap<Classroom, ClassUpsertVM>();
+
+                // ==============================
+                // === Cart
+                // ==============================
+
+                config.CreateMap<CartItem, CartItemVM>()
+                   .ForMember(dest => dest.Quantity, opt => opt.Ignore())
+                   .ForMember(dest => dest.InstructorName, opt => opt.Ignore())
+                   .ForMember(dest => dest.StartDate, opt => opt.Ignore())
+                   .ForMember(dest => dest.Duration, opt => opt.Ignore())
+                   .ForMember(dest => dest.Mode, opt => opt.Ignore())
+                   .ForMember(dest => dest.Description, opt => opt.Ignore())
+                   .ReverseMap();
             });
         }
     }

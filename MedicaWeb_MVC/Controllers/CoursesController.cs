@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Constants;
 using Core.Entities;
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
@@ -17,15 +18,15 @@ namespace MedicaWeb_MVC.Controllers
     {
         private readonly ICourseService _courseService;
         private readonly ICloudinaryService _cloudinaryService;
-        private readonly IGenericRepository<Category> _categoryRepo;
+        private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
         private readonly IAccountService _accountService;
         private readonly IHubContext<MedicaHubs> _hub;
-        public CoursesController(ICourseService courseService, IGenericRepository<Category> categoryRepo,
+        public CoursesController(ICourseService courseService, ICategoryService categoryService,
             IMapper mapper, IAccountService accountService, ICloudinaryService cloudinaryService, IHubContext<MedicaHubs> hub)
         {
             _courseService = courseService;
-            _categoryRepo = categoryRepo;
+            _categoryService = categoryService;
             _mapper = mapper;
             _accountService = accountService;
             _cloudinaryService = cloudinaryService;
@@ -35,7 +36,7 @@ namespace MedicaWeb_MVC.Controllers
         public async Task<IActionResult> Index([FromQuery] CourseParams courseParams)
         {
             ViewData["Categories"] = new SelectList(
-                await _categoryRepo.ListAllAsync(),
+                await _categoryService.GetAllCategories(),
                 "Id",
                 "Name",
                 courseParams.CategoryID);
@@ -61,11 +62,15 @@ namespace MedicaWeb_MVC.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var course = await _courseService.GetCourseByIdAsync(id);
+            if (course == null)
+            {
+                return NotFound();
+            }
             return View(_mapper.Map<CourseVM>(course));
         }
         public async Task<IActionResult> Upsert(int? id)
         {
-            ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
+            ViewData["Categories"] = new SelectList(await _categoryService.GetAllCategories(), "Id", "Name");
             ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() });
 
             // create a new course
@@ -86,6 +91,7 @@ namespace MedicaWeb_MVC.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = AppCts.Roles.Lecturer)]
         public async Task<IActionResult> Upsert(CourseCreateVM courseVM)
         {
             if (ModelState.IsValid)
@@ -115,9 +121,12 @@ namespace MedicaWeb_MVC.Controllers
                     if (courseVM.Id == 0)
                     {
                         course = _mapper.Map<Course>(courseVM);
-                        // created by user ID value is just for testing, it will be updated later
-                        course.CreatedByUserID = 1;
+
+                        var user = await _accountService.GetUserByClaimsAsync(HttpContext.User);
+                        course.CreatedByUserID = user.Id;
+
                         await _courseService.CreateCourseAsync(course);
+                        await _hub.Clients.All.SendAsync("ReceiveUpsert", _mapper.Map<CourseVM>(course), false);
                         TempData["success"] = "Successfully created a new course!";
                     }
                     // Update course
@@ -130,9 +139,9 @@ namespace MedicaWeb_MVC.Controllers
                         }
                         _mapper.Map(courseVM, course);
                         await _courseService.UpdateCourseAsync(course);
+                        await _hub.Clients.All.SendAsync("ReceiveUpsert", _mapper.Map<CourseVM>(course), true);
                         TempData["success"] = "Successfully updated a new course!";
                     }
-                    await _hub.Clients.All.SendAsync("ReceiveUpsert");
                     return RedirectToAction(nameof(Index));
                 }
                 catch (Exception ex)
@@ -140,10 +149,34 @@ namespace MedicaWeb_MVC.Controllers
                     TempData["error"] = ex.InnerException?.Message ?? ex.Message;
                 }
             }
-            ViewData["Categories"] = new SelectList(await _categoryRepo.ListAllAsync(), "Id", "Name");
+            ViewData["Categories"] = new SelectList(await _categoryService.GetAllCategories(), "Id", "Name");
             ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }
             );
             return View(courseVM);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                ViewData["Title"] = "Delete Course";
+                var course = await _courseService.GetCourseByIdAsync(id);
+                if (course == null)
+                {
+                    return NotFound();
+                }
+                await _courseService.DeleteCourseAsync(id);
+                TempData["success"] = "Successfully deleted.";
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = ex.Message;
+            }
+            ViewData["Categories"] = new SelectList(await _categoryService.GetAllCategories(), "Id", "Name");
+            ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }
+            );
+            return RedirectToAction(nameof(Index), id);
         }
     }
 }

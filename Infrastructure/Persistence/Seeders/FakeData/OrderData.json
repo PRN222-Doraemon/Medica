@@ -3,7 +3,7 @@
     "studentId": 1,
     "OrderTime": "2025-01-01",
     "Status": "Paid",
-    "PaymentIntentId": 123,
-    "TotalPrice":  300000
+    "PaymentIntentId": "23124ax_qwd12",
+    "TotalPrice": 300000
   }
 ]

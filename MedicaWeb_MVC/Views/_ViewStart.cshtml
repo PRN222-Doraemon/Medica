@@ -1,12 +1,15 @@
 ﻿@{
-	// if (User.IsInRole(AppCts.Roles.Admin))
-	// {
-	// 	Layout = "_LayoutAdmin";
-	// }
-	// else
-	// {
-	// 	Layout = "_Layout";
-	// }
+	if (User.IsInRole(AppCts.Roles.Admin))
+	{
+		Layout = "_LayoutAdmin";
+	}
+	else if (User.IsInRole(AppCts.Roles.Lecturer))
+	{
+		Layout = "_LayoutLecturer";
+	} 
+	else {
+		Layout = "_Layout";
+	}
 
-	Layout = "_Layout";
+	// Layout = "_Layout";
 }

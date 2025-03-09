@@ -48,7 +48,7 @@ namespace Infrastructure.Repositories
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public IGenericRepository<T> Repository<T>() where T : BaseEntity
+        public IGenericRepository<T> Repository<T>() where T : class
         {
             // Avoid create repository too early
             if (_repositories == null)

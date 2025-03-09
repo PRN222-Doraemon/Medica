@@ -1,14 +1,9 @@
 using AutoMapper;
 using Core.Entities;
-using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Courses;
-using MedicaWeb_MVC.Models;
 using MedicaWeb_MVC.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Diagnostics;
 
 namespace MedicaWeb_MVC.Controllers
 {

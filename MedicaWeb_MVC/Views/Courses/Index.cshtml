@@ -1,4 +1,5 @@
-﻿@model ListVM<CourseVM>
+﻿@using MedicaWeb_MVC.ViewModels
+@model ListVM<CourseVM>
 
 <div class="container py-4">
     <!-- Search and Filter Header -->
@@ -16,19 +17,22 @@
                     </select>
                 </div>
             </form>
-            <a class="btn btn-primary d-flex align-items-center gap-2" asp-controller="Courses" asp-action="Upsert">
-                <i class="bi bi-plus-lg"></i>
-                Create new
-            </a>
+            @if(User.IsInRole(AppCts.Roles.Lecturer)) {
+                <a class="btn btn-primary d-flex align-items-center gap-2" asp-controller="Courses" asp-action="Upsert">
+                    <i class="bi bi-plus-lg"></i>
+                    Create new
+                </a>
+            }
+            
         </div>
     </div>
 
 
     <!-- Course Grid -->
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div id="courseList" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         @foreach (var course in Model.Items)
         {
-            <div class="col">
+            <div class="col" id="@course.Id">
                 <div class="card h-100 shadow-sm">
                     <img src="@course.ImgUrl" class="card-img-top" alt="Course Image"
                          style="height: 200px; object-fit: cover;">
@@ -49,6 +53,9 @@
                             <i class="bi bi-clock"></i>
                             <span>Updated @course.UpdatedAt</span>
                         </div>
+                        <span class=" fw-bold text-dark fs-5">
+                            ₫ @($"{course.Price:N0}")
+                        </span>
                     </div>
                     <div class="card-footer bg-white border-top-0">
                         <a asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id" class="btn btn-outline-primary btn-sm w-100">
@@ -70,6 +77,8 @@
     function submitForm() {
         document.getElementById("filterForm").submit();
     }
+
+    $(#table).boostrapTable
 </script>
 
 <script src="~/lib/signalr/dist/browser/signalr.js"></script>

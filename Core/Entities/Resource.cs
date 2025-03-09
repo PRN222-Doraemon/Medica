@@ -1,5 +1,4 @@
-﻿using Core.Entities.Identity;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Core.Entities
 {
@@ -11,8 +10,6 @@ namespace Core.Entities
         public ResourceType ResourceType { get; set; }
         public int CourseChapterID { get; set; }
         public CourseChapter CourseChapter { get; set; }
-        public int CreatedByUserID { get; set; }
-        public Employee CreatedBy { get; set; }
     }
 
     public enum ResourceType

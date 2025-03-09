@@ -1,4 +1,5 @@
-﻿@model CourseCreateVM
+﻿@using MedicaWeb_MVC.ViewModels
+@model CourseCreateVM
 @{
     bool IsUpdate = false;
     if(ViewBag.Title == "Update Course") {
@@ -33,7 +34,7 @@
                     <form asp-action="Upsert" asp-controller="Courses" method="post" id="updateCourseForm" enctype="multipart/form-data">
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="ImgUrl" />
-                        @* <input hidden asp-for="@Model.CreatedByUserID" /> *@
+                        @* <input hidden asp-for="@Model.CreatedByUserID" />  *@
 
                         <div class="row">
                             <!-- Left Column - Basic Information -->
@@ -92,6 +93,13 @@
                                         </label>
                                         <input asp-for="Duration" placeholder="hh:mm:ss" pattern="[0-9]{1,2}:[0-5][0-9]:[0-5][0-9]" class="form-control form-control-lg shadow-sm" required>
                                         <span asp-validation-for="Duration" class="text-danger"></span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label asp-for="Price" class="form-label fw-semibold">
+                                            <i class="bi bi-currency-dollar me-2"></i>Price
+                                        </label>
+                                        <input asp-for="Price" type="number" class="form-control form-control-lg shadow-sm" required>
+                                        <span asp-validation-for="Price" class="text-danger"></span>
                                     </div>
                                     <div class="mb-3">
                                         <label asp-for="Description" class="form-label fw-semibold">
@@ -166,7 +174,6 @@
                                                                     {
                                                                         var resource = chapter.Resources.ToList()[j];
                                                                         <input hidden name="CourseChapters[@i].Resources[@j].FileUrl" value="@resource.FileUrl" />
-                                                                        <input hidden name="CourseChapters[@i].Resources[@j].CreatedByUserID" value="@resource.CreatedByUserID" />
                                                                         <div class="resource-item mb-3 p-3 bg-white rounded shadow-sm" data-resource-index="@j">
                                                                             <div class="d-flex flex-column">
                                                                                 <!-- Resource Header -->
@@ -197,8 +204,7 @@
                                                                                     <div class="col-md-4">
                                                                                         <select class="form-select"
                                                                                                 name="CourseChapters[@i].Resources[@j].ResourceType"
-                                                                                                value="@resource.ResourceType"
-                                                                                                
+                                                                                                value="@resource.ResourceType"                                                                                               
                                                                                                 asp-items="ViewBag.ResourceTypes">
                                                                                         </select>
                                                                                     </div>
