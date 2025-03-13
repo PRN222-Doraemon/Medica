@@ -1,0 +1,30 @@
+﻿@model CourseCreateVM
+
+@{
+    bool IsUpdate = false;
+
+    if (ViewBag.Title == "Update Course")
+    {
+        IsUpdate = true;
+    }
+}
+
+<!-- Header with gradient background -->
+<div class="bg-gradient-primary p-4 rounded-3 mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="h3 mb-0 text-white">@ViewBag.Title</h1>
+
+        @if (IsUpdate)
+        {
+            <a asp-action="Details" asp-controller="Courses" asp-route-id="@Model.Id" class="btn btn-light">
+                <i class="bi bi-arrow-left"></i> Back to Course
+            </a>
+        }
+        else
+        {
+            <a asp-action="Index" asp-controller="Courses" class="btn btn-light">
+                <i class="bi bi-arrow-left"></i> Back to Courses
+            </a>
+        }
+    </div>
+</div>
