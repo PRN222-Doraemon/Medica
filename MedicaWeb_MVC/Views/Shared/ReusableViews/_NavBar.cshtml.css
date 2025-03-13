@@ -9,6 +9,7 @@
 .navbar {
     background-color: var(--primary-color) !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 .navbar-nav .nav-link {
@@ -21,4 +22,11 @@
 .navbar-nav .nav-link.active {
     color: var(--green-dark-color) !important;
     text-decoration: underline;
+}
+
+.sticky-top {
+    position: sticky !important;
+    top: 0;
+    z-index: 1030; 
+    background-color: white; 
 }
