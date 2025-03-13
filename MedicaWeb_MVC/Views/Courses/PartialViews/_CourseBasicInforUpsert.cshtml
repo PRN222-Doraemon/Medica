@@ -1,0 +1,88 @@
+﻿@model CourseCreateVM
+
+<div class="mb-4 p-4 bg-light rounded-3">
+    <h5 class="mb-3 text-primary border-bottom pb-2">Basic Information</h5>
+
+    <!-- Course Image -->
+    <div class="mb-3">
+        <label class="form-label fw-semibold">
+            <i class="bi bi-image me-2"></i>Course Image
+        </label>
+        <div class="d-flex gap-3 align-items-start">
+            <div class="position-relative" style="width: 200px; height: 120px;">
+                <img id="courseImagePreview"
+                     src="@Model.ImgUrl"
+                     class="img-fluid rounded shadow-sm"
+                     style="width: 200px; height: 120px; object-fit: cover;">
+
+                @if (!string.IsNullOrEmpty(Model.ImgUrl))
+                {
+                    <input type="hidden" asp-for="ImgUrl" />
+
+                    <button type="button"
+                            class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2"
+                            onclick="removeCourseImage(this)">
+                        <i class="bi bi-x"></i>
+                    </button>
+                }
+            </div>
+            <div class="flex-grow-1">
+                <input type="file" asp-for="@Model.ImageFile" id="courseImageInput" class="form-control">
+                <small class="text-muted d-block mt-2">
+                    Recommended size: 1280x720 pixels (16:9 ratio)<br>
+                    Maximum file size: 2MB<br>
+                    Supported formats: JPG, PNG
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Name -->
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label fw-semibold">
+            <i class="bi bi-book me-2"></i>Course Name
+        </label>
+        <input asp-for="Name" class="form-control form-control-lg shadow-sm" required>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <!-- Category -->
+    <div class="mb-3">
+        <label asp-for="CategoryID" class="form-label fw-semibold">
+            <i class="bi bi-book me-2"></i>Category
+        </label>
+        <select asp-for="CategoryID" asp-items="ViewBag.Categories" class="form-control form-control-lg shadow-sm" required></select>
+        <span asp-validation-for="CategoryID" class="text-danger"></span>
+    </div>
+
+    <!-- Duration -->
+    <div class="mb-3">
+        <label asp-for="Duration" class="form-label fw-semibold">
+            <i class="bi bi-clock me-2"></i>Duration
+        </label>
+        <input asp-for="Duration"
+               placeholder="hh:mm:ss"
+               pattern="[0-9]{1,2}:[0-5][0-9]:[0-5][0-9]"
+               class="form-control form-control-lg shadow-sm"
+               required>
+        <span asp-validation-for="Duration" class="text-danger"></span>
+    </div>
+
+    <!-- Price -->
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label fw-semibold">
+            <i class="bi bi-currency-dollar me-2"></i>Price
+        </label>
+        <input asp-for="Price" type="number" class="form-control form-control-lg shadow-sm" required>
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label fw-semibold">
+            <i class="bi bi-journal-text me-2"></i>What students will learn
+        </label>
+        <textarea asp-for="Description" class="form-control shadow-sm" rows="4" required></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+</div>

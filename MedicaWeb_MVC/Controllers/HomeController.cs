@@ -34,10 +34,10 @@ namespace MedicaWeb_MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            if (_accountService.IsSignedIn(User))
-            {
-                return RedirectToAction("Index", "Courses");
-            }
+            // if (_accountService.IsSignedIn(User))
+            // {
+            //     return RedirectToAction("Index", "Courses");
+            // }
             var spec = new TopCoursesByFeedbacksSpecification(3);
             var courses = await _courseService.GetCoursesAsync(spec);
             return View(_mapper.Map<IEnumerable<Course>, IEnumerable<CourseVM>>(courses));

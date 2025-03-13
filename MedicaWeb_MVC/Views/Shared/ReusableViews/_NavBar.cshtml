@@ -1,65 +1,75 @@
-﻿@using MedicaWeb_MVC.ViewModels
-
-@{
-	var searchBarVM = new SearchbarVM()
-			{
-				Action = "Search",
-				Controller = "Profile",
-			};
+﻿@{
+    ViewData["Title"] = "Trang chủ";
 }
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
-	<div class="container-fluid">
+<style>
+    .logo {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--green-dark-color);
+        position: relative;
+        display: inline-block;
+        text-decoration: none;
+    }
 
-		<!-- Heading -->
-		<a class="navbar-brand me-3" asp-controller="Home" asp-action="Index">Medica</a>
+    .navbar-nav .nav-link {
+        color: white !important;
+        font-weight: 500;
+        font-size: medium
+    }
 
-		<!-- Search Bar (Using Partial View) -->
-		<div class="flex-lg-grow-1 mx-3">
-			<partial name="ReusableViews/_Searchbar" model="@searchBarVM" />
-		</div>
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+        color: var(--green-dark-color) !important;
+        text-decoration: underline;
+    }
+</style>
 
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
+<!-- Header -->
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <!-- Logo -->
+            <a class="logo" asp-controller="Home" asp-action="Index"> Medica </a>
 
-		<!-- Links Items -->
-		<div class="collapse navbar-collapse flex-lg-grow-1" id="navbarColor02">
-			<ul class="navbar-nav me-auto">
-				<li class="nav-item">
-					<a class="nav-link active" href="#">
-						Home
-						<span class="visually-hidden">(current)</span>
-					</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" asp-controller="Courses" asp-action="Index">Courses</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" asp-controller="News" asp-action="Index">News</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" asp-controller="MyLearning" asp-action="Index">My Learning</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
-				</li>
-			</ul>
-		</div>
-		<ul class="navbar-nav ms-auto d-flex flex-row gap-3">
-			<!-- Cart -->
-			<li class="nav-item">
-				<a class="nav-link" asp-controller="Cart" asp-action="Index">
-					<i class="bi bi-cart2 fs-2"></i>
-				</a>
-			</li>
+            <!-- Navbar content -->
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav gap-5">
+                    <li class="nav-item"><a class="nav-link" asp-controller="Courses" asp-action="Index">Courses</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="News" asp-action="Index">News</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="MyLearning" asp-action="Index">My
+                            Learning</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                </ul>
+            </div>
 
-			<!-- Profile -->
-			<li class="nav-item">
-				<a class="nav-link" asp-controller="Account" asp-action="Index">
-					<i class="bi bi-person-circle fs-2"></i>
-				</a>
-			</li>
-		</ul>
-	</div>
-</nav>
+            @if (User != null)
+            {
+                <ul class="navbar-nav ms-auto d-flex flex-row gap-3">
+                    <!-- Cart -->
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Cart" asp-action="Index">
+                            <i class="bi bi-cart2 fs-2"></i>
+                        </a>
+                    </li>
+
+                    <!-- Profile -->
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Account" asp-action="Index">
+                            <i class="bi bi-person-circle fs-2"></i>
+                        </a>
+                    </li>
+                </ul>
+            }
+            else
+            {
+                <!-- Login -->
+                <div class="d-flex align-items-center ms-auto">
+                    <button class="btn btn-green-outline me-2">Register</button>
+                    <button class="btn btn-green">Login</button>
+                </div>
+            }
+        </div>
+    </nav>
+</header>

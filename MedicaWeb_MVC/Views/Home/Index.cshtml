@@ -4,24 +4,74 @@
 @{
 	ViewData["Title"] = "Home Page";
 }
-
-<div class="container text-center mt-5">
+<div>
 	<!-- Hero Section -->
-	<h1 class="display-4 fw-bold text-primary">Welcome to Doreamon Hub</h1>
-	<p class="lead text-muted">Expand your knowledge with our interactive science courses.</p>
+	<section class="hero-section">
+		<div class="container text-center">
+			<div class="row align-items-center justify-content-center">
+				<h1 class="hero-title">Welcome to Doreamon Hub</h1>
+				<p class="hero-subtitle">Expand your knowledge with our interactive science courses.</p>
+				<div class="search-bar">
+					<form>
+						<div class="row g-2">
+							<div class="col-md-9">
+								<input type="text" class="form-control" placeholder="Searching...">
+							</div>
+							<div class="col-md-3">
+								<button type="submit" class="search-btn w-100">Search</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
 
-	<!-- Action Buttons -->
-	<div class="mt-4">
-		<a asp-controller="Accounts" asp-action="Login" class="btn btn-primary btn-lg me-2">Login</a>
-		<a asp-controller="Accounts" asp-action="Register" class="btn btn-outline-secondary btn-lg">Register</a>
+	<!-- Stats Section -->
+	<section class="py-5">
+		<div class="container">
+			<h2 class="title text-center mb-4">About Us</h2>
+			<div class="row">
+				<div class="col-md-3">
+					<div class="stats-box">
+						<div class="stats-icon"><i class="bi bi-briefcase"></i></div>
+						<div class="stats-number">175,324</div>
+						<div class="stats-text">Courses</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="stats-box">
+						<div class="stats-icon"><i class="bi bi-building"></i></div>
+						<div class="stats-number">97,354</div>
+						<div class="stats-text">Lecturers</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="stats-box">
+						<div class="stats-icon"><i class="bi bi-people"></i></div>
+						<div class="stats-number">38,471,54</div>
+						<div class="stats-text">Candidates</div>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="stats-box">
+						<div class="stats-icon"><i class="bi bi-clock"></i></div>
+						<div class="stats-number">7,532</div>
+						<div class="stats-text">Events & Workshops</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
-	</div>
+	<hr class="m-5">
+</div>
+<div class="container text-center mt-5">
 
-	<hr class="my-5">
 
 	<!-- Courses Section -->
 	<div class="container my-5">
-		<h2 class="text-center text-primary mb-4">Explore Our Courses</h2>
+		<h2 class="title text-center mb-4">Explore Our Courses</h2>
 		<div class="row row-cols-1 row-cols-md-3 g-4">
 			@foreach (var c in Model)
 			{
@@ -31,7 +81,8 @@
 						<div class="card-body d-flex flex-column">
 							<h5 class="card-title">@c.Name</h5>
 							<p class="card-text flex-grow-1">@c.Description</p>
-							<a asp-action="Details" asp-controller="Courses" asp-route-id="@c.Id" class="btn btn-primary mt-auto">
+							<a asp-action="Details" asp-controller="Courses" asp-route-id="@c.Id"
+								class="btn btn-orange mt-auto">
 								<i class="bi bi-chat-left-text"></i> Feedbacks: @c.Feedbacks.Count()
 							</a>
 						</div>

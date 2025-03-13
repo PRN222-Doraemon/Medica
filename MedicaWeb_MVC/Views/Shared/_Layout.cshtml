@@ -2,6 +2,7 @@
 <html lang="en">
 
 @* Head & Metadata *@
+
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,19 +15,22 @@
 	<link rel="stylesheet" href="~/lib/toastr.js/toastr.min.css" />
 	<link rel="stylesheet" href="~/lib/datatables.net-bs5/datatables.bootstrap5.min.css" />
 	<link rel="stylesheet" href="~/MedicaWeb_MVC.styles.css" asp-append-version="true" />
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap" />
 </head>
 
 @* Body *@
+
 <body class="d-flex flex-column min-vh-100">
 
 	@* Header *@
-	<header class="mb-3">
+	<header>
 		<partial name="ReusableViews/_NavBar" />
 	</header>
 
 	@* Container *@
 	<main role="main" class="flex-grow-1">
-		<div class="container-fluid">
+		<div>
 			@RenderBody()
 		</div>
 	</main>
@@ -46,4 +50,5 @@
 
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
+
 </html>
