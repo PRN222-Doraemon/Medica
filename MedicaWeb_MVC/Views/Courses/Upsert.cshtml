@@ -10,7 +10,7 @@
         <div class="col-12">
             <div class="card shadow">
                 <div class="card-body p-4">
-                    <partial name="PartialViews/_CourseHeader" model="@Model" />
+                    <partial name="PartialViews/_CourseHeaderUpsert" model="@Model" />
 
                     <form asp-action="Upsert" asp-controller="Courses"
                           method="post" id="updateCourseForm"
@@ -22,7 +22,7 @@
                         <div class="row">
                             <!-- Left Column - Basic Information -->
                             <div class="col-md-6 pe-md-4">
-                                <partial name="PartialViews/_CourseBasicInfor" model="@Model" />
+                                <partial name="PartialViews/_CourseBasicInforUpsert" model="@Model" />
 
                                 <!-- Save button -->
                                 <div class="d-grid gap-2">
@@ -34,7 +34,7 @@
 
                             <!-- Right Column - Course Content -->
                             <div class="col-md-6 ps-md-4">
-                                <partial name="PartialViews/_CourseContent" model="@Model" />
+                                <partial name="PartialViews/_CourseContentUpsert" model="@Model" />
                             </div>
                         </div>
                     </form>

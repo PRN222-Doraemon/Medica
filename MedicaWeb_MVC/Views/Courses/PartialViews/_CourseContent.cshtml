@@ -1,22 +1,69 @@
-﻿@model CourseCreateVM
+﻿@model CourseVM
+@using Core.Constants
 
 <div class="mb-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h5 class="text-primary border-bottom pb-2">
-            <i class="bi bi-collection me-2"></i>Course Content
-        </h5>
-        <button type="button" class="btn btn-primary btn-sm shadow-sm" onclick="addChapter()">
-            <i class="bi bi-plus-lg"></i> Add Chapter
-        </button>
+        <h4 class="mb-0">Course content</h4>
+        <span class="text-muted">
+            @($"{Model.TotalChapters} chapters • {Model.TotalResources} lectures • {Model.Duration} total length")
+        </span>
     </div>
+    <div class="border rounded">
+        <div class="accordion accordion-flush" id="courseContent">
+            @foreach (var chapter in Model.CourseChapters)
+            {
+                var collapseId = $"collapse-{chapter.Id}";
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#@collapseId">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <span>@chapter.Name</span>
+                                <span class="badge bg-light text-dark ms-2">
+                                    @($"{chapter.TotalResources} lectures")
+                                </span>
+                            </div>
+                        </button>
+                    </h2>
+                    <div id="@collapseId" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <ul class="list-group list-group-flush">
+                                @foreach (var resource in chapter.Resources)
+                                {
+                                    <li class="list-group-item d-flex align-items-center gap-3 justify-content-between">
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if (resource.ResourceType == ResourceType.Slide)
+                                            {
+                                                <i class="bi bi-file-pdf text-danger"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-play-circle text-primary"></i>
+                                            }
+                                            <span>@resource.Title</span>
+                                        </div>
 
-    <div id="chaptersContainer" class="accordion">
-        <partial name="PartialViews/_ChaptersList" model="@Model" />
-
-        <!--Template for new chapter-->
-        <partial name="PartialViews/_ChapterTemplate" />
-
-        <!-- Template for new resource -->
-        <partial name="PartialViews/_ResourceTemplate" />
+                                        <a href="@resource.FileUrl"
+                                           target="_blank"
+                                           class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1">
+                                            @if (resource.ResourceType == ResourceType.Slide)
+                                            {
+                                                <i class="bi bi-download"></i>
+                                                <span>Download PDF</span>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-play"></i>
+                                                <span>Watch Video</span>
+                                            }
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
     </div>
 </div>
