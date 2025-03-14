@@ -1,0 +1,53 @@
+@model Tuple<CourseVM, IEnumerable<LecturerVM>>
+
+@{
+    var Course = Model.Item1;
+    var Lecturers = Model.Item2;
+}
+
+<div class="container-fluid bg-light py-5">
+    <div class="container position-relative">
+        <div class="position-absolute end-0 top-0 h-100" style="z-index: 0;">
+            <img src="@(Course?.ImgUrl)" alt="Background graphic" class="h-100">
+        </div>
+
+        <div class="row position-relative" style="z-index: 1;">
+            <div class="col-lg-8">
+                <h1 class="display-5 fw-bold mb-3 text-green">@Course?.Name</h1>
+                <p class="mb-4">@Course?.Description</p>
+
+                <div class="d-flex align-items-center mb-4">
+                    <span class="me-2">Lecturers:</span>
+                    <div class="d-flex align-items-center">
+                        @foreach (var lecturer in Lecturers)
+                        {
+                            <img src="@lecturer.ImageUrl" alt="Lecturer" class="rounded-circle me-1"
+                                style="width: 30px; height: 30px;">
+                        }
+                        @foreach (var lecturer in Lecturers)
+                        {
+                            <a href="@lecturer.Id" class="me-2 text-green fw-medium">@lecturer.FullName</a>
+                        }
+                    </div>
+                </div>
+
+                @if (User.IsInRole(AppCts.Roles.Employee))
+                {
+                    <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#createClassModal">
+                        <i class="bi bi-plus-circle me-2"></i> Create Class
+                    </button>
+                }
+                else
+                {
+                    <div class="mb-3">
+                        <button class="btn btn-green px-4 py-2">Best Seller</button>
+                    </div>
+                }
+
+                <div class="mb-5">
+                    <span class="fw-bold">@Course?.TotalEnrolls</span> already enrolled
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

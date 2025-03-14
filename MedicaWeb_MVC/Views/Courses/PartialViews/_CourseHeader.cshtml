@@ -4,19 +4,21 @@
 <div class="mb-4">
     <div class="d-flex justify-content-between align-items-start mb-3">
         <div>
-            <h1 class="display-5 fw-bold mb-0">@Model.Name</h1>
-            <span class="badge rounded-pill @(Model.Status.ToString() == "Active" ? "bg-success" : "bg-secondary")">
+            <h1 class="display-5 text-green fw-bold mb-0">@Model.Name</h1>
+            <span
+                class="badge btn-green rounded-pill @(Model.Status.ToString() == "Active" ? "bg-success" : "bg-secondary")">
                 @Model.Status
             </span>
         </div>
 
-        @if (User.IsInRole(AppCts.Roles.Lecturer))
+        @if (User.IsInRole(AppCts.Roles.Employee))
         {
             <div>
-                <a asp-action="Upsert" asp-controller="Courses" asp-route-id="@Model.Id" class="btn btn-outline-primary">
+                <a asp-action="Upsert" asp-controller="Courses" asp-route-id="@Model.Id" class="btn btn-green-outline">
                     <i class="bi bi-pencil"></i> Update
                 </a>
-                <a asp-action="Delete" asp-controller="Courses" asp-route-id="@Model.Id" class="btn btn-outline-danger">
+                <a asp-action="Delete" asp-controller="Courses" asp-route-id="@Model.Id" class="btn btn-danger"
+                    onclick="return confirmDelete();">
                     <i class="bi bi-trash"></i> Delete
                 </a>
             </div>
@@ -47,10 +49,17 @@
     </div>
 
     <div class="d-flex align-items-center gap-3 text-muted">
-        <div>Created by <a href="#" class="text-decoration-none fw-semibold">@Model.CreatedByUserName</a></div>
+        <div>Created by <a href="#" class="text-decoration-none fw-semibold text-green">@Model.CreatedByUserName</a>
+        </div>
         <div class="d-flex align-items-center gap-1">
             <i class="bi bi-clock-history"></i>
             <span>Last updated @Model.UpdatedAt.ToShortDateString()</span>
         </div>
     </div>
 </div>
+
+<script>
+    function confirmDelete() {
+        return confirm("Are you sure you want to delete this course?");
+    }
+</script>

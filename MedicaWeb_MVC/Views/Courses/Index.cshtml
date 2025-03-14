@@ -3,24 +3,25 @@
 
 <div class="container py-4">
     <!-- Search and Filter Header -->
-    <div class="row mb-4">
+    <div class="row pb-4 header-container border-bottom border-secondary">
         <div class="col-md-6">
             @await Html.PartialAsync("~/Views/Shared/ReusableViews/_SearchBar.cshtml", Model.SearchValue)
         </div>
         <div class="col-md-6 d-flex justify-content-end gap-2">
             <form asp-controller="Courses" asp-action="Index" method="get" id="filterForm">
                 <div class="d-flex gap-2">
-                    <select class="form-select w-auto" name="CategoryId" asp-items="ViewBag.Categories"
+                    <select class="form-select w-auto text-grey" name="CategoryId" asp-items="ViewBag.Categories"
                         onchange="submitForm()">
                         <option value="">All Category</option>
                     </select>
-                    <select class="form-select w-auto" name="Status" asp-items="ViewBag.Status" onchange="submitForm()">
+                    <select class="form-select w-auto text-grey" name="Status" asp-items="ViewBag.Status"
+                        onchange="submitForm()">
                     </select>
                 </div>
             </form>
-            @if (User.IsInRole(AppCts.Roles.Lecturer))
+            @if (User.IsInRole(AppCts.Roles.Employee))
             {
-                <a class="btn btn-primary d-flex align-items-center gap-2" asp-controller="Courses" asp-action="Upsert">
+                <a class="btn btn-green d-flex align-items-center gap-2" asp-controller="Courses" asp-action="Upsert">
                     <i class="bi bi-plus-lg"></i>
                     Create new
                 </a>

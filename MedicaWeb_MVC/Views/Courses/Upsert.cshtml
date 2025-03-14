@@ -12,9 +12,8 @@
                 <div class="card-body p-4">
                     <partial name="PartialViews/_CourseHeaderUpsert" model="@Model" />
 
-                    <form asp-action="Upsert" asp-controller="Courses"
-                          method="post" id="updateCourseForm"
-                          enctype="multipart/form-data">
+                    <form asp-action="Upsert" asp-controller="Courses" method="post" id="updateCourseForm"
+                        enctype="multipart/form-data">
 
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="ImgUrl" />
@@ -26,7 +25,7 @@
 
                                 <!-- Save button -->
                                 <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary btn-lg shadow">
+                                    <button type="submit" class="btn btn-green fs-5 fw-small btn-lg shadow">
                                         <i class="bi bi-check2-circle me-2"></i> SAVE
                                     </button>
                                 </div>

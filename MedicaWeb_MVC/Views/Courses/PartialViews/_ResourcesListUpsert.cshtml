@@ -6,12 +6,9 @@
     {
         var resource = Model.Resources.ToList()[j];
 
-        <input type="hidden"
-               name="CourseChapters[@Model.Id].Resources[@j].FileUrl"
-               value="@resource.FileUrl" />
+        <input type="hidden" name="CourseChapters[@Model.Id].Resources[@j].FileUrl" value="@resource.FileUrl" />
 
-        <div class="resource-item mb-3 p-3 bg-white rounded shadow-sm"
-             data-resource-index="@j">
+        <div class="resource-item mb-3 p-3 bg-white rounded shadow-sm" data-resource-index="@j">
             <div class="d-flex flex-column">
 
                 <!-- Resource Header -->
@@ -25,22 +22,14 @@
                         <i class="bi bi-play-circle text-primary"></i>
                     }
 
-                    <input type="hidden"
-                           name="CourseChapters[@Model.Id].Resources[@j].Id"
-                           value="@resource.Id" />
+                    <input type="hidden" name="CourseChapters[@Model.Id].Resources[@j].Id" value="@resource.Id" />
 
                     <div class="flex-grow-1">
-                        <input type="text"
-                               class="form-control"
-                               name="CourseChapters[@Model.Id].Resources[@j].Title"
-                               value="@resource.Title"
-                               required
-                               placeholder="Enter resource title">
+                        <input type="text" class="form-control" name="CourseChapters[@Model.Id].Resources[@j].Title"
+                            value="@resource.Title" required placeholder="Enter resource title">
                     </div>
 
-                    <button type="button"
-                            class="btn btn-outline-danger btn-sm"
-                            onclick="removeResource(this)">
+                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeResource(this)">
                         <i class="bi bi-trash"></i>
                     </button>
                 </div>
@@ -48,28 +37,22 @@
                 <!-- Resource Details -->
                 <div class="row g-3 align-items-center">
                     <div class="col-md-4">
-                        <select class="form-select"
-                                name="CourseChapters[@Model.Id].Resources[@j].ResourceType"
-                                value="@resource.ResourceType"
-                                asp-items="ViewBag.ResourceTypes">
+                        <select class="form-select" name="CourseChapters[@Model.Id].Resources[@j].ResourceType"
+                            value="@resource.ResourceType" asp-items="ViewBag.ResourceTypes">
                         </select>
                     </div>
 
                     <div class="col-md-5">
                         <div class="input-group">
-                            <input type="file"
-                                   class="form-control"
-                                   name="CourseChapters[@Model.Id].Resources[@j].File"
-                                   accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.mp3">
+                            <input type="file" class="form-control" name="CourseChapters[@Model.Id].Resources[@j].File"
+                                accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.mp3">
                         </div>
                     </div>
 
                     <div class="col-md-3">
                         @if (!string.IsNullOrEmpty(resource.FileUrl))
                         {
-                            <a href="@resource.FileUrl"
-                               class="btn btn-outline-primary w-100"
-                               target="_blank">
+                            <a href="@resource.FileUrl" class="btn-green-outline" target="_blank">
                                 <i class="bi bi-file-earmark-arrow-down"></i> View Resource
                             </a>
                         }

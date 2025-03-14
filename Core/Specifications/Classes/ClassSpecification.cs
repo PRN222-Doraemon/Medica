@@ -5,7 +5,8 @@ namespace Core.Specifications.Classes
 {
     public class ClassSpecification : BaseSpecification<Classroom>
     {
-        public ClassSpecification(int id) : base(x => x.Id == id) {
+        public ClassSpecification(int id) : base(x => x.Id == id)
+        {
             AddInclude(x => x.Course);
             AddInclude(x => x.Lecturer);
             AddInclude(x => x.OrderDetails);
@@ -18,7 +19,7 @@ namespace Core.Specifications.Classes
             ((!classParams.ClassroomStatus.HasValue && x.Status != ClassroomStatus.Cancelled) || (x.Status == ClassroomStatus.Active &&
             ((classParams.ClassroomStatus == ClassroomStatus.Upcoming && x.StartDate > DateOnly.FromDateTime(DateTime.Today)) ||
             (classParams.ClassroomStatus == ClassroomStatus.Completed && x.EndDate < DateOnly.FromDateTime(DateTime.Today)) ||
-            (classParams.ClassroomStatus == ClassroomStatus.Ongoing && x.EndDate < DateOnly.FromDateTime(DateTime.Today) && x.EndDate > DateOnly.FromDateTime(DateTime.Today))))))
+            (classParams.ClassroomStatus == ClassroomStatus.Ongoing && x.StartDate < DateOnly.FromDateTime(DateTime.Today) && x.EndDate > DateOnly.FromDateTime(DateTime.Today))))))
         {
             AddCustomInclude(c => c.Include(c => c.Course).ThenInclude(c => c.Category));
             AddInclude(c => c.Lecturer);

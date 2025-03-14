@@ -1,30 +1,36 @@
 ﻿@model CourseVM
-
+<style>
+    .card-custom {
+        background: rgb(255, 255, 255);
+        box-shadow: 0 4px 10px rgba(224, 209, 189, 0.637);
+    }
+</style>
 <div class="col-lg-4">
-    <div class="card shadow-sm position-sticky" style="top: 2rem;">
+    <div class="card card-custom position-sticky" style="top: 2rem;">
         <img src="@Model.ImgUrl" class="card-img-top" alt="@Model.Name">
         <div class="card-body">
-            <span class=" fw-bold text-dark fs-1">
+            <span class=" fw-bold text-danger fs-1">
                 ₫ @($"{Model.Price:N0}")
             </span>
-            <a asp-action="Index" asp-controller="Classrooms" asp-route-courseId="@Model.Id" class="btn btn-primary btn-lg w-100 mb-4 mt-3">View Classes</a>
+            <a asp-action="Index" asp-controller="Classrooms" asp-route-courseId="@Model.Id"
+                class="badge bg-yellow text-green fw-medium ms-2 w-100 mb-4 mt-3 fs-5">View Classes</a>
 
-            <h5 class="mb-3">This course includes:</h5>
+            <h5 class="text-green mb-3">This course includes:</h5>
             <ul class="list-unstyled mb-0">
                 <li class="d-flex align-items-center gap-2 mb-3">
-                    <i class="bi bi-camera-video text-primary"></i>
+                    <i class="bi bi-camera-video text-green"></i>
                     <span>@Model.Duration on demand video</span>
                 </li>
                 <li class="d-flex align-items-center gap-2 mb-3">
-                    <i class="bi bi-download text-primary"></i>
+                    <i class="bi bi-download text-green"></i>
                     <span>Downloadable resources</span>
                 </li>
                 <li class="d-flex align-items-center gap-2 mb-3">
-                    <i class="bi bi-phone text-primary"></i>
+                    <i class="bi bi-phone text-green"></i>
                     <span>Access on mobile and TV</span>
                 </li>
                 <li class="d-flex align-items-center gap-2">
-                    <i class="bi bi-award text-primary"></i>
+                    <i class="bi bi-award text-green"></i>
                     <span>Certificate of completion</span>
                 </li>
             </ul>
