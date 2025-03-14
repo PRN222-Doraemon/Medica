@@ -33,6 +33,10 @@ p {
   font-family: 'Be Vietnam Pro', sans-serif !important;
 }
 
+a {
+  text-decoration: none;
+}
+
 .title {
   font-size: 2rem;
   font-weight: 700;
