@@ -6,82 +6,99 @@
 	ViewData["Title"] = "Register";
 }
 
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-	<div class="card shadow-lg p-4" style="max-width: 500px; width: 100%;">
-		<div class="card-body">
-			<h3 class="text-center text-primary"><i class="bi bi-person-plus-fill"></i> Register</h3>
-			<hr>
+<style>
+	.google-login-btn {
+		flex: 1;
+		text-align: center;
+		padding: 15px;
+		font-size: 15px;
+		border-radius: 30px;
+		cursor: pointer;
+		transition: all 0.3s ease;
 
-			<form asp-action="Register" asp-controller="Accounts" method="post">
-				<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+	}
 
-				<!-- First Name -->
-				<div class="mb-3">
-					<label asp-for="FirstName" class="form-label"><i class="bi bi-person"></i> First Name</label>
-					<input asp-for="FirstName" class="form-control" placeholder="Enter first name" required>
+	.google-login-btn {
+		background-color: white;
+		border: 1px solid #f99b2a;
+		color: #f99b2a;
+		text-decoration: none;
+	}
+
+	.google-login-btn:hover {
+		color: rgb(248, 108, 15);
+		border: 1px solid rgb(248, 108, 15);
+	}
+
+	.register-link a {
+		color: #f99b2a;
+		text-decoration: none;
+		font-weight: bold;
+	}
+</style>
+
+<div class="register-container">
+	<div class="left-panel">
+		<div class="logo-container">
+			<h1>Join Us!</h1>
+		</div>
+		<p class="description">
+			Create an account to get started
+		</p>
+		<button class="learn-more-btn">Learn More</button>
+	</div>
+
+	<div class="right-panel">
+		<form asp-action="Register" asp-controller="Accounts" method="post">
+			<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+			<div class="form-group row">
+				<div class="col-md-6">
+					<input asp-for="FirstName" type="text" class="form-control" placeholder="First Name" required>
 					<span asp-validation-for="FirstName" class="text-danger"></span>
 				</div>
-
-				<!-- Last Name -->
-				<div class="mb-3">
-					<label asp-for="LastName" class="form-label"><i class="bi bi-person"></i> Last Name</label>
-					<input asp-for="LastName" class="form-control" placeholder="Enter last name" required>
+				<div class="col-md-6">
+					<input asp-for="LastName" type="text" class="form-control" placeholder="Last Name" required>
 					<span asp-validation-for="LastName" class="text-danger"></span>
 				</div>
-
-				<!-- Email -->
-				<div class="mb-3">
-					<label asp-for="Email" class="form-label"><i class="bi bi-envelope"></i> Email</label>
-					<input asp-for="Email" type="email" class="form-control" placeholder="Enter email" required>
-					<span asp-validation-for="Email" class="text-danger"></span>
-				</div>
-
-				<!-- Username -->
-				<div class="mb-3">
-					<label asp-for="UserName" class="form-label"><i class="bi bi-person-circle"></i> Username</label>
-					<input asp-for="UserName" class="form-control" placeholder="Choose a username" required>
+			</div>
+			<div class="form-group row">
+				<div class="col-md-6">
+					<input asp-for="UserName" type="text" class="form-control" placeholder="Username" required>
 					<span asp-validation-for="UserName" class="text-danger"></span>
 				</div>
-
-				<!-- Password -->
-				<div class="mb-3">
-					<label asp-for="Password" class="form-label"><i class="bi bi-lock"></i> Password</label>
-					<input asp-for="Password" type="password" class="form-control" placeholder="Enter password" required>
+				<div class="col-md-6">
+					<input asp-for="Email" type="email" class="form-control" placeholder="Email" required>
+					<span asp-validation-for="Email" class="text-danger"></span>
+				</div>
+			</div>
+			<!-- Password & Confirm Password -->
+			<div class="form-group row">
+				<div class="col-md-6">
+					<input asp-for="Password" type="password" class="form-control" placeholder="Password" required>
 					<span asp-validation-for="Password" class="text-danger"></span>
 				</div>
-
-				<!-- Confirm Password -->
-				<div class="mb-3">
-					<label asp-for="ConfirmPassword" class="form-label"><i class="bi bi-lock-fill"></i> Confirm Password</label>
-					<input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm password" required>
+				<div class="col-md-6">
+					<input asp-for="ConfirmPassword" type="password" class="form-control" placeholder="Confirm Password"
+						required>
 					<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
 				</div>
-
-				<!-- Date of Birth -->
-				<div class="mb-3">
-					<label asp-for="DateOfBirth" class="form-label"><i class="bi bi-calendar"></i> Date of Birth</label>
-					<input asp-for="DateOfBirth" type="date" class="form-control" required>
-					<span asp-validation-for="DateOfBirth" class="text-danger"></span>
-				</div>
-
-				@* <!-- Profile Image URL -->
-				<div class="mb-3">
-					<label asp-for="ImageUrl" class="form-label"><i class="bi bi-image"></i> Profile Image URL</label>
-					<input asp-for="ImageUrl" type="url" class="form-control" placeholder="Enter image URL">
-					<span asp-validation-for="ImageUrl" class="text-danger"></span>
-				</div> *@
-
-				<!-- Register Button -->
-				<div class="d-grid">
-					<button type="submit" class="btn btn-primary">
-						<i class="bi bi-person-plus-fill"></i> Register
-					</button>
-				</div>
-			</form>
-
-			<div class="text-center mt-3">
-				Already have an account? <a asp-action="Login" class="text-decoration-none">Login here</a>
 			</div>
+			<div class="form-group">
+				<input asp-for="DateOfBirth" type="date" class="form-control" required>
+				<span asp-validation-for="DateOfBirth" class="text-danger"></span>
+			</div>
+
+			<div class="login-buttons">
+				<button type="submit" class="login-btn">Register</button>
+				<a asp-action="GoogleRegister" class="google-login-btn">
+					<i class="bi bi-google"></i> Sign up with Google
+				</a>
+			</div>
+		</form>
+
+		<div class="register-link">
+			Already have an account? <a asp-action="Login">Login</a>
 		</div>
 	</div>
 </div>

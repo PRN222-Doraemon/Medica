@@ -1,0 +1,237 @@
+body {
+    background: radial-gradient(circle, #FFF2C9 20%, #F9E4B7 50%, #E5C697 100%);
+}
+
+.register-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 900px;
+    height: 70vh;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.left-panel {
+    width: 45%;
+    height: 100%;
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #f99b2a, #ff8e61, #ffcc70);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    gap: 10px;
+}
+
+.right-panel {
+    width: 55%;
+    padding: 20px 40px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.brand {
+    font-size: 32px;
+    letter-spacing: 2px;
+    margin-top: 10px;
+}
+
+.description {
+    line-height: 1.6;
+    opacity: 0.8;
+    font-size: 16px;
+}
+
+.learn-more-btn {
+    margin-top: 30px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.learn-more-btn:hover {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.middle-circle {
+    position: absolute;
+    left: 45%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    background-color: #7fbc50;
+    /* Using your specified color */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.arrow {
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+}
+.welcome-text h1 {
+    font-size: 36px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.welcome-text p {
+    font-size: 18px;
+    color: #777;
+}
+
+.progress-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    background-color: #ddd;
+    border-radius: 50%;
+    margin: 0 5px;
+}
+
+.dot.active {
+    background-color: #333;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    outline: none;
+}
+
+.form-control:focus {
+    border-color: #7fbc50;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+
+.remember-me input {
+    margin-right: 8px;
+}
+
+.forgot-password {
+    color: #777;
+    text-decoration: none;
+}
+
+.forgot-password:hover {
+    color: #f99b2a;
+}
+
+.login-buttons {
+    display: flex;
+    gap: 10px;
+    /* Khoảng cách giữa 2 nút */
+}
+
+.login-btn,
+.google-login-btn {
+    flex: 1;
+    /* Chia đều kích thước */
+    text-align: center;
+    padding: 15px;
+    font-size: 15px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+}
+
+.google-login-btn {
+    background-color: white;
+    border: 1px solid #f99b2a;
+    color: #f99b2a;
+    text-decoration: none;
+}
+
+.google-login-btn:hover {
+    color: rgb(248, 108, 15);
+    border: 1px solid rgb(248, 108, 15);
+}
+
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #7fbc50;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.login-btn:hover {
+    background-color: #6da744;
+}
+
+.register-link {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.register-link a {
+    color: #f99b2a;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.close-btn:hover {
+    background-color: #ddd;
+}
