@@ -91,7 +91,7 @@ namespace MedicaWeb_MVC.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = AppCts.Roles.Lecturer)]
+        [Authorize(Roles = AppCts.Roles.Employee)]
         public async Task<IActionResult> Upsert(CourseCreateVM courseVM)
         {
             if (ModelState.IsValid)

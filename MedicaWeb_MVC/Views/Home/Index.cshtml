@@ -12,10 +12,10 @@
 				<h1 class="hero-title">Welcome to Doreamon Hub</h1>
 				<p class="hero-subtitle">Expand your knowledge with our interactive science courses.</p>
 				<div class="search-bar">
-					<form>
+					<form asp-action="Index" asp-controller="Courses" method="get">
 						<div class="row g-2">
 							<div class="col-md-9">
-								<input type="text" class="form-control" placeholder="Searching...">
+								<input name="search" type="text" class="form-control" placeholder="Searching...">
 							</div>
 							<div class="col-md-3">
 								<button type="submit" class="search-btn w-100">Search</button>

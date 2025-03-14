@@ -65,11 +65,14 @@ a {
 .text-grey { color: var(--grey-color) !important; }
 
 /* background color */
-.bg-light {background: linear-gradient(135deg, #FFF2C9, #fffaf0);}
+.bg-yellow-gradient {background: linear-gradient(135deg, #FFF2C9, #fffaf0);}
 .bg-green {background-color: var(--green-color);}
 .bg-orange {background-color: var(--primary-color);}
 .bg-peach-gradient {
   background: #fcae1d;
+}
+.bg-yellow {
+  background-color: var(--secondary-color);
 }
 /* Buttons */
 .btn-orange {

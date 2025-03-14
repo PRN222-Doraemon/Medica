@@ -19,9 +19,9 @@
                     </select>
                 </div>
             </form>
-            @if (User.IsInRole(AppCts.Roles.Lecturer))
+            @if (User.IsInRole(AppCts.Roles.Employee))
             {
-                <a class="btn btn-primary d-flex align-items-center gap-2" asp-controller="Courses" asp-action="Upsert">
+                <a class="btn btn-green d-flex align-items-center gap-2" asp-controller="Courses" asp-action="Upsert">
                     <i class="bi bi-plus-lg"></i>
                     Create new
                 </a>

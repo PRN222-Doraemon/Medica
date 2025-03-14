@@ -9,7 +9,7 @@ namespace Core.Specifications.Courses
         public CourseSpecification(CourseParams courseParam, bool applyPaging = true)
             : base(c => (string.IsNullOrEmpty(courseParam.Search) || c.Name.ToLower().Contains(courseParam.Search)) &&
             (!courseParam.CategoryID.HasValue || courseParam.CategoryID == c.CategoryID) &&
-            (!courseParam.Status.HasValue || courseParam.Status == c.Status) &&
+            ((!courseParam.Status.HasValue && c.Status != CourseStatus.Inactive) || courseParam.Status == c.Status) &&
             (!courseParam.CreatedByUserId.HasValue || courseParam.CreatedByUserId == c.CreatedByUserID))
         {
             AddInclude(x => x.Category);
