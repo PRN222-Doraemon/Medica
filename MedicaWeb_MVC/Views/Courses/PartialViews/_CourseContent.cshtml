@@ -1,0 +1,69 @@
+﻿@model CourseVM
+@using Core.Constants
+
+<div class="mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="mb-0">Course content</h4>
+        <span class="text-muted">
+            @($"{Model.TotalChapters} chapters • {Model.TotalResources} lectures • {Model.Duration} total length")
+        </span>
+    </div>
+    <div class="border rounded">
+        <div class="accordion accordion-flush" id="courseContent">
+            @foreach (var chapter in Model.CourseChapters)
+            {
+                var collapseId = $"collapse-{chapter.Id}";
+                <div class="accordion-item">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button"
+                                data-bs-toggle="collapse" data-bs-target="#@collapseId">
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <span>@chapter.Name</span>
+                                <span class="badge bg-light text-dark ms-2">
+                                    @($"{chapter.TotalResources} lectures")
+                                </span>
+                            </div>
+                        </button>
+                    </h2>
+                    <div id="@collapseId" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <ul class="list-group list-group-flush">
+                                @foreach (var resource in chapter.Resources)
+                                {
+                                    <li class="list-group-item d-flex align-items-center gap-3 justify-content-between">
+                                        <div class="d-flex align-items-center gap-2">
+                                            @if (resource.ResourceType == ResourceType.Slide)
+                                            {
+                                                <i class="bi bi-file-pdf text-danger"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-play-circle text-primary"></i>
+                                            }
+                                            <span>@resource.Title</span>
+                                        </div>
+
+                                        <a href="@resource.FileUrl"
+                                           target="_blank"
+                                           class="btn btn-sm btn-outline-primary d-flex align-items-center gap-1">
+                                            @if (resource.ResourceType == ResourceType.Slide)
+                                            {
+                                                <i class="bi bi-download"></i>
+                                                <span>Download PDF</span>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-play"></i>
+                                                <span>Watch Video</span>
+                                            }
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -5,62 +5,87 @@
 @{
 	ViewData["Title"] = "Login";
 }
+<style>
+	.google-login-btn {
+		flex: 1;
+		text-align: center;
+		padding: 15px;
+		font-size: 15px;
+		border-radius: 30px;
+		cursor: pointer;
+		transition: all 0.3s ease;
 
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-	<div class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
-		<div class="card-body">
-			<h3 class="text-center text-primary"><i class="bi bi-box-arrow-in-right"></i> Login</h3>
-			<hr>
+	}
 
-			<form asp-action="Login" asp-controller="Accounts" method="post">
-				<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+	.google-login-btn {
+		background-color: white;
+		border: 1px solid #f99b2a;
+		color: #f99b2a;
+		text-decoration: none;
+	}
 
-				<!-- Hidden ReturnUrl -->
-				<input asp-for="ReturnUrl" type="hidden" />
+	.google-login-btn:hover {
+		color: rgb(248, 108, 15);
+		border: 1px solid rgb(248, 108, 15);
+	}
 
-				<!-- Username Field -->
-				<div class="mb-3">
-					<label asp-for="UserName" class="form-label"><i class="bi bi-person"></i> Username</label>
-					<input asp-for="UserName" type="text" class="form-control" placeholder="Enter your username" required>
-					<span asp-validation-for="UserName" class="text-danger"></span>
+	.register-link a {
+		color: #f99b2a;
+		text-decoration: none;
+		font-weight: bold;
+	}
+</style>
+
+<div class="login-container">
+	<div class="left-panel">
+		<div class="logo-container">
+			<div class="brand">Medica</div>
+		</div>
+		<p class="description">
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy nibh euismod tincidunt ut
+			laoreet
+			dolore magna aliquam erat volutpat.
+		</p>
+		<button class="learn-more-btn">Learn More</button>
+	</div>
+
+	<div class="right-panel">
+		<div class="welcome-text">
+			<h1 class="text-orange">Welcome Back!</h1>
+			<p class="text-green">Sign in to continue</p>
+		</div>
+
+		<form asp-action="Login" asp-controller="Accounts" method="post">
+			<div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+			<!-- Hidden ReturnUrl -->
+			<input asp-for="ReturnUrl" type="hidden" />
+
+			<!-- Username Field -->
+			<div class="form-group">
+				<input asp-for="UserName" type="text" class="form-control" placeholder="Username" required>
+				<span asp-validation-for="UserName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<input asp-for="Password" type="password" class="form-control" placeholder="Password" required>
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+			<div class="form-options">
+				<div class="remember-me">
+					<input asp-for="IsRememberMe" type="checkbox" id="remember" name="RememberMe">
+					<label for="remember">Remember me</label>
 				</div>
+				<a href="@Url.Action("ForgotPassword", "Account")" class="forgot-password">Forgot Password?</a>
+			</div>
+			<div class="login-buttons">
+				<button type="submit" class="login-btn">Login</button>
+				<a asp-action="GoogleLogin" class="google-login-btn">
+					<i class="bi bi-google"></i> Login with Google
+				</a>
+			</div>
+		</form>
 
-				<!-- Password Field -->
-				<div class="mb-3">
-					<label asp-for="Password" class="form-label"><i class="bi bi-lock"></i> Password</label>
-					<input asp-for="Password" type="password" class="form-control" placeholder="Enter your password" required>
-					<span asp-validation-for="Password" class="text-danger"></span>
-				</div>
-
-				<!-- Remember Me -->
-				<div class="mb-3 form-check">
-					<input asp-for="IsRememberMe" type="checkbox" class="form-check-input">
-					<label asp-for="IsRememberMe" class="form-check-label"><i class="bi bi-check-circle"></i> Remember me</label>
-				</div>
-
-				<!-- Login Button -->
-				<div class="d-grid">
-					<button type="submit" class="btn btn-primary">
-						<i class="bi bi-box-arrow-in-right"></i> Login
-					</button>
-				</div>
-
-				<!-- Google Login -->
-				<div class="text-center mt-3">
-					<a asp-action="GoogleLogin" class="btn btn-outline-danger w-100">
-						<i class="bi bi-google"></i> Login with Google
-					</a>
-				</div>
-
-				<!-- Register Link -->
-				<div class="text-center mt-3">
-					Don't have an account? <a asp-action="Register" class="text-decoration-none">Register here</a>
-				</div>
-			</form>
+		<div class="register-link">
+			Don't have an account? <a asp-action="Register">Register</a>
 		</div>
 	</div>
 </div>
-
-@section Scripts {
-	<partial name="_ValidationScriptsPartial" />
-}

@@ -1,0 +1,67 @@
+﻿@model CourseCreateVM
+
+@if (Model.CourseChapters != null)
+{
+    @for (int i = 0; i < Model.CourseChapters.Count(); i++)
+    {
+        var chapter = Model.CourseChapters.ToList()[i];
+        var collapseId = $"collapse-{chapter.Id}";
+
+        <div class="accordion-item chapter-card mb-3 shadow-sm border bg-light-blue" data-chapter-index="@i">
+            <div class="accordion-header p-3">
+                <div class="d-flex align-items-center w-100">
+                    <!-- Toggle Collapse Button -->
+                    <button class="btn btn-link text-primary fw-bold me-2"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#@collapseId"
+                            aria-expanded="true"
+                            aria-controls="@collapseId">
+                        <i class="bi bi-chevron-down"></i>
+                    </button>
+
+                    <input type="hidden" name="CourseChapters[@i].Id" value="@chapter.Id" />
+
+                    <!-- Chapter Name & Description -->
+                    <div class="flex-grow-1">
+                        <input type="text"
+                               class="form-control chapter-name mb-2"
+                               name="CourseChapters[@i].Name"
+                               value="@chapter.Name"
+                               required
+                               placeholder="Enter chapter name">
+
+                        <textarea class="form-control"
+                                  name="CourseChapters[@i].Description"
+                                  rows="2"
+                                  placeholder="Enter chapter description">@chapter.Description</textarea>
+                    </div>
+
+                    <!-- Remove Chapter Button -->
+                    <button type="button"
+                            class="btn btn-outline-danger btn-sm ms-2 me-2"
+                            onclick="removeChapter(this)">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chapter Content -->
+            <div id="@collapseId" class="accordion-collapse collapse">
+                <div class="accordion-body bg-light">
+                    <div class="resources-container">
+                        <partial name="PartialViews/_ResourcesListUpsert"
+                                 model="@chapter" />
+                    </div>
+
+                    <!-- Add Resource Button -->
+                    <button type="button"
+                            class="btn btn-outline-primary btn-sm mt-3"
+                            onclick="addResource(this)">
+                        <i class="bi bi-plus-lg"></i> Add Resource
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+}

@@ -101,6 +101,7 @@ namespace MedicaWeb_MVC.Controllers
                     }
                     else
                     {
+                        TempData["error"] = "Register fail! Try again";
                         LocalRedirect(registerVM.ReturnUrl);
                     }
                 }

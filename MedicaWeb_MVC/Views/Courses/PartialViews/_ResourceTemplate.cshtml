@@ -1,0 +1,38 @@
+﻿<template id="resourceTemplate">
+    <div class="resource-item mb-3 p-3 bg-white rounded shadow-sm" data-resource-index="__RESOURCE_INDEX__">
+        <div class="d-flex flex-column">
+            <!-- Resource Header -->
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <i class="bi bi-file-pdf text-danger"></i>
+                <input type="hidden" name="CourseChapters[__CHAPTER_INDEX__].Resources[__RESOURCE_INDEX__].Id" value="0" />
+                <div class="flex-grow-1">
+                    <input type="text" class="form-control"
+                           name="CourseChapters[__CHAPTER_INDEX__].Resources[__RESOURCE_INDEX__].Title"
+                           value="" required
+                           placeholder="Enter resource title">
+                </div>
+                <button type="button" class="btn btn-outline-danger btn-sm"
+                        onclick="removeResource(this)">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+
+            <!-- Resource Details -->
+            <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                    <select class="form-select"
+                            name="CourseChapters[__CHAPTER_INDEX__].Resources[__RESOURCE_INDEX__].ResourceType"
+                            asp-items="ViewBag.ResourceTypes">
+                    </select>
+                </div>
+                <div class="col-md-8">
+                    <div class="input-group">
+                        <input type="file" class="form-control"
+                               name="CourseChapters[__CHAPTER_INDEX__].Resources[__RESOURCE_INDEX__].File"
+                               accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.mp3">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

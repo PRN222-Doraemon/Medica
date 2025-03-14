@@ -1,325 +1,40 @@
 ﻿@using MedicaWeb_MVC.ViewModels
 @model CourseCreateVM
+
 @{
-    bool IsUpdate = false;
-    if(ViewBag.Title == "Update Course") {
-        IsUpdate = true;
-    }
+    bool IsUpdate = ViewBag.Title == "Update Course";
 }
+
 <div class="container-fluid py-5">
     <div class="row justify-content-center">
         <div class="col-12">
             <div class="card shadow">
                 <div class="card-body p-4">
-                    <!-- Header with gradient background -->
-                    <div class="bg-gradient-primary p-4 rounded-3 mb-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h1 class="h3 mb-0 text-white">@ViewBag.Title</h1>
-                            @if(IsUpdate) {
-                                <a asp-action="Details" asp-controller="Courses" asp-route-id="@Model.Id"
-                                   class="btn btn-light">
-                                    <i class="bi bi-arrow-left"></i> Back to Course
-                                </a>
-                            }
-                            else {
-                                <a asp-action="Index" asp-controller="Courses"
-                                   class="btn btn-light">
-                                    <i class="bi bi-arrow-left"></i> Back to Courses
-                                </a>
-                            }
-                           
-                        </div>
-                    </div>
+                    <partial name="PartialViews/_CourseHeaderUpsert" model="@Model" />
 
-                    <form asp-action="Upsert" asp-controller="Courses" method="post" id="updateCourseForm" enctype="multipart/form-data">
+                    <form asp-action="Upsert" asp-controller="Courses"
+                          method="post" id="updateCourseForm"
+                          enctype="multipart/form-data">
+
                         <input type="hidden" asp-for="Id" />
                         <input type="hidden" asp-for="ImgUrl" />
-                        @* <input hidden asp-for="@Model.CreatedByUserID" />  *@
 
                         <div class="row">
                             <!-- Left Column - Basic Information -->
                             <div class="col-md-6 pe-md-4">
-                                <div class="mb-4 p-4 bg-light rounded-3">
-                                    <h5 class="mb-3 text-primary border-bottom pb-2">Basic Information</h5>
-                                    <div class="mb-3">
-                                        <label class="form-label fw-semibold">
-                                            <i class="bi bi-image me-2"></i>Course Image
-                                        </label>
-                                        <div class="d-flex gap-3 align-items-start">
-                                            <div class="position-relative" style="width: 200px; height: 120px;">
-                                                <img id="courseImagePreview"
-                                                     src="@Model.ImgUrl"
-                                                     class="img-fluid rounded shadow-sm"
-                                                     style="width: 200px; height: 120px; object-fit: cover;">
-                                                @if (!string.IsNullOrEmpty(Model.ImgUrl))
-                                                {
-                                                    <input type="hidden" asp-for="ImgUrl" />
-                                                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2"
-                                                            onclick="removeCourseImage(this)">
-                                                        <i class="bi bi-x"></i>
-                                                    </button>
-                                                }
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <input type="file"
-                                                       asp-for="@Model.ImageFile"
-                                                       id="courseImageInput"
-                                                       class="form-control">
-                                                <small class="text-muted d-block mt-2">
-                                                    Recommended size: 1280x720 pixels (16:9 ratio)<br>
-                                                    Maximum file size: 2MB<br>
-                                                    Supported formats: JPG, PNG
-                                                </small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label asp-for="Name" class="form-label fw-semibold">
-                                            <i class="bi bi-book me-2"></i>Course Name
-                                        </label>
-                                        <input asp-for="Name" class="form-control form-control-lg shadow-sm" required>
-                                        <span asp-validation-for="Name" class="text-danger"></span>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label asp-for="CategoryID" class="form-label fw-semibold">
-                                            <i class="bi bi-book me-2"></i>Category
-                                        </label>
-                                        <select asp-for="CategoryID" asp-items="ViewBag.Categories" class="form-control form-control-lg shadow-sm" required></select>
-                                        <span asp-validation-for="CategoryID" class="text-danger"></span>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label asp-for="Duration" class="form-label fw-semibold">
-                                            <i class="bi bi-book me-2"></i>Duration
-                                        </label>
-                                        <input asp-for="Duration" placeholder="hh:mm:ss" pattern="[0-9]{1,2}:[0-5][0-9]:[0-5][0-9]" class="form-control form-control-lg shadow-sm" required>
-                                        <span asp-validation-for="Duration" class="text-danger"></span>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label asp-for="Price" class="form-label fw-semibold">
-                                            <i class="bi bi-currency-dollar me-2"></i>Price
-                                        </label>
-                                        <input asp-for="Price" type="number" class="form-control form-control-lg shadow-sm" required>
-                                        <span asp-validation-for="Price" class="text-danger"></span>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label asp-for="Description" class="form-label fw-semibold">
-                                            <i class="bi bi-journal-text me-2"></i>What students will learn
-                                        </label>
-                                        <textarea asp-for="Description" class="form-control shadow-sm" rows="4" required></textarea>
-                                        <span asp-validation-for="Description" class="text-danger"></span>
-                                    </div>
-                                </div>
+                                <partial name="PartialViews/_CourseBasicInforUpsert" model="@Model" />
 
-                                <!-- Update button moved to left column -->
+                                <!-- Save button -->
                                 <div class="d-grid gap-2">
                                     <button type="submit" class="btn btn-primary btn-lg shadow">
-                                        <i class="bi bi-check2-circle me-2"></i>SAVE
+                                        <i class="bi bi-check2-circle me-2"></i> SAVE
                                     </button>
                                 </div>
                             </div>
 
                             <!-- Right Column - Course Content -->
                             <div class="col-md-6 ps-md-4">
-                                <div class="mb-4">
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <h5 class="text-primary border-bottom pb-2">
-                                            <i class="bi bi-collection me-2"></i>Course Content
-                                        </h5>
-                                        <button type="button" class="btn btn-primary btn-sm shadow-sm" onclick="addChapter()">
-                                            <i class="bi bi-plus-lg"></i> Add Chapter
-                                        </button>
-                                    </div>
-
-                                    <div id="chaptersContainer" class="accordion">
-                                        @if (Model.CourseChapters != null)
-                                        {
-                                            @for (int i = 0; i < Model.CourseChapters.Count(); i++)
-                                            {
-                                                var chapter = Model.CourseChapters.ToList()[i];
-                                                var collapseId = $"collapse-{chapter.Id}";
-
-                                                <div class="accordion-item chapter-card mb-3 shadow-sm border bg-light-blue" data-chapter-index="@i">
-                                                    <div class="accordion-header p-3">
-                                                        <div class="d-flex align-items-center w-100">
-                                                            <button class="btn btn-link text-primary fw-bold me-2" type="button"
-                                                                    data-bs-toggle="collapse" data-bs-target="#@collapseId"
-                                                                    aria-expanded="true" aria-controls="@collapseId">
-                                                                <i class="bi bi-chevron-down"></i>
-                                                            </button>
-                                                            <input type="hidden" name="CourseChapters[@i].Id" value="@chapter.Id" />
-                                                            <div class="flex-grow-1">
-                                                                <input type="text" class="form-control chapter-name mb-2"
-                                                                       name="CourseChapters[@i].Name"
-                                                                       value="@chapter.Name" required
-                                                                       placeholder="Enter chapter name">
-                                                                <textarea class="form-control"
-                                                                          name="CourseChapters[@i].Description"
-                                                                          rows="2"
-                                                                          placeholder="Enter chapter description">@chapter.Description</textarea>
-                                                            </div>
-
-                                                            <button type="button" class="btn btn-outline-danger btn-sm ms-2 me-2"
-                                                                    onclick="removeChapter(this)">
-                                                                <i class="bi bi-trash"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-
-                                                    <div id="@collapseId" class="accordion-collapse collapse">
-                                                        <div class="accordion-body bg-light">
-                                                            <div class="resources-container">
-                                                                @if (chapter.Resources != null)
-                                                                {
-                                                                    @for (int j = 0; j < chapter.Resources.Count(); j++)
-                                                                    {
-                                                                        var resource = chapter.Resources.ToList()[j];
-                                                                        <input hidden name="CourseChapters[@i].Resources[@j].FileUrl" value="@resource.FileUrl" />
-                                                                        <div class="resource-item mb-3 p-3 bg-white rounded shadow-sm" data-resource-index="@j">
-                                                                            <div class="d-flex flex-column">
-                                                                                <!-- Resource Header -->
-                                                                                <div class="d-flex align-items-center gap-3 mb-3">
-                                                                                    @if (resource.ResourceType == ResourceType.Slide)
-                                                                                    {
-                                                                                        <i class="bi bi-file-pdf text-danger"></i>
-                                                                                    }
-                                                                                    else
-                                                                                    {
-                                                                                        <i class="bi bi-play-circle text-primary"></i>
-                                                                                    }
-                                                                                    <input type="hidden" name="CourseChapters[@i].Resources[@j].Id" value="@resource.Id" />
-                                                                                    <div class="flex-grow-1">
-                                                                                        <input type="text" class="form-control"
-                                                                                               name="CourseChapters[@i].Resources[@j].Title"
-                                                                                               value="@resource.Title" required
-                                                                                               placeholder="Enter resource title">
-                                                                                    </div>
-                                                                                    <button type="button" class="btn btn-outline-danger btn-sm"
-                                                                                            onclick="removeResource(this)">
-                                                                                        <i class="bi bi-trash"></i>
-                                                                                    </button>
-                                                                                </div>
-
-                                                                                <!-- Resource Details -->
-                                                                                <div class="row g-3 align-items-center">
-                                                                                    <div class="col-md-4">
-                                                                                        <select class="form-select"
-                                                                                                name="CourseChapters[@i].Resources[@j].ResourceType"
-                                                                                                value="@resource.ResourceType"                                                                                               
-                                                                                                asp-items="ViewBag.ResourceTypes">
-                                                                                        </select>
-                                                                                    </div>
-                                                                                    <div class="col-md-5">
-                                                                                        <div class="input-group">
-                                                                                            <input type="file" class="form-control"
-                                                                                                   name="CourseChapters[@i].Resources[@j].File"
-                                                                                                   accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.mp3">
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-md-3">
-                                                                                        @if (!string.IsNullOrEmpty(resource.FileUrl))
-                                                                                        {
-                                                                                            <a href="@resource.FileUrl"
-                                                                                               class="btn btn-outline-primary w-100"
-                                                                                               target="_blank">
-                                                                                                <i class="bi bi-file-earmark-arrow-down"></i>
-                                                                                                View Resource
-                                                                                            </a>
-                                                                                        }
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    }
-                                                                }
-                                                            </div>
-                                                            <button type="button" class="btn btn-outline-primary btn-sm mt-3" onclick="addResource(this)">
-                                                                <i class="bi bi-plus-lg"></i> Add Resource
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            }
-                                        }
-                                        <!--Template for new chapter-->
-                                        <template id="chapterTemplate">
-                                            <div class="accordion-item chapter-card mb-3 shadow-sm border bg-light-blue" data-chapter-index="__CHAPTER_INDEX__">
-                                                <div class="accordion-header border-bottom">
-                                                    <div class="d-flex align-items-center w-100 p-3">
-                                                        <button class="btn btn-link text-primary fw-bold me-2" type="button"
-                                                                data-bs-toggle="collapse" data-bs-target="#collapse-__CHAPTER_ID__"
-                                                                aria-expanded="true" aria-controls="collapse-__CHAPTER_ID__">
-                                                            <i class="bi bi-chevron-down"></i>
-                                                        </button>
-                                                        <input type="hidden" name="CourseChapters[__CHAPTER_INDEX__].Id" value="0" />
-                                                        <div class="flex-grow-1">
-                                                            <input type="text" class="form-control chapter-name mb-2"
-                                                                   name="CourseChapters[__CHAPTER_INDEX__].Name"
-                                                                   value="" required
-                                                                   placeholder="Enter chapter name">
-                                                            <textarea class="form-control"
-                                                                      name="CourseChapters[__CHAPTER_INDEX__].Description"
-                                                                      rows="2"
-                                                                      placeholder="Enter chapter description"></textarea>
-                                                        </div>
-                                                        <button type="button" class="btn btn-outline-danger btn-sm ms-2 me-2"
-                                                                onclick="removeChapter(this)">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                                <div id="collapse-__CHAPTER_ID__" class="accordion-collapse collapse show">
-                                                    <div class="accordion-body bg-light">
-                                                        <div class="resources-container">
-                                                        </div>
-                                                        <button type="button" class="btn btn-outline-primary btn-sm mt-3" onclick="addResource(this)">
-                                                            <i class="bi bi-plus-lg"></i> Add Resource
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </template>
-
-                                        <!-- Template for new resource -->
-                                        <template id="resourceTemplate">
-                                            <div class="resource-item mb-3 p-3 bg-white rounded shadow-sm" data-resource-index="__RESOURCE_INDEX__">
-                                                <div class="d-flex flex-column">
-                                                    <!-- Resource Header -->
-                                                    <div class="d-flex align-items-center gap-3 mb-3">
-                                                        <i class="bi bi-file-pdf text-danger"></i>
-                                                        <input type="hidden" name="CourseChapters[__CHAPTER_INDEX__].Resources[__RESOURCE_INDEX__].Id" value="0" />
-                                                        <div class="flex-grow-1">
-                                                            <input type="text" class="form-control"
-                                                                   name="CourseChapters[__CHAPTER_INDEX__].Resources[__RESOURCE_INDEX__].Title"
-                                                                   value="" required
-                                                                   placeholder="Enter resource title">
-                                                        </div>
-                                                        <button type="button" class="btn btn-outline-danger btn-sm"
-                                                                onclick="removeResource(this)">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </div>
-
-                                                    <!-- Resource Details -->
-                                                    <div class="row g-3 align-items-center">
-                                                        <div class="col-md-4">
-                                                            <select class="form-select"
-                                                                    name="CourseChapters[__CHAPTER_INDEX__].Resources[__RESOURCE_INDEX__].ResourceType"
-                                                                    asp-items="ViewBag.ResourceTypes">
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <div class="input-group">
-                                                                <input type="file" class="form-control"
-                                                                       name="CourseChapters[__CHAPTER_INDEX__].Resources[__RESOURCE_INDEX__].File"
-                                                                       accept=".pdf,.doc,.docx,.ppt,.pptx,.mp4,.mp3">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </template>
-                                    </div>
-                                </div>
+                                <partial name="PartialViews/_CourseContentUpsert" model="@Model" />
                             </div>
                         </div>
                     </form>
@@ -334,4 +49,5 @@
         background: linear-gradient(45deg, #4e73df 0%, #224abe 100%);
     }
 </style>
+
 <script src="~/js/courses/course-update.js"></script>

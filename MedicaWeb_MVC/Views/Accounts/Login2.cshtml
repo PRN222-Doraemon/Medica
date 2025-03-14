@@ -1,0 +1,65 @@
+@using MedicaWeb_MVC.ViewModels
+
+@model LoginVM
+
+@{
+    ViewData["Title"] = "Login";
+}
+<div class="login-container">
+    <div class="left-panel">
+        <div class="logo-container">
+            <div class="brand">Medica</div>
+        </div>
+        <p class="description">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy nibh euismod tincidunt ut
+            laoreet
+            dolore magna aliquam erat volutpat.
+        </p>
+        <button class="learn-more-btn">Learn More</button>
+    </div>
+
+    <div class="right-panel">
+        <div class="welcome-text">
+            <h1 class="text-orange">Welcome Back!</h1>
+            <p class="text-green">Sign in to continue</p>
+            <div class="progress-dots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+
+        <form asp-action="Login" asp-controller="Accounts" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+            <!-- Hidden ReturnUrl -->
+            <input asp-for="ReturnUrl" type="hidden" />
+
+            <!-- Username Field -->
+            <div class="form-group">
+                <input asp-for="UserName" type="text" class="form-control" placeholder="Username" required>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input asp-for="Password" type="password" class="form-control" placeholder="Password" required>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-options">
+                <div class="remember-me">
+                    <input asp-for="IsRememberMe" type="checkbox" id="remember" name="RememberMe">
+                    <label for="remember">Remember me</label>
+                </div>
+                <a href="@Url.Action("ForgotPassword", "Account")" class="forgot-password">Forgot Password?</a>
+            </div>
+            <div class="login-buttons">
+                <button type="submit" class="login-btn">Login</button>
+                <a asp-action="GoogleLogin" class="google-login-btn">
+                    <i class="bi bi-google"></i> Login with Google
+                </a>
+            </div>
+        </form>
+
+        <div class="register-link">
+            Don't have an account? <a asp-action="Register">Register</a>
+        </div>
+    </div>
+</div>
