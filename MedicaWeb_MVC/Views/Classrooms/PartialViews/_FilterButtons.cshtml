@@ -1,0 +1,26 @@
+@using Core.Constants
+@model Tuple<ClassroomStatus?, int>
+
+<div class="mb-4">
+    <div class="d-flex gap-2 flex-wrap">
+        <a asp-action="Index" asp-controller="Classrooms" asp-route-courseId="@Model.Item2"
+            class="btn btn-lg px-4 @(Model.Item1.HasValue ? "btn-green-outline" : "btn-green") rounded-pill">
+            <i class="bi bi-grid-3x3-gap-fill me-2"></i> All
+        </a>
+
+        @foreach (var filter in Enum.GetValues(typeof(ClassroomStatus)).Cast<ClassroomStatus>())
+        {
+            @if (filter == ClassroomStatus.Ongoing || filter == ClassroomStatus.Upcoming)
+            {
+                <a asp-action="Index" asp-controller="Classrooms" asp-route-classroomStatus="@filter.ToString()"
+                    asp-route-courseId="@Model.Item2"
+                    class="btn btn-lg px-4 @(Model.Item1 == filter ? "btn-green" : "btn-green-outline") rounded-pill">
+                    <i
+                        class="bi @(filter == ClassroomStatus.Completed ? "bi-check-circle" :
+                                               filter == ClassroomStatus.Upcoming ? "bi-calendar-event" : "bi-play-circle") me - 2"></i>
+                @filter.ToString().Replace("_", " ")
+            </a>
+                }
+        }
+    </div>
+</div>

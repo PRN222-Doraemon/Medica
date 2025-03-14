@@ -2,7 +2,7 @@
 
 <div class="container py-5">
     <div class="mb-3">
-        <a class="btn btn-outline-primary" asp-action="Index" asp-controller="Courses">
+        <a class="btn-orange-outline" asp-action="Index" asp-controller="Courses">
             <i class="bi bi-arrow-left"></i> Back
         </a>
     </div>
@@ -11,7 +11,7 @@
         <div class="col-lg-8">
             <partial name="PartialViews/_CourseHeader" model="@Model" />
             <partial name="PartialViews/_CourseContent" model="@Model" />
-            <partial name="PartialViews/_CourseReviews" model="@Model" />            
+            <partial name="PartialViews/_CourseReviews" model="@Model" />
         </div>
         <partial name="PartialViews/_CourseCard" model="@Model" />
     </div>

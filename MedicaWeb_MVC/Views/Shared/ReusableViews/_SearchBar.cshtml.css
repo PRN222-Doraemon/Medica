@@ -18,3 +18,6 @@
     transform: translateY(-50%);
     color: #888;
 }
+.search-input:focus {
+    box-shadow: 0 0 8px rgba(255, 140, 0, 0.534); 
+}

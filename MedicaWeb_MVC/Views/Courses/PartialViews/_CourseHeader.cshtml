@@ -4,8 +4,9 @@
 <div class="mb-4">
     <div class="d-flex justify-content-between align-items-start mb-3">
         <div>
-            <h1 class="display-5 fw-bold mb-0">@Model.Name</h1>
-            <span class="badge rounded-pill @(Model.Status.ToString() == "Active" ? "bg-success" : "bg-secondary")">
+            <h1 class="display-5 text-green fw-bold mb-0">@Model.Name</h1>
+            <span
+                class="badge btn-green rounded-pill @(Model.Status.ToString() == "Active" ? "bg-success" : "bg-secondary")">
                 @Model.Status
             </span>
         </div>
@@ -47,7 +48,8 @@
     </div>
 
     <div class="d-flex align-items-center gap-3 text-muted">
-        <div>Created by <a href="#" class="text-decoration-none fw-semibold">@Model.CreatedByUserName</a></div>
+        <div>Created by <a href="#" class="text-decoration-none fw-semibold text-green">@Model.CreatedByUserName</a>
+        </div>
         <div class="d-flex align-items-center gap-1">
             <i class="bi bi-clock-history"></i>
             <span>Last updated @Model.UpdatedAt.ToShortDateString()</span>
