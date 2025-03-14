@@ -7,7 +7,7 @@
 }
 
 .navbar {
-    background-color: var(--primary-color) !important;
+    background: linear-gradient(135deg, #f99b2a, #ff8e61, #ffcc70) !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
 }
