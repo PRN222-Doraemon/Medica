@@ -1,0 +1,22 @@
+@model ClassroomStatus?
+
+<div class="mb-4">
+    <div class="d-flex gap-2 flex-wrap">
+        <a asp-action="Index" asp-controller="MyLearning"
+            class="btn btn-lg px-4 @(!Model.HasValue ? "btn-orange" : "btn-green-outline") fs-6 fw-normal rounded-pill">
+            <i class="bi bi-grid-3x3-gap-fill me-2"></i> All
+        </a>
+        @foreach (var filter in Enum.GetValues(typeof(ClassroomStatus)).Cast<ClassroomStatus>())
+        {
+            @if (filter != ClassroomStatus.Active && filter != ClassroomStatus.Cancelled)
+            {
+                <a asp-action="Index" asp-controller="MyLearning" asp-route-selectedStatus="@filter.ToString()"
+                    class="btn btn-lg px-4 @(Model == filter ? "btn-orange" : "btn-green-outline") fs-6 fw-normal rounded-pill">
+                    <i
+                        class="bi @(filter == ClassroomStatus.Completed ? "bi-check-circle" : (filter == ClassroomStatus.Upcoming ? "bi-calendar-event" : "bi-play-circle")) me - 2"></i>
+                    @filter.ToString().Replace("_", " ")
+                </a>
+            }
+        }
+    </div>
+</div>

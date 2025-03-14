@@ -8,9 +8,10 @@
 					style="width: 40px; height: 40px; object-fit: cover;">
 				<h6 class="mb-0">Mr. @Model.Lecturer.FullName</h6>
 			</div>
-			<button class="btn btn-@(Model.ComputedStatus == ClassroomStatus.Ongoing ? "success" : "secondary")">
+			<span
+				class="badge bg-@(Model.ComputedStatus == ClassroomStatus.Ongoing ? "success" : "secondary-subtle text-secondary-emphasis")">
 				@Model.ComputedStatus
-			</button>
+			</span>
 		</div>
 
 		<div class="card-body">

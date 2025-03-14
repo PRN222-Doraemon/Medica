@@ -3,67 +3,18 @@
 @model MyLearningVM
 
 <div class="container-fluid py-5" style=" width: 60%;">
-    <h1 class="mb-4">My Learning</h1>
+    <h1 class="mb-4 text-orange">My Learning</h1>
+
     <!-- Filter Buttons -->
-    <div class="mb-4">
-        <div class="d-flex gap-2 flex-wrap">
-            <a asp-action="Index" asp-controller="MyLearning" class="btn btn-lg px-4 @(!Model.SelectedStatus.HasValue ? "btn-primary" : "btn-outline-primary")  rounded-pill">
-                <i class="bi bi-grid-3x3-gap-fill me-2"></i> All
-            </a>
-            @foreach (var filter in Enum.GetValues(typeof(ClassroomStatus)).Cast<ClassroomStatus>())
-            {
-                @if (filter != ClassroomStatus.Active && filter != ClassroomStatus.Cancelled) {
-                    <a asp-action="Index" asp-controller="MyLearning" asp-route-selectedStatus="@filter.ToString()"
-                       class="btn btn-lg px-4 @(Model.SelectedStatus == filter ? "btn-primary" : "btn-outline-primary") rounded-pill">
-                        <i class="bi @(filter == ClassroomStatus.Completed ? "bi-check-circle" :
-                             filter == ClassroomStatus.Upcoming ? "bi-calendar-event" : "bi-play-circle") me-2"></i>
-                        @filter.ToString().Replace("_", " ")
-                    </a>              }
-                
-            }
-        </div>
-    </div>
+    @await Html.PartialAsync("_FilterButtons", Model.SelectedStatus)
+
     <br />
+
     <!-- Course Cards -->
     <div class="row g-4">
         @foreach (var classroom in Model.Classes)
         {
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm hover-card">
-                    <div class="position-relative">
-                        <img src="@classroom.Course.ImgUrl" class="card-img-top" alt="@classroom.Course.Name" style="height: 200px; object-fit: cover;">
-                        <div class="position-absolute top-0 end-0 m-3">
-                            <div class="dropdown">
-                                <button class="btn btn-light btn-sm rounded-circle shadow-sm" data-bs-toggle="dropdown">
-                                    <i class="bi bi-three-dots-vertical"></i>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-bookmark me-2"></i>Save Course</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="bi bi-share me-2"></i>Share</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="position-absolute bottom-0 start-0 w-100 p-3 bg-gradient-dark">
-                            <span class="badge bg-primary rounded-pill">@classroom.Mode</span>
-                        </div>
-                    </div>
-                    <div class="card-body p-4">
-                        <h5 class="card-title fw-bold mb-3 line-clamp-2 text-center">@classroom.Course.Name</h5>
-                        <p class="card-text text-muted mb-3 text-center">
-                            <i class="bi bi-person-circle me-2"></i>@string.Join(", ", classroom.Lecturer.FullName)
-                        </p>
-                        <div class="mb-4">
-                            <div class="row g-2 text-muted small">
-                                <div class="col-6"><i class="bi bi-calendar-event me-2"></i>Start: <br> @classroom.StartDate.ToString("dd/MM/yyyy")</div>
-                                <div class="col-6"><i class="bi bi-calendar-check me-2"></i>End: <br> @classroom.EndDate.ToString("dd/MM/yyyy")</div>
-                            </div>
-                        </div>
-                        <button class="btn btn-primary w-100 rounded-pill">
-                            <i class="bi bi-eye me-2"></i> VIEW DETAIL
-                        </button>
-                    </div>
-                </div>
-            </div>
+            @await Html.PartialAsync("_CourseCard", classroom)
         }
     </div>
 
@@ -77,39 +28,3 @@
         </div>
     }
 </div>
-
-<style>
-    .hover-card {
-        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    }
-
-        .hover-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
-        }
-
-    .line-clamp-2 {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .bg-gradient-dark {
-        background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
-    }
-
-    .btn-outline-primary:hover {
-        background-color: var(--bs-primary);
-        border-color: var(--bs-primary);
-        color: white;
-    }
-
-    .progress {
-        border-radius: 10px;
-    }
-
-    .progress-bar {
-        border-radius: 10px;
-    }
-</style>
