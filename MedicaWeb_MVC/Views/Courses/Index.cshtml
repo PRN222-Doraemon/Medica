@@ -10,59 +10,32 @@
         <div class="col-md-6 d-flex justify-content-end gap-2">
             <form asp-controller="Courses" asp-action="Index" method="get" id="filterForm">
                 <div class="d-flex gap-2">
-                    <select class="form-select w-auto" name="CategoryId" asp-items="ViewBag.Categories" onchange="submitForm()">
+                    <select class="form-select w-auto" name="CategoryId" asp-items="ViewBag.Categories"
+                        onchange="submitForm()">
                         <option value="">All Category</option>
                     </select>
                     <select class="form-select w-auto" name="Status" asp-items="ViewBag.Status" onchange="submitForm()">
                     </select>
                 </div>
             </form>
-            @if(User.IsInRole(AppCts.Roles.Lecturer)) {
+            @if (User.IsInRole(AppCts.Roles.Lecturer))
+            {
                 <a class="btn btn-primary d-flex align-items-center gap-2" asp-controller="Courses" asp-action="Upsert">
                     <i class="bi bi-plus-lg"></i>
                     Create new
                 </a>
             }
-            
+
         </div>
     </div>
 
 
     <!-- Course Grid -->
-    <div id="courseList" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div id="courseList" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 my-4">
         @foreach (var course in Model.Items)
         {
-            <div class="col" id="@course.Id">
-                <div class="card h-100 shadow-sm">
-                    <img src="@course.ImgUrl" class="card-img-top" alt="Course Image"
-                         style="height: 200px; object-fit: cover;">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h5 class="card-title mb-0">@course.Name</h5>
-                            <span class="badge rounded-pill @(course.Status.ToString() == "Active" ? "bg-success" : "bg-secondary")">
-                                @course.Status
-                            </span>
-                        </div>
-                        <p class="card-text text-muted small mb-2">
-                            Category: <span class="fw-medium">@course.CategoryName</span>
-                        </p>
-                        <p class="card-text text-muted small mb-2">
-                            Upload by <span class="fw-medium">@course.CreatedByUserName</span>
-                        </p>
-                        <div class="d-flex align-items-center gap-2 text-muted small">
-                            <i class="bi bi-clock"></i>
-                            <span>Updated @course.UpdatedAt</span>
-                        </div>
-                        <span class=" fw-bold text-dark fs-5">
-                            ₫ @($"{course.Price:N0}")
-                        </span>
-                    </div>
-                    <div class="card-footer bg-white border-top-0">
-                        <a asp-controller="Courses" asp-action="Details" asp-route-id="@course.Id" class="btn btn-outline-primary btn-sm w-100">
-                            View Details
-                        </a>
-                    </div>
-                </div>
+            <div class="col"> <!-- Thêm lớp .col để Bootstrap Grid hoạt động đúng -->
+                <partial name="PartialViews/_Card" model="@course" />
             </div>
         }
     </div>
@@ -83,4 +56,3 @@
 
 <script src="~/lib/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/courses/course-client.js"></script>
-

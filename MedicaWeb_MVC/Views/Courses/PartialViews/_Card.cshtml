@@ -1,0 +1,25 @@
+@model MedicaWeb_MVC.ViewModels.CourseVM
+
+<div class="course-card" id="@Model.Id">
+    <a asp-controller="Courses" asp-action="Details" asp-route-id="@Model.Id" class="course-card text-decoration-none">
+        <img src="@Model.ImgUrl" alt="Course Image" class="course-img">
+
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="card-title text-orange mb-0">@Model.Name</h5>
+                <span class="badge @(Model.Status.ToString() == "Active" ? "active" : "inactive")">
+                    @Model.Status
+                </span>
+            </div>
+
+            <p class="course-info"><strong>Category:</strong> @Model.CategoryName</p>
+            <p class="course-info"><strong>Uploaded by:</strong> @Model.CreatedByUserName</p>
+            <p class="course-info"><strong>Updated:</strong> @Model.UpdatedAt.ToString("dd/MM/yyyy")</p>
+
+            <div class="d-flex justify-content-between align-items-center mt-2">
+                <div class="course-price">₫ @($"{Model.Price:N0}")</div>
+                <span class="text-green fw-semibold">View Details</span>
+            </div>
+        </div>
+    </a>
+</div>
