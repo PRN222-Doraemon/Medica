@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace MedicaWeb_MVC.Controllers
 {
-    [Authorize]
     public class CoursesController : Controller
     {
         private readonly ICourseService _courseService;

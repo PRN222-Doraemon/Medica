@@ -57,12 +57,14 @@ namespace MedicaWeb_MVC.Extensions
 
                 config.CreateMap<RegisterVM, ApplicationUser>();
                 config.CreateMap<Lecturer, LecturerVM>();
+                config.CreateMap<Student, StudentVM>();
 
                 // ==============================
                 // === Classrooms
                 // ==============================
 
-                config.CreateMap<Classroom, ClassVM>();
+                config.CreateMap<Classroom, ClassVM>()
+                .ForMember(dest => dest.Students, u => u.MapFrom(src => src.OrderDetails != null ? src.OrderDetails.Select(od => od.Order.Student).ToList() : new List<Student>()));
                 config.CreateMap<ClassUpsertVM, Classroom>();
                 config.CreateMap<Classroom, ClassUpsertVM>();
 

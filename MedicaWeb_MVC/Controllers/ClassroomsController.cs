@@ -163,25 +163,21 @@ namespace MedicaWeb_MVC.Controllers
             return RedirectToAction(nameof(Index), new { courseId = courseId });
         }
 
-        //[HttpGet("details/{id}")]
-        //public async Task<IActionResult> Details(int id)
-        //{
-        //    var specification = new ClassroomDetailsSpecification(id);
-        //    var classroom = await _unitOfWork.Repository<Classroom>().GetEntityWithSpec(specification);
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var specification = new ClassSpecification(id);
+            var classroom = await _classService.GetClassAsync(specification);
 
-        //    if (classroom == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (classroom == null)
+            {
+                return NotFound();
+            }
+            var classVM = _mapper.Map<ClassVM>(classroom);
+            //classVM.Students = (IEnumerable<StudentVM>)classroom.OrderDetails.Select(od => od.Order.Student).ToList();
 
-        //    var viewModel = new ClassDetailsVM
-        //    {
-        //        Classroom = classroom,
-        //        Course = classroom.Course
-        //    };
-
-        //    return View(viewModel);
-        //}
+            return View(classVM);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
