@@ -11,6 +11,13 @@ namespace Core.Specifications.Classes
             AddInclude(x => x.Lecturer);
             AddCustomInclude(c => c.Include(c => c.OrderDetails).ThenInclude(od => od.Order).ThenInclude(o => o.Student));
             AddCustomInclude(c => c.Include(c => c.Course).ThenInclude(c => c.CourseChapters).ThenInclude(c => c.Resources));
+            AddCustomInclude(x => x.Include(c => c.Comments)
+                                    .ThenInclude(cc => cc.SrcComment));
+            AddCustomInclude(x => x.Include(c => c.Comments)
+                                    .ThenInclude(cc => cc.User));
+            AddCustomInclude(x => x.Include(c => c.Comments)
+                                    .ThenInclude(cc => cc.ReplyComments)
+                                    .ThenInclude(rc => rc.User));
         }
 
         public ClassSpecification(ClassParams classParams, bool applyPaging = true) :
@@ -27,6 +34,13 @@ namespace Core.Specifications.Classes
             AddCustomInclude(c => c.Include(c => c.Course).ThenInclude(c => c.CourseChapters).ThenInclude(c => c.Resources));
             AddInclude(c => c.Lecturer);
             AddCustomInclude(c => c.Include(c => c.OrderDetails).ThenInclude(od => od.Order).ThenInclude(o => o.Student));
+            AddCustomInclude(x => x.Include(c => c.Comments)
+                                    .ThenInclude(cc => cc.SrcComment));
+            AddCustomInclude(x => x.Include(c => c.Comments)
+                                    .ThenInclude(cc => cc.User));
+            AddCustomInclude(x => x.Include(c => c.Comments)
+                                    .ThenInclude(cc => cc.ReplyComments)
+                                    .ThenInclude(rc => rc.User));
             AddOrderByDescending(c => c.StartDate);
 
             if (applyPaging)

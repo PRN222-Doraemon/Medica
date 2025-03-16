@@ -3,7 +3,7 @@
 
 <div class="class-container text-grey border border-secondary-subtle">
     <div class="mb-3">
-        <a class="btn btn-outline-warning" asp-action="Index" asp-controller="MyClasses">
+        <a class="btn btn-outline-warning" asp-controller="Classrooms" asp-action="MyClass">
             <i class="bi bi-arrow-left"></i> Back
         </a>
     </div>
@@ -19,15 +19,15 @@
     <!-- nav bar >-->
     <div class="nav-tabs">
         <a href="#" class="nav-item active" data-tab="students">
-            <div class="icon">S</div>
+            <i class="bi bi-people me-2"></i>
             Students
         </a>
         <a href="#" class="nav-item" data-tab="resources">
-            <div class="icon">R</div>
+            <i class="bi bi-book me-2"></i>
             Resource
         </a>
         <a href="#" class="nav-item" data-tab="qa">
-            <div class="icon">Q</div>
+            <i class="bi bi-question-circle me-2"></i>
             Q&A
         </a>
     </div>
@@ -41,7 +41,7 @@
             @await Html.PartialAsync("~/Views/Courses/PartialViews/_CourseContent.cshtml", Model.Course)
         </div>
         <div class="tab-pane" id="qa-tab">
-            @* @await Html.PartialAsync("~/Views/Courses/PartialViews/_CourseQA.cshtml", Model.Course.Comments) *@
+            @await Html.PartialAsync("PartialViews/_CommentsList", Model.Comments)
         </div>
     </div>
 </div>

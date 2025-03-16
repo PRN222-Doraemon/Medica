@@ -214,8 +214,7 @@ namespace MedicaWeb_MVC.Controllers
         [Authorize]
         public async Task<IActionResult> Details(int id)
         {
-            var specification = new ClassSpecification(id);
-            var classroom = await _classService.GetClassAsync(specification);
+            var classroom = await _classService.GetClassByIdAsync(id);
 
             if (classroom == null)
             {

@@ -16,13 +16,7 @@ namespace Core.Specifications.Courses
             AddInclude(x => x.CreatedBy);
             AddCustomInclude(x => x.Include(c => c.CourseChapters)
                                     .ThenInclude(cc => cc.Resources));
-            AddCustomInclude(x => x.Include(c => c.Comments)
-                                    .ThenInclude(cc => cc.SrcComment));
-            AddCustomInclude(x => x.Include(c => c.Comments)
-                                    .ThenInclude(cc => cc.User));
-            AddCustomInclude(x => x.Include(c => c.Comments)
-                                    .ThenInclude(cc => cc.ReplyComments)
-                                    .ThenInclude(rc => rc.User));
+            
             AddCustomInclude(x => x.Include(c => c.Feedbacks)
                                     .ThenInclude(f => f.Student));
             AddCustomInclude(x => x.Include(c => c.Classrooms)
@@ -44,13 +38,6 @@ namespace Core.Specifications.Courses
             AddInclude(x => x.Category);
             AddCustomInclude(x => x.Include(c => c.CourseChapters)
                                     .ThenInclude(cc => cc.Resources));
-            AddCustomInclude(x => x.Include(c => c.Comments)
-                                    .ThenInclude(cc => cc.SrcComment));
-            AddCustomInclude(x => x.Include(c => c.Comments)
-                                    .ThenInclude(cc => cc.User));
-            AddCustomInclude(x => x.Include(c => c.Comments)
-                                    .ThenInclude(cc => cc.ReplyComments)
-                                    .ThenInclude(rc => rc.User));
             AddCustomInclude(x => x.Include(c => c.Feedbacks)
                                     .ThenInclude(f => f.Student));
             AddCustomInclude(x => x.Include(c => c.Classrooms)
