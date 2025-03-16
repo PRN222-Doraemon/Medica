@@ -6,6 +6,7 @@ using Stripe.Checkout;
 
 namespace Infrastructure.Services
 {
+
     public class OrderService : IOrderService
     {
         // ==============================
@@ -96,6 +97,8 @@ namespace Infrastructure.Services
             return await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
         }
 
+
+
         public async Task UpdateOrderStatusAsync(Order order, OrderStatus orderStatus)
         {
             if (order != null)
@@ -104,6 +107,37 @@ namespace Infrastructure.Services
                 _unitOfWork.Repository<Order>().Update(order);
                 await _unitOfWork.CompleteAsync();
             }
+        }
+
+        public async Task<IReadOnlyList<Order>> GetAllOrdersAsync()
+        {
+            return await _unitOfWork.Repository<Order>().ListAllAsync();
+        }
+
+        public async Task<Order> GetOrderByIdAsync(int orderId)
+        {
+            var order = await _unitOfWork.Repository<Order>()
+                .GetByIdAsync(orderId);
+
+            if (order == null)
+            {
+                throw new KeyNotFoundException($"Order with ID {orderId} not found");
+            }
+
+            return order;
+        }
+
+        public async Task<List<Order>> GetOrdersByDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            var spec = new OrderSpecification(startDate, endDate);
+            var orders = await _unitOfWork.Repository<Order>().ListAsync(spec);
+
+            if (orders == null || !orders.Any())
+            {
+                throw new KeyNotFoundException($"No orders found between {startDate} and {endDate}");
+            }
+
+            return orders.ToList();
         }
     }
 }

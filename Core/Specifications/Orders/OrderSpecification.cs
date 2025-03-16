@@ -19,5 +19,11 @@ namespace Core.Specifications.Orders
             AddCustomInclude(o => o.Include(o => o.OrderDetails).ThenInclude(c => c.Classroom).ThenInclude(c => c.Course));
             AddCustomInclude(o => o.Include(o => o.OrderDetails).ThenInclude(c => c.Classroom).ThenInclude(c => c.Lecturer));
         }
+        public OrderSpecification(DateTime startDate, DateTime endDate)
+            : base(o => o.OrderTime >= startDate && o.OrderTime <= endDate)
+        {
+            AddInclude(o => o.OrderDetails);
+            AddCustomInclude(o => o.Include(o => o.OrderDetails).ThenInclude(c => c.Classroom));
+        }
     }
 }

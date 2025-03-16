@@ -57,6 +57,8 @@ namespace Core.Specifications
         /// </summary>
         public List<Func<IQueryable<T>, IIncludableQueryable<T, object>>> CustomIncludes { get; } = new List<Func<IQueryable<T>, IIncludableQueryable<T, object>>>();
 
+
+
         /// <summary>
         /// Adds Include expression to the Includes list
         /// </summary>

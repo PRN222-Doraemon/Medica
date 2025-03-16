@@ -9,5 +9,8 @@ namespace Core.Interfaces.Services
         Task<Order> CreateOrderFromCartAsync(string paymentIntentId, int studentId);
         Task<Order> GetOrderByPaymentIntentId(string paymentIntentId);
         Task UpdateOrderStatusAsync(Order order, OrderStatus orderStatus);
+        Task<IReadOnlyList<Order>> GetAllOrdersAsync();
+        Task<Order> GetOrderByIdAsync(int orderId);
+        Task<List<Order>> GetOrdersByDateRangeAsync(DateTime startDate, DateTime endDate);
     }
 }
