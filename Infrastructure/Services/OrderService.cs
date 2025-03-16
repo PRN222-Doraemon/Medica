@@ -35,7 +35,7 @@ namespace Infrastructure.Services
             var spec = new OrderSpecification(new OrderParams { StudentID = studentId });
             var orders = await _unitOfWork.Repository<Order>().ListAsync(spec);
             var orderDetails = orders.SelectMany(o => o.OrderDetails).ToList();
-            var classes = orderDetails.Select(od => od.Classroom).ToList();
+            var classes = orderDetails.Select(od => od.Classroom).Where(c => c.Status != ClassroomStatus.Cancelled).ToList();
             if (classroomStatus.HasValue)
             {
                 switch (classroomStatus)

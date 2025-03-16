@@ -6,6 +6,13 @@
 	var Lecturers = ViewData["Lecturers"] as IEnumerable<LecturerVM>;
 	var ClassUpsertVM = ViewData["Classroom"] as ClassUpsertVM ?? new ClassUpsertVM();
 	ClassUpsertVM.CourseId = Course.Id;
+	var filterButtonVM = new FilterButtonVM
+	{
+		Controller = "Classrooms",
+		Action = "Index",
+		ClassroomStatus = Model.ClassroomStatus,
+		CourseId = Course.Id
+	};
 }
 
 <div class="container-fluid px-0">
@@ -15,7 +22,7 @@
 
 	<div class="container mt-n4 mb-5">
 		<h3 class="mb-4 mt-4">Available Classes For @Course?.Name</h3>
-		<partial name="PartialViews/_FilterButtons" model="@(Tuple.Create(Model.ClassroomStatus, Course.Id))" />
+		<partial name="PartialViews/_FilterButtons" model="@filterButtonVM" />
 		<partial name="PartialViews/_ClassList" model="@Model" />
 
 		@await Html.PartialAsync("~/Views/Shared/ReusableViews/_Paging.cshtml", Model.PagingInfo)

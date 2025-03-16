@@ -15,6 +15,7 @@ namespace MedicaWeb_MVC.ViewModels
         public CourseVM Course { get; set; }
         public LecturerVM Lecturer { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
+        public IEnumerable<StudentVM> Students { get; set; } = new List<StudentVM>();
         public int TotalEnrolls => OrderDetails.Count();
         public ClassroomStatus Status { get; set; }
 
