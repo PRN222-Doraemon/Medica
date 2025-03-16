@@ -1,6 +1,4 @@
-﻿
-
-namespace MedicaWeb_MVC.ViewModels
+﻿namespace MedicaWeb_MVC.ViewModels.Courses
 {
     public class CourseChapterVM
     {

@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Entities.Identity;
-using MedicaWeb_MVC.ViewModels;
+using MedicaWeb_MVC.ViewModels.Classes;
+using MedicaWeb_MVC.ViewModels.Courses;
+using MedicaWeb_MVC.ViewModels.Orders;
+using MedicaWeb_MVC.ViewModels.User;
 using Resource = Core.Entities.Resource;
 
 namespace MedicaWeb_MVC.Extensions

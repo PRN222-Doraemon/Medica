@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MedicaWeb_MVC.ViewModels
+namespace MedicaWeb_MVC.ViewModels.User
 {
     public class LoginVM
     {

@@ -2,7 +2,7 @@ using AutoMapper;
 using Core.Entities;
 using Core.Interfaces.Services;
 using Core.Specifications.Courses;
-using MedicaWeb_MVC.ViewModels;
+using MedicaWeb_MVC.ViewModels.Courses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicaWeb_MVC.Controllers

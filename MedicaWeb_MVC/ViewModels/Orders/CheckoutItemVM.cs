@@ -1,4 +1,4 @@
-﻿namespace MedicaWeb_MVC.ViewModels
+﻿namespace MedicaWeb_MVC.ViewModels.Orders
 {
     public class CheckoutItemVM
     {

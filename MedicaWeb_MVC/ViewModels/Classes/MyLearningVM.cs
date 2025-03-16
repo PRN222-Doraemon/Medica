@@ -1,6 +1,6 @@
 ﻿using Core.Entities;
 
-namespace MedicaWeb_MVC.ViewModels
+namespace MedicaWeb_MVC.ViewModels.Classes
 {
     public class MyLearningVM
     {
