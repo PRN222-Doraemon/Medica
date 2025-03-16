@@ -1,12 +1,19 @@
 ﻿@using MedicaWeb_MVC.ViewModels
 @model ClassVM
-<div class="class-container text-grey">
+
+<div class="class-container text-grey border border-secondary-subtle">
+    <div class="mb-3">
+        <a class="btn btn-outline-warning" asp-action="Index" asp-controller="MyClasses">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+    </div>
     <div class="d-flex align-items-center mb-4">
         <h1 class="me-3 mb-0 text-orange">@Model.Course.Name</h1>
-        <span class="badge text-bg-@(Model.Mode == ClassroomMode.Online ? "success" : "danger")">@Model.Mode</span>
+        <span
+            class="badge text-bg-@(Model.Mode == ClassroomMode.Online ? "success" : "body-secondary")">@Model.Mode</span>
     </div>
     <p class="text-grey">@Model.Course.Description</p>
-    <p class="text-grey">Total students: @Model.Students.Count()</p>
+    <p class="text-grey">Total students: @Model.Students.Count() / @Model.MaxParticipant</p>
     <p>@("Start Date: " + Model.StartDate + " - End Date: " + Model.EndDate)</p>
 
     <!-- nav bar >-->
