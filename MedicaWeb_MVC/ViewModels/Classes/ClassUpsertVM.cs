@@ -1,11 +1,11 @@
 ﻿using Core.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace MedicaWeb_MVC.ViewModels
+namespace MedicaWeb_MVC.ViewModels.Classes
 {
     public class ClassUpsertVM
     {
-        public int Id { get; set; } 
+        public int Id { get; set; }
         public ClassroomMode Mode { get; set; }
         [Required(ErrorMessage = "Start date is required.")]
         [DataType(DataType.Date)]

@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
+using MedicaWeb_MVC.ViewModels.Classes;
 
-namespace MedicaWeb_MVC.ViewModels
+namespace MedicaWeb_MVC.ViewModels.Courses
 {
     public class CourseVM
     {
@@ -24,7 +25,7 @@ namespace MedicaWeb_MVC.ViewModels
 
         public int TotalChapters => CourseChapters.Count();
         public int TotalResources => CourseChapters.Sum(chapter => chapter.TotalResources);
-        public decimal Rates => (Feedbacks.Count() > 0) ? Math.Round(Feedbacks.Average(f => f.Rating), 2) : 0;
+        public decimal Rates => Feedbacks.Count() > 0 ? Math.Round(Feedbacks.Average(f => f.Rating), 2) : 0;
 
         public int Reviews => Feedbacks.Count();
         public int TotalEnrolls => Classrooms.SelectMany(c => c.OrderDetails).Count();

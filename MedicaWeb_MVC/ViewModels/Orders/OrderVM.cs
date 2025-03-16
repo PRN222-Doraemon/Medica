@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
+using MedicaWeb_MVC.ViewModels.Classes;
 
-namespace MedicaWeb_MVC.ViewModels
+namespace MedicaWeb_MVC.ViewModels.Orders
 {
     public class OrderVM
     {

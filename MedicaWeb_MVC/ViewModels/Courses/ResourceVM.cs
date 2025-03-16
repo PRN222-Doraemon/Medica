@@ -1,6 +1,6 @@
 ﻿using Core.Entities;
 
-namespace MedicaWeb_MVC.ViewModels
+namespace MedicaWeb_MVC.ViewModels.Courses
 {
     public class ResourceVM
     {

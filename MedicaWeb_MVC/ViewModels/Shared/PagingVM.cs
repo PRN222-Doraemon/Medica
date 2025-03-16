@@ -1,6 +1,6 @@
 ﻿using Core.Constants;
 
-namespace MedicaWeb_MVC.ViewModels
+namespace MedicaWeb_MVC.ViewModels.Shared
 {
     public class PagingVM
     {

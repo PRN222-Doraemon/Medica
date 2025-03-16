@@ -4,6 +4,7 @@ using Core.Entities;
 using Core.Entities.Identity;
 using Core.Interfaces.Services;
 using MedicaWeb_MVC.ViewModels;
+using MedicaWeb_MVC.ViewModels.Orders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;

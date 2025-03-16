@@ -1,4 +1,5 @@
-@model MedicaWeb_MVC.ViewModels.CourseVM
+@using MedicaWeb_MVC.ViewModels.Courses
+@model CourseVM
 
 <div class="course-card h-100" id="@Model.Id">
     <a asp-controller="Courses" asp-action="Details" asp-route-id="@Model.Id" class="course-card text-decoration-none">

@@ -1,6 +1,8 @@
 ﻿using Core.Entities;
+using MedicaWeb_MVC.ViewModels.Courses;
+using MedicaWeb_MVC.ViewModels.User;
 
-namespace MedicaWeb_MVC.ViewModels
+namespace MedicaWeb_MVC.ViewModels.Classes
 {
     public class ClassVM
     {
