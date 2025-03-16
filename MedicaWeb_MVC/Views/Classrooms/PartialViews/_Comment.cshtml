@@ -1,0 +1,42 @@
+@using MedicaWeb_MVC.ViewModels.Courses
+@model CommentVM
+<div class="question-item p-3">
+    <div class="row">
+        <div class="col-12 col-md-8">
+            <div class="d-flex">
+                <div class="avatar-wrapper avatar-bg-1 me-3 flex-shrink-0">
+                    <span>SS</span>
+                </div>
+                <div>
+                    <span class="question-title fw-bold">@Model.Title</span>
+
+                    <p class="question-description mt-1">@Model.Details</p>
+                    <div class="lecture-info">
+                        <a href="#" class="lecture-link">@Model.UserName</a> · <span class="time-ago">1
+                            year ago · </span>
+                        <span><a class="text-green reply-btn" href="#" id="reply-btn-@Model.Id"
+                                data-parent-id="@Model.Id">Reply</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 d-flex justify-content-md-end align-items-center mt-3 mt-md-0">
+            <div class="d-flex align-items-center">
+                <div class="comments-count d-flex align-items-center">
+                    <i class="far fa-comment-alt me-1"></i> @Model.ReplyComments.Count()
+                </div>
+            </div>
+        </div>
+    </div>
+    @* Reply Comment Form Template *@
+    @* @Html.PartialAsync("PartialViews/_ReplyCommentForm") *@
+
+
+    @* Reply Comment Display Template *@
+    <div class="reply-container ms-5 mt-3">
+        @foreach (var reply in Model.ReplyComments)
+        {
+            @await Html.PartialAsync("PartialViews/_ReplyComment", reply)
+        }
+    </div>
+</div>

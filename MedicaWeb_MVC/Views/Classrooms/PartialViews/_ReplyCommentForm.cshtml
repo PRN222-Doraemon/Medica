@@ -1,0 +1,20 @@
+@using MedicaWeb_MVC.ViewModels.Courses
+@model CommentCreateVM
+
+<div class="reply-form bg-light p-3 rounded mt-3 mb-4 d-none" id="replyForm">
+    <h6 class="mb-3">Reply to this question</h6>
+    <form id="commentReplyForm" method="post">
+        <input type="hidden" asp-for="@Model.SrcCommentID" />
+        <input type="hidden" asp-for="@Model.ClassID" />
+
+        <div class="form-group mb-3">
+            <textarea class="form-control" asp-for="@Model.Details" rows="3" placeholder="Write your reply here..."
+                required></textarea>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="button" class="btn btn-light me-2 cancel-reply">Cancel</button>
+            <button type="submit" class="btn btn-orange">Post Reply</button>
+        </div>
+    </form>
+</div>

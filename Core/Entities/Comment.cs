@@ -7,8 +7,8 @@ namespace Core.Entities
     {
         public int UserID { get; set; }
         public ApplicationUser User { get; set; }
-        public int CourseID { get; set; }
-        public Course Course { get; set; }
+        public int ClassID { get; set; }
+        public Classroom Classroom { get; set; }
         public int? SrcCommentID { get; set; }
         public Comment? SrcComment { get; set; }
         public IEnumerable<Comment> ReplyComments { get; set; } = new List<Comment>();

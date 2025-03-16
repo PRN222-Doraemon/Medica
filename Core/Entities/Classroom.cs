@@ -23,6 +23,7 @@ namespace Core.Entities
         public Lecturer Lecturer { get; set; }
 
         // 1 Classrom - M OrderDetails
+        public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
 
     }

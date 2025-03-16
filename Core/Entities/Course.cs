@@ -16,7 +16,6 @@ namespace Core.Entities
         public CourseStatus Status { get; set; }
         public TimeSpan Duration { get; set; }
         public IEnumerable<CourseChapter> CourseChapters { get; set; } = new List<CourseChapter>();
-        public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
         public IEnumerable<Feedback> Feedbacks { get; set; } = new List<Feedback>();
 
         // 1 Course - M Classroom

@@ -19,7 +19,6 @@ namespace MedicaWeb_MVC.ViewModels.Courses
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public IEnumerable<CourseChapterVM> CourseChapters { get; set; } = new List<CourseChapterVM>();
-        public IEnumerable<CommentVM> Comments { get; set; } = new List<CommentVM>();
         public virtual IEnumerable<FeedbackVM> Feedbacks { get; set; } = new List<FeedbackVM>();
         public virtual ICollection<ClassVM> Classrooms { get; set; } = new HashSet<ClassVM>();
 

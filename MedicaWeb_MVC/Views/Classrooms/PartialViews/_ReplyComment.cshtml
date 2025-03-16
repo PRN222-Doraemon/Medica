@@ -1,0 +1,35 @@
+@using MedicaWeb_MVC.ViewModels.Courses
+@model CommentVM
+<div class="reply-item p-3 border-start border-bottom border-2 border-light-subtle">
+    <div class="d-flex">
+        <div class="avatar-wrapper me-3 flex-shrink-0" style="width: 35px; height: 35px;">
+            <span>ML</span>
+        </div>
+        <div class="flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="#" class="username-link fw-bold fs-6 text-dark">@Model.UserName</a>
+                    <span class="time-ago ms-2"> · 1 hour ago</span>
+                </div>
+                @if (User.Identity.IsAuthenticated && @Model.UserID == ViewBag.CurrentUserId)
+                {
+                    <div class="dropdown">
+                        <button class="btn btn-sm text-secondary" type="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item edit-reply" data-id="1" href="#">Edit</a></li>
+                            <li><a class="dropdown-item delete-reply" data-id="1" href="#">Delete</a></li>
+                        </ul>
+                    </div>
+                }
+            </div>
+            <div class="reply-content mt-2">
+                @Model.Details
+            </div>
+            <div class="mt-2">
+                <a class="text-green reply-link" data-parent-id="1" href="#">Reply</a>
+            </div>
+        </div>
+    </div>
+</div>

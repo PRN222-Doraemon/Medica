@@ -32,6 +32,7 @@ namespace Core.Constants
         public static class Display
         {
             public const int MAX_VISIBLE_REVIEWS = 3;
+            public const int MAX_VISIBLE_COMMENTS = 4;
             public const int MAX_VISIBLE_CHAPTERS = 3;
             public const int MAX_VISIBLE_RESOURCES = 10;
             public const int MAX_VISIBLE_COURSES = 6;

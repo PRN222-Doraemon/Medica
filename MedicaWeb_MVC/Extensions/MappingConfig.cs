@@ -31,7 +31,6 @@ namespace MedicaWeb_MVC.Extensions
 
                 config.CreateMap<CourseCreateVM, Course>()
                 .ForMember(dest => dest.CreatedByUserID, opt => opt.Ignore())
-                .ForMember(dest => dest.Comments, opt => opt.Ignore())
                 .ForMember(dest => dest.Feedbacks, opt => opt.Ignore())
                 .ForMember(dest => dest.Classrooms, opt => opt.Ignore())
                 .ForMember(dest => dest.Status, opt => opt.Ignore());
@@ -46,6 +45,7 @@ namespace MedicaWeb_MVC.Extensions
 
                 config.CreateMap<Comment, CommentVM>()
                 .ForMember(dest => dest.UserName, u => u.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"));
+                config.CreateMap<CommentCreateVM, Comment>();
 
                 config.CreateMap<Feedback, FeedbackVM>()
                 .ForMember(dest => dest.StudentName, u => u.MapFrom(src => $"{src.Student.FirstName} {src.Student.LastName}"))
