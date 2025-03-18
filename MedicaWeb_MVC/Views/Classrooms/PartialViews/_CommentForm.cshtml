@@ -22,15 +22,15 @@
                     <div class="form-group mb-3">
                         <label for="questionContent" class="form-label">Question Details</label>
                         <textarea class="form-control" asp-for="@Model.Details" rows="5"
-                            placeholder="Describe your question in detail. Include any error messages, steps you've tried, etc."
-                            required></textarea>
+                            placeholder="Describe your question in detail." required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-orange" id="submitQuestion">Post Question</button>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-orange" id="submitQuestion">Post Question</button>
-            </div>
+
         </div>
     </div>
 </div>

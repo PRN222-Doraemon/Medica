@@ -5,14 +5,15 @@
         <div class="col-12 col-md-8">
             <div class="d-flex">
                 <div class="avatar-wrapper avatar-bg-1 me-3 flex-shrink-0">
-                    <span>SS</span>
+                    <span>@Model.UserName.Substring(0, 2).ToUpper()</span>
                 </div>
                 <div>
                     <span class="question-title fw-bold">@Model.Title</span>
 
                     <p class="question-description mt-1">@Model.Details</p>
                     <div class="lecture-info">
-                        <a href="#" class="lecture-link">@Model.UserName</a> · <span class="time-ago">1
+                        <a href="#" class="lecture-link text-grey fst-italic">@Model.UserName</a> · <span
+                            class="time-ago">1
                             year ago · </span>
                         <span><a class="text-green reply-btn" href="#" id="reply-btn-@Model.Id"
                                 data-parent-id="@Model.Id">Reply</a></span>
@@ -21,19 +22,23 @@
             </div>
         </div>
         <div class="col-12 col-md-4 d-flex justify-content-md-end align-items-center mt-3 mt-md-0">
-            <div class="d-flex align-items-center">
-                <div class="comments-count d-flex align-items-center">
-                    <i class="far fa-comment-alt me-1"></i> @Model.ReplyComments.Count()
-                </div>
+            <div class="comments-count bg-yellow px-2" data-target="#reply-container-@Model.Id"
+                style="cursor: pointer;">
+                <i class="far fa-comment-alt me-1"></i> @Model.ReplyComments.Count()
             </div>
         </div>
     </div>
     @* Reply Comment Form Template *@
-    @* @Html.PartialAsync("PartialViews/_ReplyCommentForm") *@
+    @await Html.PartialAsync("PartialViews/_ReplyCommentForm",
+        new CommentCreateVM
+        {
+            ClassID = Model.ClassID,
+            SrcCommentID = Model.Id
+        })
 
 
     @* Reply Comment Display Template *@
-    <div class="reply-container ms-5 mt-3">
+    <div class="reply-container ms-5 mt-3 d-none" id="reply-container-@Model.Id">
         @foreach (var reply in Model.ReplyComments)
         {
             @await Html.PartialAsync("PartialViews/_ReplyComment", reply)

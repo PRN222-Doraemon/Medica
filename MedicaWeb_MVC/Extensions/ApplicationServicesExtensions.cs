@@ -28,6 +28,7 @@ namespace MedicaWeb_MVC.Extensions
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ILecturerService, LecturerService>();
+            services.AddScoped<ICommentService, CommentService>();
 
 
             services.AddScoped<IOrderService, OrderService>();
