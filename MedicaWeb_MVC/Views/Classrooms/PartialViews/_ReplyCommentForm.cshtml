@@ -1,9 +1,9 @@
 @using MedicaWeb_MVC.ViewModels.Courses
 @model CommentCreateVM
 
-<div class="reply-form bg-light p-3 rounded mt-3 mb-4 d-none" id="replyForm">
+<div class="reply-form bg-light p-3 rounded mt-3 mb-4 d-none" id="replyForm-@Model.SrcCommentID">
     <h6 class="mb-3">Reply to this question</h6>
-    <form id="commentReplyForm" method="post">
+    <form id="commentReplyForm" method="post" asp-action="Upsert" asp-controller="Comments">
         <input type="hidden" asp-for="@Model.SrcCommentID" />
         <input type="hidden" asp-for="@Model.ClassID" />
 

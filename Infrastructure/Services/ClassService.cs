@@ -56,7 +56,17 @@ namespace Infrastructure.Services
         {
             var spec = new ClassSpecification(id);
             var classroom = await _unitOfWork.Repository<Classroom>().GetEntityWithSpec(spec);
-            classroom.Comments = classroom.Comments.Where(c => c.SrcComment == null).ToList();
+            if (classroom.Comments != null && classroom.Comments.Any())
+            {
+                classroom.Comments = classroom.Comments
+                    .Where(c => c.SrcComment == null)
+                    .OrderByDescending(c => c.CreatedAt)
+                    .ToList();
+            }
+            else
+            {
+                classroom.Comments = new List<Comment>();
+            }
             return classroom;
         }
 

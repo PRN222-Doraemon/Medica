@@ -1,12 +1,12 @@
 @using MedicaWeb_MVC.ViewModels.Courses
 
-@model IEnumerable<CommentVM>
+@model Tuple<IEnumerable<CommentVM>, int>
 <!-- Page Header -->
 <div class="page-header">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="mb-0 text-green">All questions in this course <span
-                    class="question-count">(@Model.Count())</span></h5>
+                    class="question-count">(@Model.Item1.Count())</span></h5>
             <button class="btn btn-orange btn-sm" data-bs-toggle="modal" data-bs-target="#askQuestionModal">
                 <i class="fas fa-plus me-1"></i>New question
             </button>
@@ -15,164 +15,30 @@
 </div>
 
 <!-- Comment form -->
-@* @await Html.PartialAsync("PartialViews/_CommentForm") *@
+@await Html.PartialAsync("PartialViews/_CommentForm", new CommentCreateVM { ClassID = Model.Item2 })
 
 <!-- Comment List -->
 <div class="container mb-4">
     <!-- Question-->
-    @foreach (var comment in Model)
+    @if (Model != null && Model.Item1.Any())
     {
-        @await Html.PartialAsync("PartialViews/_Comment", comment)
+        @foreach (var comment in Model.Item1)
+        {
+            @await Html.PartialAsync("PartialViews/_Comment", comment)
+        }
     }
+    else
+    {
+        <div class="text-center text-muted">No comments yet.</div>
+    }
+
 </div>
 
 @* See more *@
-@if (Model.Count() > AppCts.Display.MAX_VISIBLE_COMMENTS)
+@if (Model != null && Model.Item1.Count() > AppCts.Display.MAX_VISIBLE_COMMENTS)
 {
     <div class="text-center mt-3">
         <a class="text-green" id="showMoreBtn"><i class="bi bi-chevron-down"></i> See more</a>
         <a class="text-green d-none" id="seeLessBtn"><i class="bi bi-chevron-up"></i> See less</a>
     </div>
 }
-
-@* JavaScript for Reply and Question functionality *@
-<script>
-    $(document).ready(function () {
-        // Bắt sự kiện khi bấm Reply
-        $(document).on('click', '.reply-btn', function (e) {
-            e.preventDefault();
-            const parentId = $(this).data('parent-id');
-
-            // Chèn form vào đúng vị trí
-            const btn = $(this);
-            const parentContainer = btn.closest('.reply-target');
-
-            $('#replyForm').insertAfter(parentContainer).removeClass('d-none');
-            $('#parentCommentId').val(parentId);
-            $('#replyContent').val('').focus();
-        });
-
-        // Bấm nút Cancel
-        $(document).on('click', '.cancel-reply', function () {
-            $('#replyForm').addClass('d-none');
-        });
-
-        // Reply link in replies section
-        $(document).on('click', '.reply-link', function (e) {
-            e.preventDefault();
-            $('#replyForm').insertAfter($(this).closest('.reply-content')).removeClass('d-none');
-            const parentId = $(this).data('parent-id');
-            $('#parentCommentId').val(parentId);
-            $('#lectureId').val('@ViewBag.CurrentLectureId');
-            $('#replyContent').focus();
-        });
-
-        // Cancel reply button
-        $(document).on('click', '.cancel-reply', function () {
-            $('#replyForm').addClass('d-none');
-        });
-
-        // Show more/less comments functionality
-        $('#showMoreBtn').click(function () {
-            $('.question-item:hidden').slice(0, @AppCts.Display.MAX_VISIBLE_COMMENTS).slideDown();
-            if ($('.question-item:hidden').length == 0) {
-                $('#showMoreBtn').addClass('d-none');
-                $('#seeLessBtn').removeClass('d-none');
-            }
-        });
-
-        $('#seeLessBtn').click(function () {
-            $('.question-item').slice(@AppCts.Display.MAX_VISIBLE_COMMENTS).slideUp();
-            $('#seeLessBtn').addClass('d-none');
-            $('#showMoreBtn').removeClass('d-none');
-        });
-
-        // Show new question modal
-        $('.btn-orange:contains("New question")').click(function () {
-            $('#askQuestionModal').modal('show');
-        });
-
-        // Submit new question
-        $('#submitQuestion').click(function () {
-            if ($('#questionForm')[0].checkValidity()) {
-                $('#questionForm').submit();
-            } else {
-                $('#questionForm')[0].reportValidity();
-            }
-        });
-
-        // Edit reply functionality
-        $(document).on('click', '.edit-reply', function (e) {
-            e.preventDefault();
-            const replyId = $(this).data('id');
-            const replyContent = $(this).closest('.reply-item').find('.reply-content').text().trim();
-            const replyElement = $(this).closest('.reply-item').find('.reply-content');
-
-            replyElement.html(`
-                    <div class="edit-reply-form">
-                        <textarea class="form-control mb-2">${replyContent}</textarea>
-                        <div class="d-flex justify-content-end">
-                            <button class="btn btn-sm btn-light me-2 cancel-edit">Cancel</button>
-                            <button class="btn btn-sm btn-orange save-edit" data-id="${replyId}">Save</button>
-                        </div>
-                    </div>
-                `);
-        });
-
-        // Cancel edit
-        $(document).on('click', '.cancel-edit', function () {
-            const replyElement = $(this).closest('.reply-content');
-            const originalContent = replyElement.find('textarea').val();
-            replyElement.html(originalContent);
-        });
-
-        // Save edited reply
-        $(document).on('click', '.save-edit', function () {
-            const replyId = $(this).data('id');
-            const newContent = $(this).closest('.edit-reply-form').find('textarea').val();
-            const replyElement = $(this).closest('.reply-content');
-
-            $.ajax({
-                url: '/Course/UpdateComment',
-                type: 'POST',
-                data: {
-                    id: replyId,
-                    content: newContent
-                },
-                success: function (response) {
-                    if (response.success) {
-                        replyElement.html(newContent);
-                    } else {
-                        alert('Failed to update reply');
-                    }
-                }
-            });
-        });
-
-        // Delete reply
-        $(document).on('click', '.delete-reply', function (e) {
-            e.preventDefault();
-            if (confirm('Are you sure you want to delete this reply?')) {
-                const replyId = $(this).data('id');
-                const replyItem = $(this).closest('.reply-item');
-
-                $.ajax({
-                    url: '/Course/DeleteComment',
-                    type: 'POST',
-                    data: {
-                        id: replyId
-                    },
-                    success: function (response) {
-                        if (response.success) {
-                            replyItem.fadeOut(function () {
-                                $(this).remove();
-                            });
-                        } else {
-                            alert('Failed to delete reply');
-                        }
-                    }
-                });
-            }
-        });
-    });
-</script>

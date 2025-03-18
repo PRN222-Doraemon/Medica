@@ -41,44 +41,88 @@
             @await Html.PartialAsync("~/Views/Courses/PartialViews/_CourseContent.cshtml", Model.Course)
         </div>
         <div class="tab-pane" id="qa-tab">
-            @await Html.PartialAsync("PartialViews/_CommentsList", Model.Comments)
+            @await Html.PartialAsync("PartialViews/_CommentsList", Tuple.Create(Model.Comments, Model.Id))
         </div>
     </div>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const tabs = document.querySelectorAll(".nav-item");
-        const tabPanes = document.querySelectorAll(".tab-pane");
 
-        // Lấy tab active từ localStorage hoặc mặc định là "students"
-        let activeTab = localStorage.getItem("activeTab") || "students";
-        setActiveTab(activeTab);
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tabs = document.querySelectorAll(".nav-item");
+            const tabPanes = document.querySelectorAll(".tab-pane");
 
-        // Gán sự kiện click cho mỗi tab
-        tabs.forEach(tab => {
-            tab.addEventListener("click", function (event) {
-                event.preventDefault();
-                let selectedTab = this.getAttribute("data-tab");
+            // Lấy tab active từ localStorage hoặc mặc định là "students"
+            let activeTab = localStorage.getItem("activeTab") || "students";
+            setActiveTab(activeTab);
 
-                // Cập nhật trạng thái active
-                setActiveTab(selectedTab);
+            // Gán sự kiện click cho mỗi tab
+            tabs.forEach(tab => {
+                tab.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    let selectedTab = this.getAttribute("data-tab");
 
-                // Lưu vào localStorage để nhớ lần sau
-                localStorage.setItem("activeTab", selectedTab);
+                    // Cập nhật trạng thái active
+                    setActiveTab(selectedTab);
+
+                    // Lưu vào localStorage để nhớ lần sau
+                    localStorage.setItem("activeTab", selectedTab);
+                });
             });
+
+            function setActiveTab(tabName) {
+                tabs.forEach(tab => tab.classList.remove("active"));
+                document.querySelector(`.nav-item[data-tab="${tabName}"]`)?.classList.add("active");
+
+                tabPanes.forEach(pane => pane.classList.remove("active"));
+                document.getElementById(`${tabName}-tab`).classList.add("active");
+            }
         });
 
-        function setActiveTab(tabName) {
-            // Xóa class active khỏi tất cả tab
-            tabs.forEach(tab => tab.classList.remove("active"));
-            document.querySelector(`.nav-item[data-tab="${tabName}"]`)?.classList.add("active");
+        $(document).ready(function () {
 
-            // Ẩn tất cả nội dung
-            tabPanes.forEach(pane => pane.classList.remove("active"));
+            // Toggle replies container 
+            $(document).on('click', '.comments-count', function () {
+                console.log("comments-count clicked");
+                var target = $(this).data('target');
+                console.log("Toggle target:", target);
+                $(target).toggleClass('d-none');
+            });
 
-            // Hiển thị tab tương ứng
-            document.getElementById(`${tabName}-tab`).classList.add("active");
-        }
-    });
-</script>
+            $(document).on('click', '.reply-btn', function (e) {
+                e.preventDefault();
+                console.log("reply-btn clicked");
+                var parentId = $(this).data('parent-id');
+                var target = '#replyForm-' + parentId;
+                console.log("Toggle target:", target);
+                $(target).toggleClass('d-none');
+            });
+
+            $(document).on('click', '.cancel-reply', function () {
+                console.log("cancel-reply clicked");
+                $(this).closest('.reply-form').addClass('d-none');
+            });
+
+            // Show more/less comments functionality
+            $('#showMoreBtn').click(function () {
+                $('.question-item:hidden').slice(0, @AppCts.Display.MAX_VISIBLE_COMMENTS).slideDown();
+                if ($('.question-item:hidden').length == 0) {
+                    $('#showMoreBtn').addClass('d-none');
+                    $('#seeLessBtn').removeClass('d-none');
+                }
+            });
+
+            $('#seeLessBtn').click(function () {
+                $('.question-item').slice(@AppCts.Display.MAX_VISIBLE_COMMENTS).slideUp();
+                $('#seeLessBtn').addClass('d-none');
+                $('#showMoreBtn').removeClass('d-none');
+            });
+
+            // Show new question modal
+            $('.btn-orange:contains("New question")').click(function () {
+                $('#askQuestionModal').modal('show');
+            });
+        });
+    </script>
+}

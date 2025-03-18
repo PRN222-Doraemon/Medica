@@ -11,11 +11,13 @@ namespace MedicaWeb_MVC.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ICommentService _commentService;
+        private readonly IAccountService _userService;
 
-        public CommentsController(IMapper mapper, ICommentService commentService)
+        public CommentsController(IMapper mapper, ICommentService commentService, IAccountService userService)
         {
             _mapper = mapper;
             _commentService = commentService;
+            _userService = userService;
         }
         public IActionResult Index()
         {
@@ -24,9 +26,11 @@ namespace MedicaWeb_MVC.Controllers
         public async Task<IActionResult> Upsert(CommentCreateVM commentCreateVM)
         {
             var comment = _mapper.Map<Comment>(commentCreateVM);
+            var user = await _userService.GetUserByClaimsAsync(User);
+            comment.UserID = user.Id;
             await _commentService.AddComment(comment);
-            TempData["success"] = "Successfully added a new question";
-            return RedirectToAction("Details", "Classrooms" ,commentCreateVM.ClassID);
+            TempData["success"] = "Successfully added a comment";
+            return RedirectToAction("Details", "Classrooms", new { id = commentCreateVM.ClassID });
         }
     }
 }
