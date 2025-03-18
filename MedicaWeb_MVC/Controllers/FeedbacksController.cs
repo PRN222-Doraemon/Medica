@@ -12,7 +12,6 @@ namespace MedicaWeb_MVC.Controllers
         private readonly IFeedbackService _feedbackService;
         private readonly IMapper _mapper;
 
-
         public FeedbacksController(IAccountService accountService, IFeedbackService feedbackService, IMapper mapper)
         {
             _accountService = accountService;
@@ -23,6 +22,7 @@ namespace MedicaWeb_MVC.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(FeedbackUpsertVM feedbackVM)
         {
@@ -63,6 +63,7 @@ namespace MedicaWeb_MVC.Controllers
             }
             return RedirectToAction("Details", "Courses", feedbackVM.CourseId);
         }
+
         [HttpGet]
         public async Task<IActionResult> Delete(int id)
         {
@@ -74,7 +75,7 @@ namespace MedicaWeb_MVC.Controllers
             await _feedbackService.DeleteFeedback(feedback);
             TempData["success"] = "Successfully delete";
             return RedirectToAction("Details", "Courses", feedback.CourseId);
-            
+
         }
     }
 }
