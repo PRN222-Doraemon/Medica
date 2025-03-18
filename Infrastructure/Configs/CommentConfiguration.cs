@@ -13,9 +13,9 @@ namespace Infrastructure.Configs
                    .HasForeignKey(c => c.UserID)
                    .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(c => c.Course)
-                   .WithMany(course => course.Comments)
-                   .HasForeignKey(c => c.CourseID)
+            builder.HasOne(c => c.Classroom)
+                   .WithMany(classroom => classroom.Comments)
+                   .HasForeignKey(c => c.ClassID)
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(c => c.SrcComment)

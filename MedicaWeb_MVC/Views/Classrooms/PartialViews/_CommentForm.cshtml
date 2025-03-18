@@ -1,0 +1,36 @@
+@using MedicaWeb_MVC.ViewModels.Courses
+@model CommentCreateVM
+
+@* Ask Question Modal Template *@
+<div class="modal fade" id="askQuestionModal" tabindex="-1" aria-labelledby="askQuestionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="askQuestionModalLabel">Ask a New Question</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="questionForm" method="post" asp-action="Upsert" asp-controller="Comments">
+                    <input type="hidden" asp-for="@Model.ClassID" />
+
+                    <div class="form-group mb-3">
+                        <label for="questionTitle" class="form-label">Question Title</label>
+                        <input type="text" class="form-control" asp-for="@Model.Title"
+                            placeholder="Enter a clear, specific title" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="questionContent" class="form-label">Question Details</label>
+                        <textarea class="form-control" asp-for="@Model.Details" rows="5"
+                            placeholder="Describe your question in detail." required></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-orange" id="submitQuestion">Post Question</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>

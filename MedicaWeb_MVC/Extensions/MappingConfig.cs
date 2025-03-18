@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Core.Entities;
 using Core.Entities.Identity;
-using MedicaWeb_MVC.ViewModels;
+using MedicaWeb_MVC.ViewModels.Classes;
+using MedicaWeb_MVC.ViewModels.Courses;
+using MedicaWeb_MVC.ViewModels.Orders;
+using MedicaWeb_MVC.ViewModels.User;
 using Resource = Core.Entities.Resource;
 
 namespace MedicaWeb_MVC.Extensions
@@ -28,7 +31,6 @@ namespace MedicaWeb_MVC.Extensions
 
                 config.CreateMap<CourseCreateVM, Course>()
                 .ForMember(dest => dest.CreatedByUserID, opt => opt.Ignore())
-                .ForMember(dest => dest.Comments, opt => opt.Ignore())
                 .ForMember(dest => dest.Feedbacks, opt => opt.Ignore())
                 .ForMember(dest => dest.Classrooms, opt => opt.Ignore())
                 .ForMember(dest => dest.Status, opt => opt.Ignore());
@@ -42,7 +44,9 @@ namespace MedicaWeb_MVC.Extensions
                 // ==============================
 
                 config.CreateMap<Comment, CommentVM>()
-                .ForMember(dest => dest.UserName, u => u.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"));
+                .ForMember(dest => dest.UserName, u => u.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"))
+                .ForMember(dest => dest.UserImgUrl, u => u.MapFrom(src => $"{src.User.ImageUrl}"));
+                config.CreateMap<CommentCreateVM, Comment>();
 
                 config.CreateMap<Feedback, FeedbackVM>()
                 .ForMember(dest => dest.StudentName, u => u.MapFrom(src => $"{src.Student.FirstName} {src.Student.LastName}"))
@@ -57,12 +61,14 @@ namespace MedicaWeb_MVC.Extensions
 
                 config.CreateMap<RegisterVM, ApplicationUser>();
                 config.CreateMap<Lecturer, LecturerVM>();
+                config.CreateMap<Student, StudentVM>();
 
                 // ==============================
                 // === Classrooms
                 // ==============================
 
-                config.CreateMap<Classroom, ClassVM>();
+                config.CreateMap<Classroom, ClassVM>()
+                .ForMember(dest => dest.Students, u => u.MapFrom(src => src.OrderDetails != null ? src.OrderDetails.Select(od => od.Order.Student).ToList() : new List<Student>()));
                 config.CreateMap<ClassUpsertVM, Classroom>();
                 config.CreateMap<Classroom, ClassUpsertVM>();
 

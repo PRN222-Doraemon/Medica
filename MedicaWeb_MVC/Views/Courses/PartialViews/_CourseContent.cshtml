@@ -1,5 +1,7 @@
-﻿@model CourseVM
-@using Core.Constants
+﻿@using Core.Constants
+@using MedicaWeb_MVC.ViewModels.Courses
+
+@model CourseVM
 
 <div class="mb-4">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -19,7 +21,7 @@
                             data-bs-target="#@collapseId">
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <span>@chapter.Name</span>
-                                <span class="badge bg-light text-dark ms-2">
+                                <span class="badge bg-yellow text-dark ms-2">
                                     @($"{chapter.TotalResources} lectures")
                                 </span>
                             </div>

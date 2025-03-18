@@ -1,0 +1,38 @@
+@using MedicaWeb_MVC.ViewModels.Classes
+
+@model MyLearningVM
+
+<div class="container-fluid py-4" style=" width: 90%;">
+    <h1 class="mb-4 text-orange fs-2">My Classes</h1>
+
+    <!-- Filter Buttons -->
+    @{
+        var filterButtonVM = new FilterButtonVM
+        {
+            Controller = "Classrooms",
+            Action = "MyClass",
+            ClassroomStatus = Model.SelectedStatus
+        };
+    }
+    @await Html.PartialAsync("PartialViews/_FilterButtons", filterButtonVM)
+
+    <br />
+
+    <!-- Course Cards -->
+    <div class="row g-4">
+        @foreach (var classroom in Model.Classes)
+        {
+            @await Html.PartialAsync("PartialViews/_CourseCard", classroom)
+        }
+    </div>
+
+    <!-- See More Button -->
+    @if (Model.Classes.Count() > AppCts.Display.MAX_VISIBLE_MYLEARNING)
+    {
+        <div class="text-center mt-5">
+            <button class="btn btn-light btn-lg px-5 rounded-pill shadow-sm">
+                <i class="bi bi-plus-circle me-2"></i> See More
+            </button>
+        </div>
+    }
+</div>

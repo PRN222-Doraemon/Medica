@@ -17,5 +17,6 @@ namespace Core.Specifications.Classes
         public string? SortOrder { get; set; }
         public DateOnly? StartDate { get; set; }
         public DateOnly? EndDate { get; set; }
+        public int? LecturerId { get; set; }
     }
 }

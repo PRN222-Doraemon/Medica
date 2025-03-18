@@ -1,4 +1,5 @@
 using AutoMapper;
+using Core.Constants;
 using Core.Entities;
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
@@ -6,9 +7,14 @@ using Core.Specifications.Classes;
 using Core.Specifications.Courses;
 using Infrastructure.Services;
 using MedicaWeb_MVC.ViewModels;
+using MedicaWeb_MVC.ViewModels.Classes;
+using MedicaWeb_MVC.ViewModels.Courses;
+using MedicaWeb_MVC.ViewModels.Shared;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using Stripe.Climate;
 
 namespace MedicaWeb_MVC.Controllers
 {
@@ -18,17 +24,22 @@ namespace MedicaWeb_MVC.Controllers
         private readonly IClassService _classService;
         private readonly ICourseService _courseService;
         private readonly ILecturerService _lecturerService;
+        private readonly IAccountService _accountService;
+        private readonly IOrderService _orderService;
         private readonly IMapper _mapper;
 
         public ClassroomsController(
             ILogger<ClassroomsController> logger,
-            ICourseService courseService, IClassService classService, IMapper mapper, ILecturerService lecturerService)
+            ICourseService courseService, IClassService classService, IMapper mapper,
+            ILecturerService lecturerService, IAccountService accountService, IOrderService orderService)
         {
             _logger = logger;
             _classService = classService;
             _courseService = courseService;
             _mapper = mapper;
             _lecturerService = lecturerService;
+            _accountService = accountService;
+            _orderService = orderService;
         }
 
         [HttpGet]
@@ -47,7 +58,7 @@ namespace MedicaWeb_MVC.Controllers
 
             ViewData["IsUpdate"] = isUpdate;
             ViewData["Classroom"] = classroom;
-            if(isUpdate)
+            if (isUpdate)
             {
                 @ViewData["Title"] = "Update Class";
             }
@@ -68,7 +79,7 @@ namespace MedicaWeb_MVC.Controllers
             var classes = await _classService.GetClassesAsync(spec);
             var totalClasses = (await _classService.GetClassesAsync(countSpec)).Count();
 
-            
+
 
             var model = new ListVM<ClassVM>
             {
@@ -80,8 +91,42 @@ namespace MedicaWeb_MVC.Controllers
             return View(model);
 
         }
-
         [HttpGet]
+        [Route("Classrooms/MyClass")]
+        [Authorize]
+        public async Task<IActionResult> MyClass([FromQuery] ClassParams param)
+        {
+            var user = await _accountService.GetUserByClaimsAsync(User);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            IEnumerable<Classroom> classes;
+            string url;
+            // Retrieve student's learning
+            if (User.IsInRole(AppCts.Roles.Student))
+            {
+                classes = await _orderService.GetMyLearningByStudentId(user.Id, param.ClassroomStatus);
+                url = "~/Views/Classrooms/MyLearning.cshtml";
+            }
+            // retrieve lecturer's classes
+            else
+            {
+                param.LecturerId = user.Id;
+                var spec = new ClassSpecification(param);
+                classes = await _classService.GetClassesAsync(spec);
+                url = "~/Views/Classrooms/MyClass.cshtml";
+            }
+
+            var model = new MyLearningVM
+            {
+                Classes = _mapper.Map<IEnumerable<ClassVM>>(classes),
+                SelectedStatus = param.ClassroomStatus
+            };
+            return View(url, model);
+        }
+        [HttpGet]
+        [Authorize(Roles = AppCts.Roles.Employee)]
         public async Task<IActionResult> Upsert(int? id, int courseId)
         {
             ViewData["LecturerIds"] = new SelectList(
@@ -102,17 +147,18 @@ namespace MedicaWeb_MVC.Controllers
                 TempData["IsUpdate"] = true;
             }
 
-            return RedirectToAction(nameof(Index), new {CourseId = courseId});
+            return RedirectToAction(nameof(Index), new { CourseId = courseId });
         }
         [HttpPost]
+        [Authorize(Roles = AppCts.Roles.Employee)]
         public async Task<IActionResult> Upsert(ClassUpsertVM classUpsertVM)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
                     Classroom classroom;
-                    if(classUpsertVM.Id == 0)
+                    if (classUpsertVM.Id == 0)
                     {
                         classroom = _mapper.Map<Classroom>(classUpsertVM);
                         await _classService.CreateClassAsync(classroom);
@@ -131,11 +177,12 @@ namespace MedicaWeb_MVC.Controllers
                     TempData["error"] = "Failed to update this class due to an unexpected error.";
                     Console.WriteLine(ex);
                 }
-                return RedirectToAction(nameof(Index), new { CourseId = classUpsertVM.CourseId});
+                return RedirectToAction(nameof(Index), new { CourseId = classUpsertVM.CourseId });
             }
             return RedirectToAction(nameof(Index), new { CourseId = classUpsertVM.CourseId });
         }
 
+        [Authorize(Roles = AppCts.Roles.Employee)]
         public async Task<IActionResult> Delete(int id, int courseId)
         {
             try
@@ -143,7 +190,7 @@ namespace MedicaWeb_MVC.Controllers
                 await _classService.DeleteClassAsync(id);
                 TempData["success"] = "Successfully delete this class";
             }
-            catch(KeyNotFoundException e)
+            catch (KeyNotFoundException e)
             {
                 TempData["error"] = "Class not found. Please check again.";
                 Console.WriteLine(e);
@@ -163,25 +210,21 @@ namespace MedicaWeb_MVC.Controllers
             return RedirectToAction(nameof(Index), new { courseId = courseId });
         }
 
-        //[HttpGet("details/{id}")]
-        //public async Task<IActionResult> Details(int id)
-        //{
-        //    var specification = new ClassroomDetailsSpecification(id);
-        //    var classroom = await _unitOfWork.Repository<Classroom>().GetEntityWithSpec(specification);
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> Details(int id)
+        {
+            var classroom = await _classService.GetClassByIdAsync(id);
 
-        //    if (classroom == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (classroom == null)
+            {
+                return NotFound();
+            }
+            var classVM = _mapper.Map<ClassVM>(classroom);
+            //classVM.Students = (IEnumerable<StudentVM>)classroom.OrderDetails.Select(od => od.Order.Student).ToList();
 
-        //    var viewModel = new ClassDetailsVM
-        //    {
-        //        Classroom = classroom,
-        //        Course = classroom.Course
-        //    };
-
-        //    return View(viewModel);
-        //}
+            return View(classVM);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

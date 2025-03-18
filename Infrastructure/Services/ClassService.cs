@@ -31,7 +31,7 @@ namespace Infrastructure.Services
 
         public async Task CreateClassAsync(Classroom classroom)
         {
-            _unitOfWork.Repository<Classroom>().Add(classroom); 
+            _unitOfWork.Repository<Classroom>().Add(classroom);
             await _unitOfWork.CompleteAsync();
         }
 
@@ -40,7 +40,7 @@ namespace Infrastructure.Services
             var classroom = await GetClassByIdAsync(id);
             if (classroom == null)
                 throw new KeyNotFoundException("This classroom does not exist");
-            if(classroom.OrderDetails != null && classroom.OrderDetails.Count > 0)
+            if (classroom.OrderDetails != null && classroom.OrderDetails.Count > 0)
                 throw new InvalidOperationException("Deletion failed: This class cannot be deleted because there are enrolled students");
             classroom.Status = ClassroomStatus.Cancelled;
             _unitOfWork.Repository<Classroom>().Update(classroom);
@@ -55,7 +55,19 @@ namespace Infrastructure.Services
         public async Task<Classroom> GetClassByIdAsync(int id)
         {
             var spec = new ClassSpecification(id);
-            return await _unitOfWork.Repository<Classroom>().GetEntityWithSpec(spec);
+            var classroom = await _unitOfWork.Repository<Classroom>().GetEntityWithSpec(spec);
+            if (classroom.Comments != null && classroom.Comments.Any())
+            {
+                classroom.Comments = classroom.Comments
+                    .Where(c => c.SrcComment == null)
+                    .OrderByDescending(c => c.CreatedAt)
+                    .ToList();
+            }
+            else
+            {
+                classroom.Comments = new List<Comment>();
+            }
+            return classroom;
         }
 
         public async Task<IEnumerable<Classroom>> GetClassesAsync(ISpecification<Classroom> spec)

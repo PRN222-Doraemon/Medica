@@ -1,18 +1,128 @@
-﻿@using MedicaWeb_MVC.ViewModels
-@model ClassDetailsVM
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <img src="@Model.Course.ImgUrl" alt="Course Image" class="img-fluid">
-            <p><strong>Max Participants:</strong> @Model.Classroom.MaxParticipant students</p>
-            <p><strong>Created by:</strong> @string.Concat(Model.Classroom.Lecturer.LastName, " ", Model.Classroom.Lecturer.FirstName)</p>
-            <p><strong>Last Updated:</strong> @Model.Classroom.UpdatedAt.ToString("MM/dd/yyyy")</p>
-            <p><strong>Duration:</strong> @Model.Course.Duration hours</p>
+﻿@using MedicaWeb_MVC.ViewModels.Classes
+@model ClassVM
+
+<div class="class-container text-grey border border-secondary-subtle">
+    <div class="mb-3">
+        <a class="btn btn-outline-warning" asp-controller="Classrooms" asp-action="MyClass">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+    </div>
+    <div class="d-flex align-items-center mb-4">
+        <h1 class="me-3 mb-0 text-orange">@Model.Course.Name</h1>
+        <span
+            class="badge text-bg-@(Model.Mode == ClassroomMode.Online ? "success" : "body-secondary")">@Model.Mode</span>
+    </div>
+    <p class="text-grey">@Model.Course.Description</p>
+    <p class="text-grey">Total students: @Model.Students.Count() / @Model.MaxParticipant</p>
+    <p>@("Start Date: " + Model.StartDate + " - End Date: " + Model.EndDate)</p>
+
+    <!-- nav bar >-->
+    <div class="nav-tabs">
+        <a href="#" class="nav-item active" data-tab="students">
+            <i class="bi bi-people me-2"></i>
+            Students
+        </a>
+        <a href="#" class="nav-item" data-tab="resources">
+            <i class="bi bi-book me-2"></i>
+            Resource
+        </a>
+        <a href="#" class="nav-item" data-tab="qa">
+            <i class="bi bi-question-circle me-2"></i>
+            Q&A
+        </a>
+    </div>
+
+    <!-- tab content -->
+    <div id="tab-content">
+        <div class="tab-pane active" id="students-tab">
+            @await Html.PartialAsync("~/Views/Classrooms/PartialViews/_StudentsList.cshtml", Model.Students)
         </div>
-        <div class="col-md-8">
-            <h1>@Model.Course.Name</h1>
-            <p>@Model.Course.Description</p>
+        <div class="tab-pane" id="resources-tab">
+            @await Html.PartialAsync("~/Views/Courses/PartialViews/_CourseContent.cshtml", Model.Course)
+        </div>
+        <div class="tab-pane" id="qa-tab">
+            @await Html.PartialAsync("PartialViews/_CommentsList", Tuple.Create(Model.Comments, Model.Id))
         </div>
     </div>
 </div>
 
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const tabs = document.querySelectorAll(".nav-item");
+            const tabPanes = document.querySelectorAll(".tab-pane");
+
+            // Lấy tab active từ localStorage hoặc mặc định là "students"
+            let activeTab = localStorage.getItem("activeTab") || "students";
+            setActiveTab(activeTab);
+
+            // Gán sự kiện click cho mỗi tab
+            tabs.forEach(tab => {
+                tab.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    let selectedTab = this.getAttribute("data-tab");
+
+                    // Cập nhật trạng thái active
+                    setActiveTab(selectedTab);
+
+                    // Lưu vào localStorage để nhớ lần sau
+                    localStorage.setItem("activeTab", selectedTab);
+                });
+            });
+
+            function setActiveTab(tabName) {
+                tabs.forEach(tab => tab.classList.remove("active"));
+                document.querySelector(`.nav-item[data-tab="${tabName}"]`)?.classList.add("active");
+
+                tabPanes.forEach(pane => pane.classList.remove("active"));
+                document.getElementById(`${tabName}-tab`).classList.add("active");
+            }
+        });
+
+        $(document).ready(function () {
+
+            // Toggle replies container 
+            $(document).on('click', '.comments-count', function () {
+                console.log("comments-count clicked");
+                var target = $(this).data('target');
+                console.log("Toggle target:", target);
+                $(target).toggleClass('d-none');
+            });
+
+            $(document).on('click', '.reply-btn', function (e) {
+                e.preventDefault();
+                console.log("reply-btn clicked");
+                var parentId = $(this).data('parent-id');
+                var target = '#replyForm-' + parentId;
+                console.log("Toggle target:", target);
+                $(target).toggleClass('d-none');
+            });
+
+            $(document).on('click', '.cancel-reply', function () {
+                console.log("cancel-reply clicked");
+                $(this).closest('.reply-form').addClass('d-none');
+            });
+
+            // Show more/less comments functionality
+            $('#showMoreBtn').click(function () {
+                $('.question-item:hidden').slice(0, @AppCts.Display.MAX_VISIBLE_COMMENTS).slideDown();
+                if ($('.question-item:hidden').length == 0) {
+                    $('#showMoreBtn').addClass('d-none');
+                    $('#seeLessBtn').removeClass('d-none');
+                }
+            });
+
+            $('#seeLessBtn').click(function () {
+                $('.question-item').slice(@AppCts.Display.MAX_VISIBLE_COMMENTS).slideUp();
+                $('#seeLessBtn').addClass('d-none');
+                $('#showMoreBtn').removeClass('d-none');
+            });
+
+            // Show new question modal
+            $('.btn-orange:contains("New question")').click(function () {
+                $('#askQuestionModal').modal('show');
+            });
+        });
+    </script>
+}

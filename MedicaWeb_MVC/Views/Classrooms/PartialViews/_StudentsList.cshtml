@@ -1,0 +1,76 @@
+﻿@using MedicaWeb_MVC.ViewModels.User
+@model List<StudentVM>
+
+<div class="container mt-4">
+    <div class="student-table-container">
+        <table class="table table-hover">
+            <thead>
+                <tr class="table-header border-bottom">
+                    <th class="text-center text-green" width="5%">NO.</th>
+                    <th class="text-green" width="5%">ID</th>
+                    <th class="text-center text-green" width="20%">AVATAR</th>
+                    <th class="text-green" width="20%">FULLNAME</th>
+                    <th class="text-center text-green" width="20%">GRADE</th>
+                    <th class="text-center text-green" width="10%">ASSESSMENT</th>
+                    <th class="text-center text-green">ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var student = Model[i];
+                    <tr class="student-row align-middle">
+                        <td class="text-center">
+                            <span class="index-number">@(i + 1)</span>
+                        </td>
+
+                        <td>
+                            <div class="student-info text-center">
+                                <span class="index-number">@student.Id</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="avatar-container">
+                                @if (!string.IsNullOrEmpty(student.ImageUrl))
+                                {
+                                    <img src="@student.ImageUrl" alt="@student.FullName" class="student-avatar" />
+                                }
+                                else
+                                {
+                                    <div class="default-avatar">
+                                        <span>@(student.FullName.Substring(0, 1).ToUpper())</span>
+                                    </div>
+                                }
+                        </div>
+                    </td>
+                    <td>
+                        <div class="student-info">
+                            <h5 class="student-name">@student.FullName</h5>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="grade-display">
+                            <span class="grade-value">@student.Grade</span>
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div
+                            class="grade-badge @(student.Grade >= 8.0 ? "excellent" : student.Grade >= 7.0 ? "good" : student.Grade >= 5.0 ? "average" : "poor")">
+                            @(student.Grade >= 8.0 ? "Excellent" : student.Grade >= 7.0 ? "Good" : student.Grade >=
+                                                        5.0 ? "Average" : "Poor")
+                        </div>
+                    </td>
+                    <td class="text-center">
+                        <div class="action-buttons">
+                            <button class="btn btn-sm btn-outline-success ms-1" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                        </div>
+                    </td>
+
+                    </tr>
+                                }
+            </tbody>
+        </table>
+    </div>
+</div>

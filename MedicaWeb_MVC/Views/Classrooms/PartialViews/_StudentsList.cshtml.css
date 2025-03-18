@@ -1,0 +1,117 @@
+﻿.student-table-container {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    background-color: white;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+
+.table-header th {
+    padding: 15px;
+    border-bottom: none;
+}
+
+.student-row {
+    transition: all 0.2s ease;
+}
+
+.student-row:hover {
+    background-color: #f8f9ff;
+}
+
+
+.avatar-container {
+    display: flex;
+    justify-content: center;
+}
+
+.student-avatar, .default-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.default-avatar {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.student-info {
+    padding: 5px 0;
+}
+
+.student-name {
+    margin-bottom: 5px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.student-details {
+    display: flex;
+    align-items: center;
+}
+
+.grade-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.grade-value {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.grade-badge {
+    padding: 3px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+    min-width: 80px;
+    text-align: center;
+}
+
+.excellent {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.good {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.average {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.poor {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.action-buttons {
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .table-header th, .student-row td {
+        padding: 10px 5px;
+    }
+
+    .action-buttons .btn {
+        padding: 0.25rem 0.4rem;
+    }
+}
