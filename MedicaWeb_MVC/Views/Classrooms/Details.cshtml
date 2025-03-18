@@ -41,7 +41,7 @@
             @await Html.PartialAsync("~/Views/Courses/PartialViews/_CourseContent.cshtml", Model.Course)
         </div>
         <div class="tab-pane" id="qa-tab">
-            @await Html.PartialAsync("PartialViews/_CommentsList", Model.Comments)
+            @await Html.PartialAsync("PartialViews/_CommentsList", Tuple.Create(Model.Comments, Model.Id))
         </div>
     </div>
 </div>

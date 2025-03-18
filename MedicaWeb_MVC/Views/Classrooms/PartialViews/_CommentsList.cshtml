@@ -1,12 +1,12 @@
 @using MedicaWeb_MVC.ViewModels.Courses
 
-@model IEnumerable<CommentVM>
+@model Tuple<IEnumerable<CommentVM>, int>
 <!-- Page Header -->
 <div class="page-header">
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="mb-0 text-green">All questions in this course <span
-                    class="question-count">(@Model.Count())</span></h5>
+                    class="question-count">(@Model.Item1.Count())</span></h5>
             <button class="btn btn-orange btn-sm" data-bs-toggle="modal" data-bs-target="#askQuestionModal">
                 <i class="fas fa-plus me-1"></i>New question
             </button>
@@ -15,19 +15,27 @@
 </div>
 
 <!-- Comment form -->
-@await Html.PartialAsync("PartialViews/_CommentForm", new CommentCreateVM { ClassID = Model.First().ClassID })
+@await Html.PartialAsync("PartialViews/_CommentForm", new CommentCreateVM { ClassID = Model.Item2 })
 
 <!-- Comment List -->
 <div class="container mb-4">
     <!-- Question-->
-    @foreach (var comment in Model)
+    @if (Model != null && Model.Item1.Any())
     {
-        @await Html.PartialAsync("PartialViews/_Comment", comment)
+        @foreach (var comment in Model.Item1)
+        {
+            @await Html.PartialAsync("PartialViews/_Comment", comment)
+        }
     }
+    else
+    {
+        <div class="text-center text-muted">No comments yet.</div>
+    }
+
 </div>
 
 @* See more *@
-@if (Model.Count() > AppCts.Display.MAX_VISIBLE_COMMENTS)
+@if (Model != null && Model.Item1.Count() > AppCts.Display.MAX_VISIBLE_COMMENTS)
 {
     <div class="text-center mt-3">
         <a class="text-green" id="showMoreBtn"><i class="bi bi-chevron-down"></i> See more</a>

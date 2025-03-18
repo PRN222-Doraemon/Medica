@@ -44,7 +44,8 @@ namespace MedicaWeb_MVC.Extensions
                 // ==============================
 
                 config.CreateMap<Comment, CommentVM>()
-                .ForMember(dest => dest.UserName, u => u.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"));
+                .ForMember(dest => dest.UserName, u => u.MapFrom(src => $"{src.User.FirstName} {src.User.LastName}"))
+                .ForMember(dest => dest.UserImgUrl, u => u.MapFrom(src => $"{src.User.ImageUrl}"));
                 config.CreateMap<CommentCreateVM, Comment>();
 
                 config.CreateMap<Feedback, FeedbackVM>()
