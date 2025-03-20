@@ -50,5 +50,20 @@ namespace MedicaWeb_MVC.Controllers
 
             return Json(await _dashboardService.GetTotalCoursesChartData());
         }
+
+        public async Task<IActionResult> GetOrderStatusPieChartData()
+        {
+
+            return Json(await _dashboardService.GetOrderStatusPieChartData());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetOrderGrowthData(
+            [FromQuery] DateTime? startDate,
+            [FromQuery] DateTime? endDate
+        )
+        {
+            return Json(await _dashboardService.GetOrderGrowthData(startDate, endDate));
+        }
     }
 }
