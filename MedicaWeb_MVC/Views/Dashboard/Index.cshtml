@@ -137,6 +137,7 @@
 	<script src="~/js/charts/getTotalCoursesRadialChart.js"></script>
 	<script src="~/js/charts/getTotalUsersRadialChart.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 	<script>
 		let pieChart;
 		let lineChart;
@@ -144,12 +145,12 @@
 		// Initialize Pie Chart
 		function initPieChart(data) {
 			const pieOptions = {
-				series: data.values,
+				series: data.series,
 				chart: {
 					type: 'pie',
 					height: 300
 				},
-				labels: ['Paid', 'Failed'],
+				labels: data.labels,
 				colors: ['#00E396', '#FF4560'],
 				legend: {
 					position: 'bottom'
@@ -178,10 +179,10 @@
 			pieChart.render();
 
 			// Update summary text
-			const total = data.values.reduce((a, b) => a + b, 0);
+			const total = data.series.reduce((a, b) => a + b, 0);
 			document.getElementById('spanTotalOrdersCount').textContent = total;
-			document.getElementById('orderStatusSummary').textContent = 
-				`${data.values[0]} Paid · ${data.values[1]} Failed`;
+			document.getElementById('orderStatusSummary').textContent =
+				`${data.series[0]} Paid · ${data.series[1]} Failed`;
 		}
 
 		// Initialize Line Chart
@@ -247,12 +248,13 @@
 			toggleSpinner(true);
 
 			// Update Pie Chart
-			fetch('/Dashboard/GetOrderStatusData')
+			fetch('/Dashboard/GetOrderStatusPieChartData')
 				.then(response => response.json())
 				.then(data => {
 					if (pieChart) {
 						pieChart.updateOptions({
-							series: data.values
+							labels: data.labels,
+							series: data.series
 						});
 					} else {
 						initPieChart(data);
@@ -261,12 +263,12 @@
 				.finally(() => toggleSpinner(false));
 
 			// Update Line Chart
-			fetch('/Dashboard/GetOrderGrowthData')
+			fetch('/Dashboard/GetOrderGrowthLineData')
 				.then(response => response.json())
 				.then(data => {
 					if (lineChart) {
 						lineChart.updateOptions({
-							xaxis: { categories: data.categories },
+							xaxis: { categories: data.dates },
 							series: [{
 								data: data.series[0].data
 							}]

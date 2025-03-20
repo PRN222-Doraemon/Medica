@@ -16,7 +16,7 @@ namespace Core.Specifications.Orders
             : base(o =>
             (!orderParams.StudentID.HasValue || orderParams.StudentID == o.StudentId) &&
             (!orderParams.CourseID.HasValue || o.OrderDetails.Any(d => d.Classroom.CourseId == orderParams.CourseID)) &&
-            (string.IsNullOrEmpty(orderParams.Status) || orderParams.Status.ToLower().Equals(o.Status.ToString().ToLower())) &&
+            (!orderParams.Status.HasValue || orderParams.Status.Equals(o.Status)) &&
             (!orderParams.StartDate.HasValue || orderParams.StartDate <= o.OrderTime) &&
             (!orderParams.EndDate.HasValue || orderParams.EndDate >= o.OrderTime)
             )

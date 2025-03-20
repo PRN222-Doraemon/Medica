@@ -110,8 +110,8 @@ namespace Infrastructure.Services
         // Return the number of paid and failed orders
         public async Task<(int paidOrders, int failedOrders)> GetOrderStatusPieChartData()
         {
-            var specPaid = new OrderSpecification(new OrderParams() { Status = OrderStatus.Paid.ToString() });
-            var specFailed = new OrderSpecification(new OrderParams() { Status = OrderStatus.Cancelled.ToString() });
+            var specPaid = new OrderSpecification(new OrderParams() { Status = OrderStatus.Paid });
+            var specFailed = new OrderSpecification(new OrderParams() { Status = OrderStatus.Cancelled });
 
             var ordersPaid = await _unitOfWork.Repository<Order>().ListAsync(specPaid);
             var ordersFailed = await _unitOfWork.Repository<Order>().ListAsync(specFailed);
@@ -123,7 +123,7 @@ namespace Infrastructure.Services
         public async Task<IEnumerable<(DateTime date, int orderCount)>> GetOrderGrowthData(DateTime? startDate = null, DateTime? endDate = null)
         {
             // Default range is 1 month
-            startDate ??= DateTime.Now.AddMonths(-1);
+            startDate ??= DateTime.Now.AddMonths(-24);
             endDate ??= DateTime.Now;
 
             var spec = new OrderSpecification(new OrderParams()
