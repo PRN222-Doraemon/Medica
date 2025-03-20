@@ -76,7 +76,7 @@ namespace MedicaWeb_MVC.Controllers
                 Dates = orderData.Select(x => x.date.ToString("MMM yyyy")).ToList(), // get the date only
                 Series = new List<SeriesVM>()
                 {
-                    new SeriesVM()
+                    new SeriesVM()         // series[0]
                     {
                         Name = "Orders",
                         Data = orderData.Select(x => x.orderCount).ToList(), // Get the count only
