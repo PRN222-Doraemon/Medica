@@ -81,6 +81,52 @@
 			</div>
 		</div>
 
+		<!-- Line Chart -->
+		<div class="col-md-12 col-xl-8 mt-2">
+			<div class="card">
+				<div class="card-body">
+					<div class="">
+						<p class="text-muted mb-0">Order Growth Over Time</p>
+					</div>
+
+					<div id="orderGrowthChart"></div>
+
+					<div class="justify-content-center text-center chart-spinner" style="display:none">
+						<div class="spinner-border" role="status">
+							<span class="visually-hidden">Loading...</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Pie Chart -->
+		<div class="col-md-12 col-xl-4 mt-2">
+			<div class="card">
+				<div class="card-body">
+					<div class="">
+						<p class="text-muted mb-0">Orders Status</p>
+					</div>
+
+					<div id="ordersStatusPieChart"></div>
+
+					<div>
+						<h4 class="my-1">
+							<span id="spanTotalOrdersCount">0</span> Total Orders
+						</h4>
+					</div>
+					<p class="text-muted mt-3 mb-0" id="orderStatusSummary"></p>
+
+					<div class="justify-content-center text-center chart-spinner" style="display:none">
+						<div class="spinner-border" role="status">
+							<span class="visually-hidden">Loading...</span>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
 
 	</div>
 </div>
@@ -90,4 +136,156 @@
 	<script src="~/js/charts/getTotalFeedbacksRadialChart.js"></script>
 	<script src="~/js/charts/getTotalCoursesRadialChart.js"></script>
 	<script src="~/js/charts/getTotalUsersRadialChart.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+	<script>
+		let pieChart;
+		let lineChart;
+
+		// Initialize Pie Chart
+		function initPieChart(data) {
+			const pieOptions = {
+				series: data.series,
+				chart: {
+					type: 'pie',
+					height: 300
+				},
+				labels: data.labels,
+				colors: ['#00E396', '#FF4560'],
+				legend: {
+					position: 'bottom'
+				},
+				tooltip: {
+					y: {
+						formatter: function(val) {
+							return val + " orders"
+						}
+					}
+				},
+				responsive: [{
+					breakpoint: 480,
+					options: {
+						chart: {
+							width: 200
+						},
+						legend: {
+							position: 'bottom'
+						}
+					}
+				}]
+			};
+
+			pieChart = new ApexCharts(document.querySelector("#ordersStatusPieChart"), pieOptions);
+			pieChart.render();
+
+			// Update summary text
+			const total = data.series.reduce((a, b) => a + b, 0);
+			document.getElementById('spanTotalOrdersCount').textContent = total;
+			document.getElementById('orderStatusSummary').textContent =
+				`${data.series[0]} Paid · ${data.series[1]} Failed`;
+		}
+
+		// Initialize Line Chart
+		function initLineChart(data) {
+			const lineOptions = {
+				series: [{
+					name: 'Orders',
+					data: data.series[0].data
+				}],
+				chart: {
+					type: 'line',
+					height: 350,
+					toolbar: {
+						show: true
+					},
+					zoom: {
+						enabled: true
+					}
+				},
+				stroke: {
+					curve: 'smooth',
+					width: 3
+				},
+				xaxis: {
+					categories: data.categories,
+					title: {
+						text: 'Period'
+					}
+				},
+				yaxis: {
+					title: {
+						text: 'Number of Orders'
+					}
+				},
+				markers: {
+					size: 4
+				},
+				colors: ['#008FFB'],
+				tooltip: {
+					shared: true,
+					intersect: false,
+					y: {
+						formatter: function(val) {
+							return val + " orders"
+						}
+					}
+				}
+			};
+
+			lineChart = new ApexCharts(document.querySelector("#orderGrowthChart"), lineOptions);
+			lineChart.render();
+		}
+
+		// Function to show/hide loading spinner
+		function toggleSpinner(show) {
+			document.querySelectorAll('.chart-spinner').forEach(spinner => {
+				spinner.style.display = show ? 'block' : 'none';
+			});
+		}
+
+		// Update both charts
+		function updateCharts() {
+			toggleSpinner(true);
+
+			// Update Pie Chart
+			fetch('/Dashboard/GetOrderStatusPieChartData')
+				.then(response => response.json())
+				.then(data => {
+					if (pieChart) {
+						pieChart.updateOptions({
+							labels: data.labels,
+							series: data.series
+						});
+					} else {
+						initPieChart(data);
+					}
+				})
+				.finally(() => toggleSpinner(false));
+
+			// Update Line Chart
+			fetch('/Dashboard/GetOrderGrowthLineData')
+				.then(response => response.json())
+				.then(data => {
+					if (lineChart) {
+						lineChart.updateOptions({
+							xaxis: { categories: data.dates },
+							series: [{
+								data: data.series[0].data
+							}]
+						});
+					} else {
+						initLineChart(data);
+					}
+				})
+				.finally(() => toggleSpinner(false));
+		}
+
+		// Initial load
+		document.addEventListener('DOMContentLoaded', function() {
+			updateCharts();
+		});
+
+		// Refresh every 5 minutes
+		setInterval(updateCharts, 300000);
+	</script>
 }

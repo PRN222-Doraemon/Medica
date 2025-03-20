@@ -30,7 +30,7 @@ namespace Infrastructure.Services
         // === Methods
         // ==============================
 
-        public async Task<IEnumerable<Classroom>> GetMyLearningByStudentId(int studentId, ClassroomStatus? classroomStatus)
+        public async Task<IEnumerable<Classroom>> GetMyLearningByStudentIdAsync(int studentId, ClassroomStatus? classroomStatus)
         {
             var spec = new OrderSpecification(new OrderParams { StudentID = studentId });
             var orders = await _unitOfWork.Repository<Order>().ListAsync(spec);
@@ -90,7 +90,7 @@ namespace Infrastructure.Services
             return order;
         }
 
-        public async Task<Order> GetOrderByPaymentIntentId(string paymentIntentId)
+        public async Task<Order> GetOrderByPaymentIntentIdAsync(string paymentIntentId)
         {
             var spec = new OrderSpecification(paymentIntentId);
             return await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
