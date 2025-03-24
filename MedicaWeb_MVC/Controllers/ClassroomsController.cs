@@ -106,7 +106,7 @@ namespace MedicaWeb_MVC.Controllers
             // Retrieve student's learning
             if (User.IsInRole(AppCts.Roles.Student))
             {
-                classes = await _orderService.GetMyLearningByStudentId(user.Id, param.ClassroomStatus);
+                classes = await _orderService.GetMyLearningByStudentIdAsync(user.Id, param.ClassroomStatus);
                 url = "~/Views/Classrooms/MyLearning.cshtml";
             }
             // retrieve lecturer's classes

@@ -12,5 +12,7 @@ namespace Core.Interfaces.Services
         Task<RadialBarChartDto> GetTotalFeedbackRadialChartData();
         Task<RadialBarChartDto> GetTotalCoursesChartData();
         Task<RadialBarChartDto> GetRegisteredUserChartData();
+        Task<(int paidOrders, int failedOrders)> GetOrderStatusPieChartData();
+        Task<IEnumerable<(DateTime date, int orderCount)>> GetOrderGrowthData(DateTime? startDate = null, DateTime? endDate = null);
     }
 }

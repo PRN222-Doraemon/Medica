@@ -5,9 +5,9 @@ namespace Core.Interfaces.Services
 {
     public interface IOrderService
     {
-        Task<IEnumerable<Classroom>> GetMyLearningByStudentId(int studentId, ClassroomStatus? classStatus);
+        Task<IEnumerable<Classroom>> GetMyLearningByStudentIdAsync(int studentId, ClassroomStatus? classStatus);
         Task<Order> CreateOrderFromCartAsync(string paymentIntentId, int studentId);
-        Task<Order> GetOrderByPaymentIntentId(string paymentIntentId);
+        Task<Order> GetOrderByPaymentIntentIdAsync(string paymentIntentId);
         Task UpdateOrderStatusAsync(Order order, OrderStatus orderStatus);
     }
 }

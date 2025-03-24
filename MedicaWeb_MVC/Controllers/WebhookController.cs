@@ -109,7 +109,7 @@ namespace MedicaWeb_MVC.Controllers
             if (checkoutSession == null) return;
 
             var paymentIntentId = checkoutSession.PaymentIntentId;
-            var order = await _orderService.GetOrderByPaymentIntentId(paymentIntentId);
+            var order = await _orderService.GetOrderByPaymentIntentIdAsync(paymentIntentId);
             if (order == null) return;
 
             if (order.Status != OrderStatus.Paid)
@@ -124,7 +124,7 @@ namespace MedicaWeb_MVC.Controllers
             if (checkoutSession == null) return;
 
             var paymentIntentId = checkoutSession.PaymentIntentId;
-            var order = await _orderService.GetOrderByPaymentIntentId(paymentIntentId);
+            var order = await _orderService.GetOrderByPaymentIntentIdAsync(paymentIntentId);
             if (order == null) return;
 
             if (order.Status != OrderStatus.Cancelled)
