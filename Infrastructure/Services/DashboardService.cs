@@ -80,7 +80,7 @@ namespace Infrastructure.Services
                 Status = FeedbackStatus.Enabled
             });
 
-            var totalFeedback = await _feedbackService.GetAllFeedbacks(spec);
+            var totalFeedback = await _feedbackService.GetFeedbacks(spec);
 
             var countTotal = totalFeedback.Count();
             var countByCurrentMonth = totalFeedback.Count(f => currentMonthStartDate <= f.CreatedAt && f.CreatedAt <= DateTime.Now);

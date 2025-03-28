@@ -27,8 +27,11 @@ namespace Infrastructure.Services
         // ==============================
         // === Methods
         // ==============================k
-
-        public async Task<IEnumerable<Feedback>> GetAllFeedbacks(ISpecification<Feedback> spec)
+        public async Task<IEnumerable<Feedback>> GetAllFeedbacks()
+        {
+            return await _unitOfWork.Repository<Feedback>().ListAllAsync();
+        }
+        public async Task<IEnumerable<Feedback>> GetFeedbacks(ISpecification<Feedback> spec)
         {
             return await _unitOfWork.Repository<Feedback>().ListAsync(spec);
         }

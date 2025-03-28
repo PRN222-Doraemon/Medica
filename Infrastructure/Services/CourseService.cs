@@ -32,7 +32,7 @@ namespace Infrastructure.Services
         {
             var spec = new CourseSpecification(id);
             var course = await _unitOfWork.Repository<Course>().GetEntityWithSpec(spec);
-            if(course != null)
+            if (course != null)
             {
                 course.Feedbacks = course.Feedbacks.OrderByDescending(f => f.CreatedAt).ToList();
             }
@@ -48,6 +48,10 @@ namespace Infrastructure.Services
         {
             _unitOfWork.Repository<Course>().Update(course);
             await _unitOfWork.CompleteAsync();
+        }
+        public async Task<IEnumerable<Course>> GetAllCoursesAsync()
+        {
+            return await _unitOfWork.Repository<Course>().ListAllAsync();
         }
     }
 }
