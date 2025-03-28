@@ -21,5 +21,19 @@ namespace MedicaWeb_MVC.ViewModels.Classes
         public int CourseId { get; set; }
         [Required(ErrorMessage = "Lecturer is required.")]
         public int LecturerId { get; set; }
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var today = DateOnly.FromDateTime(DateTime.Today);
+
+            if (StartDate <= today)
+            {
+                yield return new ValidationResult("Start date must be greater than today.", new[] { nameof(StartDate) });
+            }
+
+            if (EndDate <= StartDate)
+            {
+                yield return new ValidationResult("End date must be greater than start date.", new[] { nameof(EndDate) });
+            }
+        }
     }
 }

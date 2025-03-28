@@ -44,7 +44,7 @@ namespace MedicaWeb_MVC.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Index([FromQuery] ClassParams classParams)
-        {
+        {           
             ViewData["LecturerIds"] = new SelectList(
                 await _lecturerService.GetLecturersAsync(),
                 "Id",
@@ -79,11 +79,25 @@ namespace MedicaWeb_MVC.Controllers
             var classes = await _classService.GetClassesAsync(spec);
             var totalClasses = (await _classService.GetClassesAsync(countSpec)).Count();
 
+            var classVMs = _mapper.Map<IEnumerable<ClassVM>>(classes);
 
-
+            // check if student is enrolled in class
+            var user = await _accountService.GetUserByClaimsAsync(User);
+            if (user != null)
+            {
+                var myClasses = await _orderService.GetMyLearningByStudentIdAsync(user.Id);               
+                foreach (var classVM in classVMs)
+                {
+                    if (myClasses.Any(c => c.Id == classVM.Id))
+                    {
+                        classVM.IsEnrolled = true;
+                    }
+                }
+            }
+            
             var model = new ListVM<ClassVM>
             {
-                Items = _mapper.Map<IEnumerable<ClassVM>>(classes),
+                Items = classVMs,
                 PagingInfo = new PagingVM { CurrentPage = classParams.Page, TotalItems = totalClasses },
                 SearchValue = new SearchbarVM { Controller = "LecturerClassroom", Action = "Index", SearchText = classParams.Search },
                 ClassroomStatus = classParams.ClassroomStatus

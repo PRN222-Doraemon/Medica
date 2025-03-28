@@ -30,5 +30,7 @@ namespace Core.Entities
         Inactive,
         [EnumMember(Value = "Pending")]
         Pending,
+        [EnumMember(Value = "Rejected")]
+        Rejected,
     }
 }

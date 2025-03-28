@@ -9,21 +9,21 @@ namespace Core.Specifications.Courses
         public CourseSpecification(CourseParams courseParam, bool applyPaging = true)
             : base(c => (string.IsNullOrEmpty(courseParam.Search) || c.Name.ToLower().Contains(courseParam.Search)) &&
             (!courseParam.CategoryID.HasValue || courseParam.CategoryID == c.CategoryID) &&
-            ((!courseParam.Status.HasValue && c.Status != CourseStatus.Inactive) || courseParam.Status == c.Status) &&
+            (!courseParam.Status.HasValue || courseParam.Status == c.Status) &&
             (!courseParam.CreatedByUserId.HasValue || courseParam.CreatedByUserId == c.CreatedByUserID))
         {
             AddInclude(x => x.Category);
             AddInclude(x => x.CreatedBy);
             AddCustomInclude(x => x.Include(c => c.CourseChapters)
                                     .ThenInclude(cc => cc.Resources));
-            
+
             AddCustomInclude(x => x.Include(c => c.Feedbacks)
                                     .ThenInclude(f => f.Student));
             AddCustomInclude(x => x.Include(c => c.Classrooms)
                                     .ThenInclude(f => f.OrderDetails));
             AddCustomInclude(x => x.Include(c => c.Classrooms)
                                     .ThenInclude(f => f.Lecturer));
-            AddOrderBy(x => x.Status);
+            AddOrderByDescending(x => x.CreatedAt);
             if (applyPaging)
             {
                 ApplyPaging(courseParam.PageSize * (courseParam.Page - 1),

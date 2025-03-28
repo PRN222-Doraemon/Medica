@@ -56,7 +56,7 @@ function appendCourseCard(course) {
         </div>
     `;
 
-    $("#courseList").append(cardHtml);
+    $("#courseList").prepend(cardHtml);
 }
 function updateCourseCard(course) {
     let card = $("#" + course.id);

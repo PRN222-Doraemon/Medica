@@ -168,7 +168,7 @@ namespace MedicaWeb_MVC.Controllers
                     return NotFound();
                 }
                 await _courseService.DeleteCourseAsync(id);
-                TempData["success"] = "Successfully deleted.";
+                TempData["success"] = "Successfully disable this course.";
             }
             catch (Exception ex)
             {
@@ -177,7 +177,30 @@ namespace MedicaWeb_MVC.Controllers
             ViewData["Categories"] = new SelectList(await _categoryService.GetAllCategories(), "Id", "Name");
             ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }
             );
-            return RedirectToAction(nameof(Index), id);
+            return RedirectToAction(nameof(Details), new {Id = id});
+        }
+
+        public async Task<IActionResult> Enable(int id)
+        {
+            try
+            {
+                var course = await _courseService.GetCourseByIdAsync(id);
+                if (course == null)
+                {
+                    return NotFound();
+                }
+                course.Status = CourseStatus.Active;
+                await _courseService.UpdateCourseAsync(course);
+                TempData["success"] = "Successfully enable this course.";
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = ex.Message;
+            }
+            ViewData["Categories"] = new SelectList(await _categoryService.GetAllCategories(), "Id", "Name");
+            ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }
+            );
+            return RedirectToAction(nameof(Details), new { Id = id });
         }
     }
 }

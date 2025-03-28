@@ -21,6 +21,7 @@ namespace MedicaWeb_MVC.ViewModels.Classes
         public IEnumerable<StudentVM> Students { get; set; } = new List<StudentVM>();
         public int TotalEnrolls => OrderDetails.Count();
         public ClassroomStatus Status { get; set; }
+        public bool IsEnrolled { get; set; } = false;
 
         public ClassroomStatus ComputedStatus
         {
