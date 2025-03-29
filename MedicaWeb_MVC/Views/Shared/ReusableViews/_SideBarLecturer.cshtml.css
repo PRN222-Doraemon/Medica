@@ -1,3 +1,20 @@
+#sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+
+#sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+#sidebar::-webkit-scrollbar-thumb {
+  background: #FFD0AE;
+  border-radius: 10px;
+}
+
+#sidebar::-webkit-scrollbar-thumb:hover {
+  background: #FF9955;
+}
+
 /* Default height for large screens (100vh for full height) */
 #sidebar {
   height: 100%; /* Full viewport height */

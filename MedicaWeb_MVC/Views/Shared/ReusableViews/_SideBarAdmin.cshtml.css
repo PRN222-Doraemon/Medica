@@ -1,18 +1,36 @@
-﻿/* Default height for large screens (100vh for full height) */
-#sidebar {
+﻿#sidebar::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  #sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  #sidebar::-webkit-scrollbar-thumb {
+    background: #FFD0AE;
+    border-radius: 10px;
+  }
+  
+  #sidebar::-webkit-scrollbar-thumb:hover {
+    background: #FF9955;
+  }
+  
+  /* Default height for large screens (100vh for full height) */
+  #sidebar {
     height: 100%; /* Full viewport height */
-}
-
-/* For smaller screens (like mobile), make it auto to fit content */
-@media (max-width: 768px) {
+  }
+  
+  /* For smaller screens (like mobile), make it auto to fit content */
+  @media (max-width: 768px) {
     #sidebar {
-        height: auto; /* Adjust based on content */
+      height: auto; /* Adjust based on content */
     }
-}
-
-/* You can also target other screen sizes as needed */
-@media (max-width: 576px) {
+  }
+  
+  /* You can also target other screen sizes as needed */
+  @media (max-width: 576px) {
     #sidebar {
-        height: auto; /* Again, adjust height as per content */
+      height: auto; /* Again, adjust height as per content */
     }
-}
+  }
+  

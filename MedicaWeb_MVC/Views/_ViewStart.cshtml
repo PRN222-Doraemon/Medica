@@ -3,11 +3,12 @@
 	{
 		Layout = "_LayoutAdmin";
 	}
-	else if (User.IsInRole(AppCts.Roles.Lecturer))
+	else if (User.IsInRole(AppCts.Roles.Lecturer) || User.IsInRole(AppCts.Roles.Employee))
 	{
 		Layout = "_LayoutLecturer";
-	} 
-	else {
+	}
+	else
+	{
 		Layout = "_Layout";
 	}
 
