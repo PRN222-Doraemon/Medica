@@ -28,5 +28,9 @@ namespace Core.Entities
         Active,
         [EnumMember(Value = "Inactive")]
         Inactive,
+        [EnumMember(Value = "Pending")]
+        Pending,
+        [EnumMember(Value = "Rejected")]
+        Rejected,
     }
 }

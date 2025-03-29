@@ -2,6 +2,7 @@
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications;
+using Core.Specifications.Classes;
 using Core.Specifications.Courses;
 
 namespace Infrastructure.Services
@@ -23,6 +24,10 @@ namespace Infrastructure.Services
         public async Task DeleteCourseAsync(int id)
         {
             var course = await GetCourseByIdAsync(id);
+            var classSpec = new ClassSpecification(new ClassParams { CourseId = course.Id });
+            var classes = await _unitOfWork.Repository<Classroom>().ListAsync(classSpec);
+            if (classes.Any(c => c.Status == ClassroomStatus.Active && c.StartDate >= DateOnly.FromDateTime(DateTime.Today)))
+                throw new InvalidOperationException("You cannot disable this course as there are still ongoing or upcoming classes.");
             course.Status = CourseStatus.Inactive;
             _unitOfWork.Repository<Course>().Update(course);
             await _unitOfWork.CompleteAsync();
@@ -32,7 +37,7 @@ namespace Infrastructure.Services
         {
             var spec = new CourseSpecification(id);
             var course = await _unitOfWork.Repository<Course>().GetEntityWithSpec(spec);
-            if(course != null)
+            if (course != null)
             {
                 course.Feedbacks = course.Feedbacks.OrderByDescending(f => f.CreatedAt).ToList();
             }
@@ -48,6 +53,10 @@ namespace Infrastructure.Services
         {
             _unitOfWork.Repository<Course>().Update(course);
             await _unitOfWork.CompleteAsync();
+        }
+        public async Task<IEnumerable<Course>> GetAllCoursesAsync()
+        {
+            return await _unitOfWork.Repository<Course>().ListAllAsync();
         }
     }
 }

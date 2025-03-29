@@ -33,7 +33,7 @@
                     </div>
                 </div>
 
-                @if (User.IsInRole(AppCts.Roles.Employee))
+                @if (User.IsInRole(AppCts.Roles.Employee) && Course?.Status == CourseStatus.Active)
                 {
                     <button type="button" class="btn btn-green" data-bs-toggle="modal" data-bs-target="#createClassModal">
                         <i class="bi bi-plus-circle me-2"></i> Create Class

@@ -60,7 +60,7 @@
     padding: 15px;
     width: 70%;
     border-radius: 8px;
-    box-shadow: 0 4px 12px var(--green-dark-color);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 .search-bar input,

@@ -30,7 +30,7 @@ namespace Infrastructure.Services
         // === Methods
         // ==============================
 
-        public async Task<IEnumerable<Classroom>> GetMyLearningByStudentIdAsync(int studentId, ClassroomStatus? classroomStatus)
+        public async Task<IEnumerable<Classroom>> GetMyLearningByStudentIdAsync(int studentId, ClassroomStatus? classroomStatus = null)
         {
             var spec = new OrderSpecification(new OrderParams { StudentID = studentId });
             var orders = await _unitOfWork.Repository<Order>().ListAsync(spec);

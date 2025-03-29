@@ -44,7 +44,7 @@ namespace MedicaWeb_MVC.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Index([FromQuery] ClassParams classParams)
-        {
+        {           
             ViewData["LecturerIds"] = new SelectList(
                 await _lecturerService.GetLecturersAsync(),
                 "Id",
@@ -54,7 +54,7 @@ namespace MedicaWeb_MVC.Controllers
             bool isUpdate = TempData["IsUpdate"] != null && (bool)TempData["IsUpdate"];
             ClassUpsertVM classroom = TempData["Classroom"] != null
                 ? JsonConvert.DeserializeObject<ClassUpsertVM>(TempData["Classroom"].ToString())
-                : null;
+                : new ClassUpsertVM { StartDate = DateOnly.FromDateTime(DateTime.Today), EndDate = DateOnly.FromDateTime(DateTime.Today) };
 
             ViewData["IsUpdate"] = isUpdate;
             ViewData["Classroom"] = classroom;
@@ -79,11 +79,25 @@ namespace MedicaWeb_MVC.Controllers
             var classes = await _classService.GetClassesAsync(spec);
             var totalClasses = (await _classService.GetClassesAsync(countSpec)).Count();
 
+            var classVMs = _mapper.Map<IEnumerable<ClassVM>>(classes);
 
-
+            // check if student is enrolled in class
+            var user = await _accountService.GetUserByClaimsAsync(User);
+            if (user != null)
+            {
+                var myClasses = await _orderService.GetMyLearningByStudentIdAsync(user.Id);               
+                foreach (var classVM in classVMs)
+                {
+                    if (myClasses.Any(c => c.Id == classVM.Id))
+                    {
+                        classVM.IsEnrolled = true;
+                    }
+                }
+            }
+            
             var model = new ListVM<ClassVM>
             {
-                Items = _mapper.Map<IEnumerable<ClassVM>>(classes),
+                Items = classVMs,
                 PagingInfo = new PagingVM { CurrentPage = classParams.Page, TotalItems = totalClasses },
                 SearchValue = new SearchbarVM { Controller = "LecturerClassroom", Action = "Index", SearchText = classParams.Search },
                 ClassroomStatus = classParams.ClassroomStatus
@@ -143,16 +157,26 @@ namespace MedicaWeb_MVC.Controllers
                 {
                     return NotFound();
                 }
-                TempData["Classroom"] = JsonConvert.SerializeObject(_mapper.Map<ClassUpsertVM>(classroom));
+                var classUpsertVM = _mapper.Map<ClassUpsertVM>(classroom);
+                TempData["Classroom"] = JsonConvert.SerializeObject(classUpsertVM);
                 TempData["IsUpdate"] = true;
             }
 
-            return RedirectToAction(nameof(Index), new { CourseId = courseId });
+                return RedirectToAction(nameof(Index), new { CourseId = courseId });
         }
         [HttpPost]
         [Authorize(Roles = AppCts.Roles.Employee)]
         public async Task<IActionResult> Upsert(ClassUpsertVM classUpsertVM)
         {
+            //if (classUpsertVM.StartDate <= DateOnly.FromDateTime(DateTime.Today))
+            //{
+            //    ModelState.AddModelError(nameof(classUpsertVM.StartDate), "Start date must be greater than today.");
+            //}
+
+            //if (classUpsertVM.EndDate <= classUpsertVM.StartDate)
+            //{
+            //    ModelState.AddModelError(nameof(classUpsertVM.EndDate), "End date must be greater than start date.");
+            //}
             if (ModelState.IsValid)
             {
                 try
@@ -179,6 +203,8 @@ namespace MedicaWeb_MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index), new { CourseId = classUpsertVM.CourseId });
             }
+            TempData["Classroom"] = JsonConvert.SerializeObject(classUpsertVM);
+            TempData["IsUpdate"] = true;
             return RedirectToAction(nameof(Index), new { CourseId = classUpsertVM.CourseId });
         }
 

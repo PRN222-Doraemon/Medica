@@ -7,7 +7,8 @@
 @{
 	var Course = ViewData["Course"] as CourseVM;
 	var Lecturers = ViewData["Lecturers"] as IEnumerable<LecturerVM>;
-	var ClassUpsertVM = ViewData["Classroom"] as ClassUpsertVM ?? new ClassUpsertVM();
+	var ClassUpsertVM = ViewData["Classroom"] as ClassUpsertVM ?? 
+	new ClassUpsertVM() { StartDate = DateOnly.FromDateTime(DateTime.Today), EndDate = DateOnly.FromDateTime(DateTime.Today) };
 	ClassUpsertVM.CourseId = Course.Id;
 	var filterButtonVM = new FilterButtonVM
 	{
