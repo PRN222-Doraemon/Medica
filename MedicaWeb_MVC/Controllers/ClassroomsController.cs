@@ -54,7 +54,7 @@ namespace MedicaWeb_MVC.Controllers
             bool isUpdate = TempData["IsUpdate"] != null && (bool)TempData["IsUpdate"];
             ClassUpsertVM classroom = TempData["Classroom"] != null
                 ? JsonConvert.DeserializeObject<ClassUpsertVM>(TempData["Classroom"].ToString())
-                : null;
+                : new ClassUpsertVM { StartDate = DateOnly.FromDateTime(DateTime.Today), EndDate = DateOnly.FromDateTime(DateTime.Today) };
 
             ViewData["IsUpdate"] = isUpdate;
             ViewData["Classroom"] = classroom;
@@ -157,16 +157,26 @@ namespace MedicaWeb_MVC.Controllers
                 {
                     return NotFound();
                 }
-                TempData["Classroom"] = JsonConvert.SerializeObject(_mapper.Map<ClassUpsertVM>(classroom));
+                var classUpsertVM = _mapper.Map<ClassUpsertVM>(classroom);
+                TempData["Classroom"] = JsonConvert.SerializeObject(classUpsertVM);
                 TempData["IsUpdate"] = true;
             }
 
-            return RedirectToAction(nameof(Index), new { CourseId = courseId });
+                return RedirectToAction(nameof(Index), new { CourseId = courseId });
         }
         [HttpPost]
         [Authorize(Roles = AppCts.Roles.Employee)]
         public async Task<IActionResult> Upsert(ClassUpsertVM classUpsertVM)
         {
+            //if (classUpsertVM.StartDate <= DateOnly.FromDateTime(DateTime.Today))
+            //{
+            //    ModelState.AddModelError(nameof(classUpsertVM.StartDate), "Start date must be greater than today.");
+            //}
+
+            //if (classUpsertVM.EndDate <= classUpsertVM.StartDate)
+            //{
+            //    ModelState.AddModelError(nameof(classUpsertVM.EndDate), "End date must be greater than start date.");
+            //}
             if (ModelState.IsValid)
             {
                 try
@@ -193,6 +203,8 @@ namespace MedicaWeb_MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index), new { CourseId = classUpsertVM.CourseId });
             }
+            TempData["Classroom"] = JsonConvert.SerializeObject(classUpsertVM);
+            TempData["IsUpdate"] = true;
             return RedirectToAction(nameof(Index), new { CourseId = classUpsertVM.CourseId });
         }
 

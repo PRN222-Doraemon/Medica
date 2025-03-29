@@ -27,19 +27,15 @@
 							<label asp-for="StartDate" class="form-label">
 								<i class="bi bi-calendar-event me-1"></i> Start Date
 							</label>
-							<input type="date" class="form-control" asp-for="StartDate"
-								value="@DateTime.Today.ToString("yyyy-MM-dd")"
-								min="@DateTime.Today.ToString("yyyy-MM-dd")" required aria-describedby="startDateHelp">
-							<span class="text-danger" asp-validation-for="StartDate"></span>
+							<input type="date" class="form-control" asp-for="StartDate" id="StartDate" />
+							<span class="text-danger fw-normal fs-6" id="StartDateError"></span>
 						</div>
 						<div class="col">
 							<label asp-for="EndDate" class="form-label">
 								<i class="bi bi-calendar-check me-1"></i> End Date
 							</label>
-							<input type="date" class="form-control" asp-for="EndDate"
-								value="@DateTime.Today.ToString("yyyy-MM-dd")"
-								min="@DateTime.Today.ToString("yyyy-MM-dd")" required aria-describedby="endDateHelp">
-							<span class="text-danger" asp-validation-for="EndDate"></span>
+							<input type="date" class="form-control" asp-for="EndDate" id="EndDate" />
+							<span class="text-danger fw-normal fs-6" id="EndDateError"></span>
 						</div>
 					</div>
 
@@ -106,10 +102,53 @@
 
 <script>
 	document.addEventListener("DOMContentLoaded", function () {
-		var isUpdate = @IsUpdate.ToString().ToLower();
+		var isUpdate = @Json.Serialize(IsUpdate);
 		if (isUpdate) {
 			var modal = new bootstrap.Modal(document.getElementById('createClassModal'));
 			modal.show();
 		}
+
+		// Lấy phần tử input
+		const startDateInput = document.getElementById("StartDate");
+		const endDateInput = document.getElementById("EndDate");
+		const startDateError = document.getElementById("StartDateError");
+		const endDateError = document.getElementById("EndDateError");
+
+		// Kiểm tra xem input có tồn tại không
+		if (startDateInput && endDateInput) {
+			startDateInput.addEventListener("change", validateDates);
+			endDateInput.addEventListener("change", validateDates);
+		} else {
+			console.error("StartDate or EndDate input not found!");
+		}
+
+		function validateDates() {
+			console.log("Change event triggered!");
+
+			// Lấy giá trị ngày
+			let startDateVal = startDateInput.value;
+			let endDateVal = endDateInput.value;
+
+			// Chuyển đổi sang đối tượng Date
+			let startDate = startDateVal ? new Date(startDateVal) : null;
+			let endDate = endDateVal ? new Date(endDateVal) : null;
+			let today = new Date();
+			today.setHours(0, 0, 0, 0); // Đặt giờ về 0 để chỉ so sánh ngày
+
+			// Xóa thông báo lỗi cũ
+			startDateError.textContent = "";
+			endDateError.textContent = "";
+
+			// Kiểm tra ngày bắt đầu
+			if (startDate && startDate <= today) {
+				startDateError.textContent = "Start date must be greater than today.";
+			}
+
+			// Kiểm tra ngày kết thúc
+			if (startDate && endDate && endDate <= startDate) {
+				endDateError.textContent = "End date must be greater than start date.";
+			}
+		}
 	});
 </script>
+

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MedicaWeb_MVC.ViewModels.Classes
 {
-    public class ClassUpsertVM
+    public class ClassUpsertVM : IValidatableObject
     {
         public int Id { get; set; }
         public ClassroomMode Mode { get; set; }
