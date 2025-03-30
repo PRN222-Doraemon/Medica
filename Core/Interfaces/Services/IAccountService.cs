@@ -15,5 +15,7 @@ namespace Core.Interfaces.Services
         Task<bool> RegisterAsync(ApplicationUser user, string password, string role);
         bool IsSignedIn(ClaimsPrincipal principal);
         Task LogoutAsync();
+        Task<bool> UpdateUserAsync(ApplicationUser user);
+        Task<bool> ChangePasswordAsync(ApplicationUser user, string currentPassword, string newPassword);
     }
 }
