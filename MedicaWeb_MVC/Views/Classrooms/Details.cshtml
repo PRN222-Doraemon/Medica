@@ -13,6 +13,14 @@
             class="badge text-bg-@(Model.Mode == ClassroomMode.Online ? "success" : "body-secondary")">@Model.Mode</span>
     </div>
     <p class="text-grey">@Model.Course.Description</p>
+    <div class="d-flex align-items-center mb-4">
+        <span class="me-2">Lecturers:</span>
+        <div class="d-flex align-items-center">
+            <img src="@Model.Lecturer.ImageUrl" alt="Lecturer" class="rounded-circle me-1"
+                style="width: 30px; height: 30px;">
+            <span class="me-2 text-green fw-medium">@Model.Lecturer.FullName</span>
+        </div>
+    </div>
     <p class="text-grey">Total students: @Model.Students.Count() / @Model.MaxParticipant</p>
     <p>@("Start Date: " + Model.StartDate + " - End Date: " + Model.EndDate)</p>
 

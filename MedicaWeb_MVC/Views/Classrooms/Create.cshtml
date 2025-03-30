@@ -9,8 +9,8 @@
 <div class="modal fade" id="createClassModal" tabindex="-1" aria-labelledby="createClassModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content shadow-lg">
-			<div class="modal-header bg-yellow-gradient text-white">
-				<h5 class="modal-title text-orange" id="createClassModalLabel">
+			<div class="modal-header bg-green text-white">
+				<h5 class="modal-title text-white" id="createClassModalLabel">
 					<i class="bi bi-pencil-square me-2"></i> @ViewData["Title"]
 				</h5>
 				<button type="button" class="btn-close btn-close-danger" data-bs-dismiss="modal"
@@ -108,13 +108,11 @@
 			modal.show();
 		}
 
-		// Lấy phần tử input
 		const startDateInput = document.getElementById("StartDate");
 		const endDateInput = document.getElementById("EndDate");
 		const startDateError = document.getElementById("StartDateError");
 		const endDateError = document.getElementById("EndDateError");
 
-		// Kiểm tra xem input có tồn tại không
 		if (startDateInput && endDateInput) {
 			startDateInput.addEventListener("change", validateDates);
 			endDateInput.addEventListener("change", validateDates);
@@ -125,30 +123,24 @@
 		function validateDates() {
 			console.log("Change event triggered!");
 
-			// Lấy giá trị ngày
 			let startDateVal = startDateInput.value;
 			let endDateVal = endDateInput.value;
 
-			// Chuyển đổi sang đối tượng Date
 			let startDate = startDateVal ? new Date(startDateVal) : null;
 			let endDate = endDateVal ? new Date(endDateVal) : null;
 			let today = new Date();
-			today.setHours(0, 0, 0, 0); // Đặt giờ về 0 để chỉ so sánh ngày
+			today.setHours(0, 0, 0, 0);
 
-			// Xóa thông báo lỗi cũ
 			startDateError.textContent = "";
 			endDateError.textContent = "";
 
-			// Kiểm tra ngày bắt đầu
 			if (startDate && startDate <= today) {
 				startDateError.textContent = "Start date must be greater than today.";
 			}
 
-			// Kiểm tra ngày kết thúc
 			if (startDate && endDate && endDate <= startDate) {
 				endDateError.textContent = "End date must be greater than start date.";
 			}
 		}
 	});
 </script>
-

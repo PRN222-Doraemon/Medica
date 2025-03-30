@@ -75,14 +75,16 @@
 						<a class="btn btn-orange w-100" asp-action="Details" asp-controller="Classrooms"
 							asp-route-id="@Model.Id">Already Enrolled</a>
 					}
-					else if (Model.ComputedStatus == ClassroomStatus.Upcoming)
+					else if (Model.ComputedStatus == ClassroomStatus.Upcoming && Model.Students.Count() <
+					Model.MaxParticipant)
 					{
 						<!-- Student only Enroll Upcoming classes -->
 						<button class="btn btn-orange-outline w-100" onclick="addClassToCart(@Model.Id)">Add to cart</button>
 						<button class="btn btn-orange w-100">Enroll</button>
 					}
 				}
-				else if (!User.Identity.IsAuthenticated && Model.ComputedStatus == ClassroomStatus.Upcoming)
+				else if (!User.Identity.IsAuthenticated && Model.ComputedStatus == ClassroomStatus.Upcoming &&
+				Model.Students.Count() < Model.MaxParticipant)
 				{
 					<button class="btn btn-orange-outline w-100" onclick="addClassToCart(@Model.Id)">Add to cart</button>
 					<button class="btn btn-orange w-100">Enroll</button>

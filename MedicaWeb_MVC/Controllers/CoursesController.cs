@@ -46,10 +46,16 @@ namespace MedicaWeb_MVC.Controllers
                 new List<string> { CourseStatus.Active.ToString(), CourseStatus.Inactive.ToString() },
                 selectedValue: courseParams.Status?.ToString() ?? CourseStatus.Active.ToString());
 
+            if (!User.Identity.IsAuthenticated || User.IsInRole(AppCts.Roles.Student))
+            {
+                courseParams.Status = CourseStatus.Active;
+            }
+
             var spec = new CourseSpecification(courseParams);
             var countSpec = new CourseSpecification(courseParams, false);
             var courses = await _courseService.GetCoursesAsync(spec);
             var totalCourses = (await _courseService.GetCoursesAsync(countSpec)).Count();
+
 
             var model = new ListVM<CourseVM>
             {
@@ -143,7 +149,7 @@ namespace MedicaWeb_MVC.Controllers
                         await _hub.Clients.All.SendAsync("ReceiveUpsert", _mapper.Map<CourseVM>(course), true);
                         TempData["success"] = "Successfully updated a new course!";
                     }
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Details), new { id = course.Id });
                 }
                 catch (Exception ex)
                 {
@@ -177,7 +183,7 @@ namespace MedicaWeb_MVC.Controllers
             ViewData["Categories"] = new SelectList(await _categoryService.GetAllCategories(), "Id", "Name");
             ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }
             );
-            return RedirectToAction(nameof(Details), new {Id = id});
+            return RedirectToAction(nameof(Details), new { Id = id });
         }
 
         public async Task<IActionResult> Enable(int id)
