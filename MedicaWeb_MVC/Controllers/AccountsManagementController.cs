@@ -107,7 +107,10 @@ namespace MedicaWeb_MVC.Controllers
             var roleName = roles.FirstOrDefault() ?? "No Role";
 
             ViewBag.Roles = await _roleManager.Roles.ToListAsync();
-            return View(_mapper.Map<ApplicationUser, AccountVM>(user));
+            var accountVm = _mapper.Map<ApplicationUser, AccountVM>(user);
+            accountVm.RoleName = roleName;
+
+            return View(accountVm);
         }
 
         [HttpPost]
