@@ -3,6 +3,7 @@ using Core.Entities;
 using Core.Entities.Identity;
 using MedicaWeb_MVC.ViewModels.Classes;
 using MedicaWeb_MVC.ViewModels.Courses;
+using MedicaWeb_MVC.ViewModels.News;
 using MedicaWeb_MVC.ViewModels.Orders;
 using MedicaWeb_MVC.ViewModels.User;
 using Resource = Core.Entities.Resource;
@@ -83,6 +84,16 @@ namespace MedicaWeb_MVC.Extensions
                    .ForMember(dest => dest.Duration, opt => opt.Ignore())
                    .ForMember(dest => dest.Mode, opt => opt.Ignore())
                    .ForMember(dest => dest.Description, opt => opt.Ignore())
+                   .ReverseMap();
+
+                // ==============================
+                // === News 
+                // ==============================
+
+                config.CreateMap<News, NewsVM>()
+                   .ReverseMap();
+
+                config.CreateMap<News, NewsUpsertVM>()
                    .ReverseMap();
             });
         }
