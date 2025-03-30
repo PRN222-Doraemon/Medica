@@ -1,5 +1,3 @@
-using Core.Entities;
-
 namespace Core.Specifications.News
 {
     public class NewsSpecification : BaseSpecification<Entities.News>
