@@ -1,10 +1,7 @@
 ﻿using Core.Entities;
 using Core.Interfaces.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Stripe;
-using Stripe.Checkout;
 
 namespace MedicaWeb_MVC.Controllers
 {

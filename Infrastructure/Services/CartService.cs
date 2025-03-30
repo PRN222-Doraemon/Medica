@@ -1,16 +1,8 @@
-﻿using Core.DTOs;
-using Core.Entities;
-using Core.Interfaces.Repos;
+﻿using Core.Entities;
 using Core.Interfaces.Services;
 using Core.Specifications.Classes;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Distributed;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {

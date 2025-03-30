@@ -2,7 +2,6 @@
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications;
-using Core.Specifications.Courses;
 using Core.Specifications.Feedbacks;
 
 namespace Infrastructure.Services

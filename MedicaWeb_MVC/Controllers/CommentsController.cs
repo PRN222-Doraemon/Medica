@@ -3,7 +3,6 @@ using Core.Entities;
 using Core.Interfaces.Services;
 using MedicaWeb_MVC.ViewModels.Courses;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace MedicaWeb_MVC.Controllers
 {

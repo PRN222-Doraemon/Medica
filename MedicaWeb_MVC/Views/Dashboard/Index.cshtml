@@ -8,7 +8,7 @@
 
 		<!-- Total Feedbacks -->
 		<div class="col-md-6 col-xl-4 mt-2">
-			<div class="card">
+			<div class="card shadow-lg">
 				<div class="card-body">
 					<div class="float-end mt-2">
 						<div id="totalFeedbacksRadialChart"></div>
@@ -33,7 +33,7 @@
 
 		<!-- Total Registered Users -->
 		<div class="col-md-6 col-xl-4 mt-2">
-			<div class="card">
+			<div class="card shadow-lg">
 				<div class="card-body">
 					<div class="float-end mt-2">
 						<div id="totalUsersRadialChart"></div>
@@ -58,7 +58,7 @@
 
 		<!-- Total Courses -->
 		<div class="col-md-6 col-xl-4 mt-2">
-			<div class="card">
+			<div class="card shadow-lg">
 				<div class="card-body">
 					<div class="float-end mt-2">
 						<div id="totalCoursesRadialChart"></div>
@@ -83,13 +83,27 @@
 
 		<!-- Line Chart -->
 		<div class="col-md-12 col-xl-8 mt-2">
-			<div class="card">
+			<div class="card shadow-lg">
 				<div class="card-body">
-					<div class="">
+					<div class="d-flex justify-content-between align-items-center mb-3">
 						<p class="text-muted mb-0">Order Growth Over Time</p>
+						<div class="d-flex gap-2">
+							<select class="form-select form-select-sm" id="dateRangeSelect" style="width: auto;">
+								<option value="180">Last 6 Months</option>
+								<option value="365">Last Year</option>
+								<option value="730">Last 2 Years</option>
+								<option value="custom">Custom Range</option>
+							</select>
+							<div id="customDateRange" class="d-none">
+								<input type="date" class="form-control form-control-sm" id="startDate" style="width: auto;">
+								<input type="date" class="form-control form-control-sm" id="endDate" style="width: auto;">
+							</div>
+						</div>
 					</div>
 
-					<div id="orderGrowthChart"></div>
+					<div style="position: relative; height: 350px;">
+						<canvas id="orderGrowthChart" style="width: 100%"></canvas>
+					</div>
 
 					<div class="justify-content-center text-center chart-spinner" style="display:none">
 						<div class="spinner-border" role="status">
@@ -102,13 +116,13 @@
 
 		<!-- Pie Chart -->
 		<div class="col-md-12 col-xl-4 mt-2">
-			<div class="card">
+			<div class="card shadow-lg">
 				<div class="card-body">
 					<div class="">
 						<p class="text-muted mb-0">Orders Status</p>
 					</div>
 
-					<div id="ordersStatusPieChart"></div>
+					<canvas id="ordersStatusPieChart"></canvas>
 
 					<div>
 						<h4 class="my-1">
@@ -133,109 +147,18 @@
 
 @section Scripts {
 	<script src="~/js/charts/loadRadialChart.js"></script>
-	<script src="~/js/charts/getTotalFeedbacksRadialChart.js"></script>
-	<script src="~/js/charts/getTotalCoursesRadialChart.js"></script>
-	<script src="~/js/charts/getTotalUsersRadialChart.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+	<script src="~/js/charts/getTotalFeedbacksRadialChart.js"
+			asp-append-version="true"></script>
+	<script src="~/js/charts/getTotalCoursesRadialChart.js"
+			asp-append-version="true"></script>
+	<script src="~/js/charts/getTotalUsersRadialChart.js"
+			asp-append-version="true"></script>
+	<script src="~/js/charts/getOrderGrowthLineChart.js"
+			asp-append-version="true"></script>
+	<script src="~/js/charts/getOrderStatusPieChart.js"
+			asp-append-version="true"></script>
 
 	<script>
-		let pieChart;
-		let lineChart;
-
-		// Initialize Pie Chart
-		function initPieChart(data) {
-			const pieOptions = {
-				series: data.series,
-				chart: {
-					type: 'pie',
-					height: 300
-				},
-				labels: data.labels,
-				colors: ['#00E396', '#FF4560'],
-				legend: {
-					position: 'bottom'
-				},
-				tooltip: {
-					y: {
-						formatter: function(val) {
-							return val + " orders"
-						}
-					}
-				},
-				responsive: [{
-					breakpoint: 480,
-					options: {
-						chart: {
-							width: 200
-						},
-						legend: {
-							position: 'bottom'
-						}
-					}
-				}]
-			};
-
-			pieChart = new ApexCharts(document.querySelector("#ordersStatusPieChart"), pieOptions);
-			pieChart.render();
-
-			// Update summary text
-			const total = data.series.reduce((a, b) => a + b, 0);
-			document.getElementById('spanTotalOrdersCount').textContent = total;
-			document.getElementById('orderStatusSummary').textContent =
-				`${data.series[0]} Paid · ${data.series[1]} Failed`;
-		}
-
-		// Initialize Line Chart
-		function initLineChart(data) {
-			const lineOptions = {
-				series: [{
-					name: 'Orders',
-					data: data.series[0].data
-				}],
-				chart: {
-					type: 'line',
-					height: 350,
-					toolbar: {
-						show: true
-					},
-					zoom: {
-						enabled: true
-					}
-				},
-				stroke: {
-					curve: 'smooth',
-					width: 3
-				},
-				xaxis: {
-					categories: data.categories,
-					title: {
-						text: 'Period'
-					}
-				},
-				yaxis: {
-					title: {
-						text: 'Number of Orders'
-					}
-				},
-				markers: {
-					size: 4
-				},
-				colors: ['#008FFB'],
-				tooltip: {
-					shared: true,
-					intersect: false,
-					y: {
-						formatter: function(val) {
-							return val + " orders"
-						}
-					}
-				}
-			};
-
-			lineChart = new ApexCharts(document.querySelector("#orderGrowthChart"), lineOptions);
-			lineChart.render();
-		}
-
 		// Function to show/hide loading spinner
 		function toggleSpinner(show) {
 			document.querySelectorAll('.chart-spinner').forEach(spinner => {
@@ -251,37 +174,20 @@
 			fetch('/Dashboard/GetOrderStatusPieChartData')
 				.then(response => response.json())
 				.then(data => {
-					if (pieChart) {
-						pieChart.updateOptions({
-							labels: data.labels,
-							series: data.series
-						});
-					} else {
-						initPieChart(data);
-					}
+					window.updateOrderStatusPieChart(data);
 				})
 				.finally(() => toggleSpinner(false));
 
 			// Update Line Chart
-			fetch('/Dashboard/GetOrderGrowthLineData')
-				.then(response => response.json())
-				.then(data => {
-					if (lineChart) {
-						lineChart.updateOptions({
-							xaxis: { categories: data.dates },
-							series: [{
-								data: data.series[0].data
-							}]
-						});
-					} else {
-						initLineChart(data);
-					}
-				})
-				.finally(() => toggleSpinner(false));
+			window.updateOrderGrowthLineChart();
 		}
 
-		// Initial load
+		// Event Listeners
 		document.addEventListener('DOMContentLoaded', function() {
+			// Initialize date range controls
+			window.initOrderGrowthDateRangeControls();
+
+			// Initial load
 			updateCharts();
 		});
 

@@ -2,7 +2,6 @@
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Orders;
-using Stripe.Checkout;
 
 namespace Infrastructure.Services
 {

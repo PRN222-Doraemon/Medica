@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Core.Constants;
 using Core.Entities;
-using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Courses;
 using MedicaWeb_MVC.Hubs;
-using MedicaWeb_MVC.ViewModels;
 using MedicaWeb_MVC.ViewModels.Courses;
 using MedicaWeb_MVC.ViewModels.Shared;
 using Microsoft.AspNetCore.Authorization;

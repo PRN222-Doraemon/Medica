@@ -1,0 +1,59 @@
+@model dynamic
+
+@{
+	// Get the Generic Controller passed in
+	var controller = Model.Controller as string;
+}
+
+<div class="card shadow-lg">
+	<div class="card-body">
+		<!-- Table -->
+		<div class="table-responsive">
+			<table class="table table-hover align-middle" id="dataTable">
+				<thead class="table-light">
+					<tr>
+						@foreach (var column in Model.Columns)
+						{
+							<th class="text-nowrap">@column.Value</th>
+						}
+						<th class="text-nowrap">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model.Items)
+					{
+						<tr>
+							@foreach (var column in Model.Columns)
+							{
+								<td>
+									@if (column.Key == "IsActive" || column.Key == "Status")
+									{
+										var status = item.ContainsKey("Status") ? item["Status"] : item["IsActive"];
+										var isEnabled = status is bool ? (bool)status : status.ToString() == "Enabled";
+										<span class="badge bg-@(isEnabled ? "success" : "danger")">
+											@(isEnabled ? "Enabled" : "Disabled")
+										</span>
+									}
+									else
+									{
+										@item[column.Key]
+									}
+								</td>
+							}
+							<td>
+								<div class="btn-group">
+									<a href="@Url.Action("Edit", controller, new { id = item["Id"] })" class="btn btn-warning">
+										Edit <i class="fas fa-edit"></i>
+									</a>
+									<a href="@Url.Action("Delete", controller, new { id = item["Id"] })" class="btn btn-danger">
+										Delete <i class="fas fa-trash"></i>
+									</a>
+								</div>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

@@ -15,6 +15,6 @@ namespace MedicaWeb_MVC.ViewModels.User
         [Display(Name = "Remember Me")]
         public bool IsRememberMe { get; set; } = false;
 
-        public string? ReturnUrl { get; set; }
+        public string? ReturnUrl { get; set; } = null;
     }
 }

@@ -1,0 +1,68 @@
+@model IEnumerable<MedicaWeb_MVC.ViewModels.User.AccountVM>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Accounts Management</h4>
+
+            @* Add New Account *@
+            <div class="page-title-right">
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add New Account
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        @* Table of Content *@
+        <div class="col-12 mt-5">
+            @await Html.PartialAsync("_GenericTable", new
+            {
+                Controller = "AccountsManagement",
+                Items = Model.Select(a => new Dictionary<string, object>
+                {
+                    { "Id", a.Id },
+                    { "Username", a.Username },
+                    { "Email", a.Email },
+                    { "FirstName", a.FirstName },
+                    { "LastName", a.LastName },
+                    { "FullName", a.FullName },
+                    { "PhoneNumber", a.PhoneNumber },
+                    { "RoleName", a.RoleName },
+                    { "Status", a.Status },
+                    { "DateOfBirth", a.DateOfBirth.ToString("MM/dd/yyyy") },
+                    { "CreatedAt", a.CreatedAt.ToString("MM/dd/yyyy") },
+                    { "UpdatedAt", a.UpdatedAt.ToString("MM/dd/yyyy") }
+                }),
+                Columns = new Dictionary<string, string>
+                {
+                    { "Id", "ID" },
+                    { "Username", "Username" },
+                    { "Email", "Email" },
+                    { "FirstName", "First Name" },
+                    { "LastName", "Last Name" },
+                    { "FullName", "Full Name" },
+                    { "PhoneNumber", "Phone" },
+                    { "RoleName", "Role" },
+                    { "Status", "Status" },
+                    { "DateOfBirth", "Date of Birth" },
+                    { "CreatedAt", "Created At" },
+                    { "UpdatedAt", "Last Updated" }
+                }
+            })
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+
+            // Add custom styling for action buttons
+            $('.btn-group .btn').each(function() {
+                $(this).addClass('me-1');
+            });
+        });
+    </script>
+} 

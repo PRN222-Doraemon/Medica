@@ -103,7 +103,9 @@ namespace Infrastructure.Services
 
         public async Task<List<ApplicationUser>> GetAllRegisteredUserAsync()
         {
-            return await _userManager.Users.ToListAsync();
+            return await _userManager.Users
+                .OrderByDescending(s => s.Id)
+                .ToListAsync();
         }
     }
 }

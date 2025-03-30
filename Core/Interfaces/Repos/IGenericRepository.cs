@@ -1,6 +1,4 @@
-﻿using Core.Entities;
-using Core.Entities.Identity;
-using Core.Specifications;
+﻿using Core.Specifications;
 
 namespace Core.Interfaces.Repos
 {
