@@ -107,5 +107,17 @@ namespace Infrastructure.Services
                 .OrderByDescending(s => s.Id)
                 .ToListAsync();
         }
+
+        public async Task<bool> UpdateUserAsync(ApplicationUser user)
+        {
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded;
+        }
+
+        public async Task<bool> ChangePasswordAsync(ApplicationUser user, string currentPassword, string newPassword)
+        {
+            var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+            return result.Succeeded;
+        }
     }
 }
