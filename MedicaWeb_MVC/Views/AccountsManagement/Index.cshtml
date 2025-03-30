@@ -4,6 +4,8 @@
     <div class="row">
         <div class="page-title-box d-flex align-items-center justify-content-between">
             <h4 class="mb-0">Accounts Management</h4>
+
+            @* Add New Account *@
             <div class="page-title-right">
                 <a asp-action="Create" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Add New Account
@@ -12,7 +14,9 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-12">
+
+        @* Table of Content *@
+        <div class="col-12 mt-5">
             @await Html.PartialAsync("_GenericTable", new
             {
                 Controller = "AccountsManagement",
@@ -54,39 +58,6 @@
 @section Scripts {
     <script>
         $(document).ready(function() {
-            // Customize the table for accounts
-            const table = $('#tableBody').DataTable({
-                pageLength: 10,
-                order: [[0, 'asc']],
-                columnDefs: [
-                    {
-                        targets: 8, // Status column
-                        render: function(data, type, row) {
-                            return data === 'Enabled' ? 
-                                '<span class="badge bg-success">Enabled</span>' : 
-                                '<span class="badge bg-danger">Disabled</span>';
-                        }
-                    }
-                ],
-                language: {
-                    search: "",
-                    searchPlaceholder: "Search accounts...",
-                    lengthMenu: "Show _MENU_ entries",
-                    info: "Showing _START_ to _END_ of _TOTAL_ accounts",
-                    paginate: {
-                        previous: "Previous",
-                        next: "Next"
-                    }
-                }
-            });
-
-            // Customize the toggle status button appearance
-            $('.toggle-status').each(function() {
-                const status = $(this).data('status');
-                $(this).find('i')
-                    .removeClass('fa-ban fa-check')
-                    .addClass(status === 'Enabled' ? 'fa-ban' : 'fa-check');
-            });
 
             // Add custom styling for action buttons
             $('.btn-group .btn').each(function() {

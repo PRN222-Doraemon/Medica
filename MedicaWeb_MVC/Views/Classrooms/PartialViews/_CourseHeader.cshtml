@@ -15,7 +15,17 @@
 
         <div class="row position-relative" style="z-index: 1;">
             <div class="col-lg-8">
-                <h1 class="display-5 fw-bold mb-3 text-green">@Course?.Name</h1>
+                <div class="d-flex align-items-center gap-3">
+                    <h1 class="display-5 fw-bold mb-3 text-green">@Course?.Name</h1>
+                    @if (Course?.Status == CourseStatus.Active)
+                    {
+                        <span class="badge rounded-pill bg-success">@Course?.Status</span>
+                    }
+                    else
+                    {
+                        <span class="badge rounded-pill bg-secondary">@Course?.Status</span>
+                    }
+                </div>
                 <p class="mb-4">@Course?.Description</p>
 
                 <div class="d-flex align-items-center mb-4">

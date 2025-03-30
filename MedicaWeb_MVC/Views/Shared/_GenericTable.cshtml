@@ -1,243 +1,59 @@
 @model dynamic
 
+@{
+	// Get the Generic Controller passed in
+	var controller = Model.Controller as string;
+}
+
 <div class="card shadow-lg">
-    <div class="card-body">
-        <!-- Search and Filter Section -->
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <div class="input-group">
-                    <input type="text" class="form-control" id="searchInput" placeholder="Search...">
-                    <button class="btn btn-outline-secondary" type="button" id="searchButton">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="col-md-6 text-end">
-                <button class="btn btn-primary" id="addNewButton">
-                    <i class="fas fa-plus"></i> Add New
-                </button>
-            </div>
-        </div>
-
-        <!-- Table -->
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        @foreach (var column in Model.Columns)
-                        {
-                            <th class="sortable" data-sort="@column.Key">
-                                @column.Value
-                                <i class="fas fa-sort"></i>
-                            </th>
-                        }
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    @foreach (var item in Model.Items)
-                    {
-                        <tr>
-                            @foreach (var column in Model.Columns)
-                            {
-                                <td>@item[column.Key]</td>
-                            }
-                            <td>
-                                <div class="btn-group" role="group">
-                                    <button type="button" class="btn btn-sm btn-info view-detail" data-id="@item["Id"]">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-warning update-item" data-id="@item["Id"]">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-danger toggle-status" data-id="@item["Id"]" data-status="@item["IsActive"]">
-                                        <i class="fas fa-ban"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination -->
-        <div class="row mt-3">
-            <div class="col-md-6">
-                <div class="d-flex align-items-center">
-                    <span class="me-2">Show</span>
-                    <select class="form-select form-select-sm" id="pageSize" style="width: auto;">
-                        <option value="10">10</option>
-                        <option value="25">25</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                    <span class="ms-2">entries</span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <nav aria-label="Page navigation" class="float-end">
-                    <ul class="pagination mb-0" id="pagination">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Previous</a>
-                        </li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
+	<div class="card-body">
+		<!-- Table -->
+		<div class="table-responsive">
+			<table class="table table-hover align-middle" id="dataTable">
+				<thead class="table-light">
+					<tr>
+						@foreach (var column in Model.Columns)
+						{
+							<th class="text-nowrap">@column.Value</th>
+						}
+						<th class="text-nowrap">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model.Items)
+					{
+						<tr>
+							@foreach (var column in Model.Columns)
+							{
+								<td>
+									@if (column.Key == "IsActive" || column.Key == "Status")
+									{
+										var status = item.ContainsKey("Status") ? item["Status"] : item["IsActive"];
+										var isEnabled = status is bool ? (bool)status : status.ToString() == "Enabled";
+										<span class="badge bg-@(isEnabled ? "success" : "danger")">
+											@(isEnabled ? "Enabled" : "Disabled")
+										</span>
+									}
+									else
+									{
+										@item[column.Key]
+									}
+								</td>
+							}
+							<td>
+								<div class="btn-group">
+									<a href="@Url.Action("Edit", controller, new { id = item["Id"] })" class="btn btn-warning">
+										Edit <i class="fas fa-edit"></i>
+									</a>
+									<a href="@Url.Action("Delete", controller, new { id = item["Id"] })" class="btn btn-danger">
+										Delete <i class="fas fa-trash"></i>
+									</a>
+								</div>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
-
-@section Scripts {
-    <script>
-        $(document).ready(function() {
-            let currentPage = 1;
-            let pageSize = 10;
-            let sortColumn = '';
-            let sortDirection = 'asc';
-            let searchTerm = '';
-
-            // Initialize DataTable
-            const table = $('#tableBody').DataTable({
-                pageLength: pageSize,
-                order: [[0, 'asc']],
-                language: {
-                    search: "",
-                    searchPlaceholder: "Search...",
-                    lengthMenu: "Show _MENU_ entries",
-                    info: "Showing _START_ to _END_ of _TOTAL_ entries",
-                    paginate: {
-                        previous: "Previous",
-                        next: "Next"
-                    }
-                },
-                dom: '<"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6"f>>' +
-                     '<"row"<"col-sm-12"tr>>' +
-                     '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
-                drawCallback: function() {
-                    // Update pagination buttons
-                    updatePaginationButtons();
-                }
-            });
-
-            // Search functionality
-            $('#searchInput').on('keyup', function() {
-                searchTerm = $(this).val();
-                table.search(searchTerm).draw();
-            });
-
-            // Page size change
-            $('#pageSize').on('change', function() {
-                pageSize = parseInt($(this).val());
-                table.page.len(pageSize).draw();
-            });
-
-            // Sorting
-            $('.sortable').on('click', function() {
-                const column = $(this).data('sort');
-                if (sortColumn === column) {
-                    sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
-                } else {
-                    sortColumn = column;
-                    sortDirection = 'asc';
-                }
-                table.order([$(this).index(), sortDirection]).draw();
-            });
-
-            // View Detail
-            $(document).on('click', '.view-detail', function() {
-                const id = $(this).data('id');
-                window.location.href = `/@Model.Controller/Details/${id}`;
-            });
-
-            // Update Item
-            $(document).on('click', '.update-item', function() {
-                const id = $(this).data('id');
-                window.location.href = `/@Model.Controller/Edit/${id}`;
-            });
-
-            // Toggle Status
-            $(document).on('click', '.toggle-status', function() {
-                const id = $(this).data('id');
-                const currentStatus = $(this).data('status');
-                const newStatus = !currentStatus;
-
-                if (confirm('Are you sure you want to ' + (newStatus ? 'enable' : 'disable') + ' this item?')) {
-                    $.ajax({
-                        url: `/@Model.Controller/ToggleStatus/${id}`,
-                        type: 'POST',
-                        success: function(response) {
-                            if (response.success) {
-                                // Update button icon and status
-                                const button = $(`.toggle-status[data-id="${id}"]`);
-                                button.data('status', newStatus);
-                                button.find('i').toggleClass('fa-ban fa-check');
-                                
-                                // Show success message
-                                toastr.success('Status updated successfully');
-                            } else {
-                                toastr.error('Failed to update status');
-                            }
-                        },
-                        error: function() {
-                            toastr.error('An error occurred while updating status');
-                        }
-                    });
-                }
-            });
-
-            // Add New
-            $('#addNewButton').on('click', function() {
-                window.location.href = `/@Model.Controller/Create`;
-            });
-
-            // Update pagination buttons
-            function updatePaginationButtons() {
-                const totalPages = Math.ceil(table.page.info().recordsTotal / pageSize);
-                const currentPage = table.page.info().page + 1;
-                
-                let paginationHtml = '';
-                
-                // Previous button
-                paginationHtml += `
-                    <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                        <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
-                    </li>
-                `;
-
-                // Page numbers
-                for (let i = 1; i <= totalPages; i++) {
-                    paginationHtml += `
-                        <li class="page-item ${i === currentPage ? 'active' : ''}">
-                            <a class="page-link" href="#" data-page="${i}">${i}</a>
-                        </li>
-                    `;
-                }
-
-                // Next button
-                paginationHtml += `
-                    <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                        <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
-                    </li>
-                `;
-
-                $('#pagination').html(paginationHtml);
-            }
-
-            // Handle pagination clicks
-            $(document).on('click', '.page-link', function(e) {
-                e.preventDefault();
-                const page = $(this).data('page');
-                if (page && !$(this).parent().hasClass('disabled')) {
-                    table.page(page - 1).draw('page');
-                }
-            });
-        });
-    </script>
-} 
