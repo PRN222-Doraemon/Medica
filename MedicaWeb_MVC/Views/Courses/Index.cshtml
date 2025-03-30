@@ -48,14 +48,20 @@
     </div>
 </div>
 
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll("select[name='CategoryId'], select[name='Status']")
+                .forEach(select => {
+                    select.addEventListener("change", function () {
+                        console.log("Submitting form...");
+                        document.getElementById("filterForm").submit();
+                    });
+                });
+        });
+    </script>
+}
 
-<script>
-    function submitForm() {
-        document.getElementById("filterForm").submit();
-    }
-
-    $(#table).boostrapTable
-</script>
 
 <script src="~/lib/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/courses/course-client.js"></script>
