@@ -1,4 +1,5 @@
 ﻿@using System.Security.Claims
+@using MedicaWeb_MVC.ViewModels.User
 @{
 	var userName = User.Identity.IsAuthenticated ? User.FindFirst(ClaimTypes.Name)?.Value : "Guest";
 	var role = User.Identity.IsAuthenticated ? User.FindFirst(ClaimTypes.Role)?.Value : "Guest";
@@ -62,12 +63,9 @@
 		<ul class="nav flex-column">
 			<li class="nav-item mb-2">
 				<a asp-controller="Accounts" asp-action="Profile"
-				   class=" nav-link d-flex align-items-center p-2 rounded-3 text-decoration-none user-profile">
-					<img src="https://github.com/mdo.png" alt="User Avatar" width="42" height="42"
-						 class="rounded-circle me-3" style="border: 2px solid #FF7722;">
+				   class="nav-link d-flex align-items-center p-2 rounded-3 text-decoration-none user-profile">
 					<div>
-						<strong class="d-block text-dark">@userName</strong>
-						<small class="text-muted">@role</small>
+						View Profile
 					</div>
 				</a>
 			</li>
