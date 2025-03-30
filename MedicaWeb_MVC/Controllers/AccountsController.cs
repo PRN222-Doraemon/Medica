@@ -53,8 +53,15 @@ namespace MedicaWeb_MVC.Controllers
             var loginResult = await _accountService.LoginAsync(loginVM.UserName, loginVM.Password, loginVM.IsRememberMe);
             if (loginResult)
             {
-                if (string.IsNullOrEmpty(loginVM.ReturnUrl))
+                if (string.IsNullOrEmpty(loginVM.ReturnUrl) || loginVM.ReturnUrl.Equals("/"))
                 {
+                    // If admin, redirect to dashboard
+                    if (User.IsInRole(AppCts.Roles.Admin))
+                    {
+                        return RedirectToAction("Index", "Dashboard");
+                    }
+
+                    // Else, redirect to Courses
                     return RedirectToAction("Index", "Courses");
                 }
                 else

@@ -44,7 +44,7 @@ namespace MedicaWeb_MVC.Controllers
 
         [HttpGet]
         public async Task<IActionResult> Index([FromQuery] ClassParams classParams)
-        {           
+        {
             ViewData["LecturerIds"] = new SelectList(
                 await _lecturerService.GetLecturersAsync(),
                 "Id",
@@ -85,7 +85,7 @@ namespace MedicaWeb_MVC.Controllers
             var user = await _accountService.GetUserByClaimsAsync(User);
             if (user != null)
             {
-                var myClasses = await _orderService.GetMyLearningByStudentIdAsync(user.Id);               
+                var myClasses = await _orderService.GetMyLearningByStudentIdAsync(user.Id);
                 foreach (var classVM in classVMs)
                 {
                     if (myClasses.Any(c => c.Id == classVM.Id))
@@ -94,7 +94,7 @@ namespace MedicaWeb_MVC.Controllers
                     }
                 }
             }
-            
+
             var model = new ListVM<ClassVM>
             {
                 Items = classVMs,
@@ -162,7 +162,7 @@ namespace MedicaWeb_MVC.Controllers
                 TempData["IsUpdate"] = true;
             }
 
-                return RedirectToAction(nameof(Index), new { CourseId = courseId });
+            return RedirectToAction(nameof(Index), new { CourseId = courseId });
         }
         [HttpPost]
         [Authorize(Roles = AppCts.Roles.Employee)]

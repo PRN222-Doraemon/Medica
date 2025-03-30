@@ -28,29 +28,34 @@ namespace MedicaWeb_MVC.Controllers
         // === Methods
         // ==============================
 
+        [HttpGet]
         public IActionResult Index()
         {
             return View();
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetTotalFeedbackRadialChartData()
         {
 
             return Json(await _dashboardService.GetTotalFeedbackRadialChartData());
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetRegisteredUserRadialChartData()
         {
 
             return Json(await _dashboardService.GetRegisteredUserChartData());
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetTotalCoursesRadialChartData()
         {
 
             return Json(await _dashboardService.GetTotalCoursesChartData());
         }
 
+        [HttpGet]
         public async Task<IActionResult> GetOrderStatusPieChartData()
         {
             var (paidOrders, failedOrders) = await _dashboardService.GetOrderStatusPieChartData();
@@ -73,7 +78,7 @@ namespace MedicaWeb_MVC.Controllers
             var orderData = await _dashboardService.GetOrderGrowthData(startDate, endDate);
             var viewModel = new LineChartVM()
             {
-                Dates = orderData.Select(x => x.date.ToString("MMM yyyy")).ToList(), // get the date only
+                Dates = orderData.Select(x => x.date.ToString("yyyy MM")).ToList(), // get the date only
                 Series = new List<SeriesVM>()
                 {
                     new SeriesVM()         // series[0]
