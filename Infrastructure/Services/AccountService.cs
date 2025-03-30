@@ -114,5 +114,24 @@ namespace Infrastructure.Services
             if (principal == null) return false;
             return _signInManager.IsSignedIn(principal);
         }
+
+        public async Task<List<ApplicationUser>> GetAllRegisteredUserAsync()
+        {
+            return await _userManager.Users
+                .OrderByDescending(s => s.Id)
+                .ToListAsync();
+        }
+
+        public async Task<bool> UpdateUserAsync(ApplicationUser user)
+        {
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded;
+        }
+
+        public async Task<bool> ChangePasswordAsync(ApplicationUser user, string currentPassword, string newPassword)
+        {
+            var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+            return result.Succeeded;
+        }
     }
 }
