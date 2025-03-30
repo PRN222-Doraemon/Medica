@@ -1,3 +1,4 @@
+using Core.Constants;
 using Core.Entities.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
@@ -47,6 +48,10 @@ namespace MedicaWeb_MVC.ViewModels.User
 
         [Display(Name = "Last Updated")]
         public DateTime UpdatedAt { get; set; }
+
+        [Display(Name = "Default Password")]
+        [ValidateNever]
+        public string DefaultPassword { get; set; } = AppCts.Accounts.DefaultPassword;
 
         [ValidateNever]
         [Display(Name = "Image URL")]

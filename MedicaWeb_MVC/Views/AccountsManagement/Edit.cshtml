@@ -13,18 +13,20 @@
 				<div class="card-body">
 					<form asp-action="Edit" method="post" enctype="multipart/form-data">
 						<input type="hidden" asp-for="Id" />
+						<input type="hidden" asp-for="Username" />
+						<input type="hidden" asp-for="Email" />
 						<input type="hidden" asp-for="ImageFile" />
 
 						<div class="row">
 							<div class="col-md-6 mb-3">
 								<label asp-for="Username" class="form-label">Username</label>
-								<input asp-for="Username" class="form-control" readonly />
+								<input asp-for="Username" class="form-control" readonly disabled />
 								<span asp-validation-for="Username" class="text-danger"></span>
 							</div>
 
 							<div class="col-md-6 mb-3">
 								<label asp-for="Email" class="form-label">Email</label>
-								<input asp-for="Email" class="form-control" readonly />
+								<input asp-for="Email" class="form-control" readonly disabled />
 								<span asp-validation-for="Email" class="text-danger"></span>
 							</div>
 
@@ -42,7 +44,7 @@
 
 							<div class="col-md-6 mb-3">
 								<label asp-for="PhoneNumber" class="form-label">Phone Number</label>
-								<input asp-for="PhoneNumber" class="form-control" />
+								<input asp-for="PhoneNumber" class="form-control" type="number"/>
 								<span asp-validation-for="PhoneNumber" class="text-danger"></span>
 							</div>
 

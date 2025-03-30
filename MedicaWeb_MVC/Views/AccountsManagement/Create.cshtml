@@ -1,0 +1,97 @@
+@model MedicaWeb_MVC.ViewModels.User.AccountVM
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Create New Account</h4>
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Username" class="form-label">Username</label>
+                                <input asp-for="Username" class="form-control" />
+                                <span asp-validation-for="Username" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Email" class="form-label">Email</label>
+                                <input asp-for="Email" class="form-control" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstName" class="form-label">First Name</label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LastName" class="form-label">Last Name</label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="PhoneNumber" class="form-label">Phone Number</label>
+                                <input asp-for="PhoneNumber" class="form-control" type="number" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="RoleName" class="form-label">Role</label>
+                                <select asp-for="RoleName" class="form-select" asp-items="@(new SelectList(ViewBag.Roles, "Name", "Name"))">
+                                    <option value="">-- Select Role --</option>
+                                </select>
+                                <span asp-validation-for="RoleName" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
+                                <input asp-for="DateOfBirth" class="form-control" type="date" />
+                                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Status" class="form-label">Status</label>
+                                <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<UserStatus>()">
+                                    <option value="">-- Select Status --</option>
+                                </select>
+                                <span asp-validation-for="Status" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DefaultPassword" class="form-label">Default Password</label>
+                                <input asp-for="DefaultPassword" class="form-control" readonly disabled />
+                                <small class="text-muted">This is the default password for the new account. The user should change it upon first login.</small>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ImageFile" class="form-label">Profile Image</label>
+                                <input asp-for="ImageFile" class="form-control" type="file" accept="image/*" />
+                                <small class="text-muted">Supported formats: JPG, PNG, GIF. Max size: 5MB</small>
+                                <span asp-validation-for="ImageFile" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Create Account</button>
+                            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
