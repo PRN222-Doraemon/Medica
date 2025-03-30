@@ -30,6 +30,7 @@ namespace MedicaWeb_MVC.Extensions
             services.AddScoped<ILecturerService, LecturerService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IStudentService, StudentService>();
+            services.AddScoped<INewsService, NewsService>();
 
 
             services.AddScoped<IOrderService, OrderService>();

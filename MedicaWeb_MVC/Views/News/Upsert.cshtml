@@ -1,0 +1,36 @@
+@using MedicaWeb_MVC.ViewModels.News
+@model NewsUpsertVM
+@{
+    bool IsUpdate = ViewBag.Title == "Update News";
+}
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-body p-4">
+                    <partial name="PartialViews/_NewsHeaderUpsert" model="@Model" />
+
+                    <form asp-action="Upsert" asp-controller="News" method="post" id="updateNewsForm"
+                        enctype="multipart/form-data">
+
+                        <input type="hidden" asp-for="@Model.Id" />
+                        <input type="hidden" asp-for="@Model.ImageUrl" />
+
+                        <div class="row">
+                            <div class="col-md-8 pe-md-4">
+                                <partial name="PartialViews/_NewsBasicInfoUpsert" model="@Model" />
+
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-green fs-5 fw-small btn-lg shadow">
+                                        <i class="bi bi-check2-circle me-2"></i> SAVE
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
