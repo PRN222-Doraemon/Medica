@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MedicaWeb_MVC.ViewModels.News;
 using MedicaWeb_MVC.ViewModels.Shared;
-using Infrastructure.Services;
 using Core.Specifications.News;
 using AutoMapper;
 using Core.Interfaces.Services;
@@ -132,6 +131,7 @@ namespace MedicaWeb_MVC.Controllers
                     var newsToBeUpdated = await _newsService.GetNewsWithSpec(new NewsSpecification(newsVM.Id));
                     if (newsToBeUpdated == null)
                     {
+                        TempData["error"] = "News not found";
                         return NotFound();
                     }
                     _mapper.Map(newsVM, newsToBeUpdated);
@@ -159,6 +159,7 @@ namespace MedicaWeb_MVC.Controllers
             var news = await _newsService.GetNewsWithSpec(new NewsSpecification(id));
             if (news == null)
             {
+                TempData["error"] = "News not found";
                 return NotFound();
             }
             news.Status = NewsStatus.Disabled;
@@ -174,6 +175,7 @@ namespace MedicaWeb_MVC.Controllers
             var news = await _newsService.GetNewsWithSpec(new NewsSpecification(id));
             if (news == null)
             {
+                TempData["error"] = "News not found";
                 return NotFound();
             }
             news.Status = NewsStatus.Active;
