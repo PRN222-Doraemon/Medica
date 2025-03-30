@@ -7,9 +7,12 @@
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="mb-0 text-green">All questions in this course <span
                     class="question-count">(@Model.Item1.Count())</span></h5>
-            <button class="btn btn-orange btn-sm" data-bs-toggle="modal" data-bs-target="#askQuestionModal">
-                <i class="fas fa-plus me-1"></i>New question
-            </button>
+            @if (User.IsInRole(AppCts.Roles.Student))
+            {
+                <button class="btn btn-orange btn-sm" data-bs-toggle="modal" data-bs-target="#askQuestionModal">
+                    <i class="fas fa-plus me-1"></i>New question
+                </button>
+            }
         </div>
     </div>
 </div>

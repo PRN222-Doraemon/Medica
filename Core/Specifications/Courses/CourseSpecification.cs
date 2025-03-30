@@ -13,15 +13,15 @@ namespace Core.Specifications.Courses
         {
             AddInclude(x => x.Category);
             AddInclude(x => x.CreatedBy);
-            AddCustomInclude(x => x.Include(c => c.CourseChapters)
-                                    .ThenInclude(cc => cc.Resources));
+            //AddCustomInclude(x => x.Include(c => c.CourseChapters)
+            //                        .ThenInclude(cc => cc.Resources));
 
-            AddCustomInclude(x => x.Include(c => c.Feedbacks)
-                                    .ThenInclude(f => f.Student));
-            AddCustomInclude(x => x.Include(c => c.Classrooms)
-                                    .ThenInclude(f => f.OrderDetails));
-            AddCustomInclude(x => x.Include(c => c.Classrooms)
-                                    .ThenInclude(f => f.Lecturer));
+            //AddCustomInclude(x => x.Include(c => c.Feedbacks)
+            //                        .ThenInclude(f => f.Student));
+            //AddCustomInclude(x => x.Include(c => c.Classrooms)
+            //                        .ThenInclude(f => f.OrderDetails));
+            //AddCustomInclude(x => x.Include(c => c.Classrooms)
+            //                        .ThenInclude(f => f.Lecturer));
             AddOrderByDescending(x => x.CreatedAt);
             if (applyPaging)
             {

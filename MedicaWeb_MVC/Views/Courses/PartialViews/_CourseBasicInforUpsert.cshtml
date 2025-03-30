@@ -13,19 +13,10 @@
             <div class="position-relative" style="width: 200px; height: 120px;">
                 <img id="courseImagePreview" src="@Model.ImgUrl" class="img-fluid rounded shadow-sm"
                     style="width: 200px; height: 120px; object-fit: cover;">
-
-                @if (!string.IsNullOrEmpty(Model.ImgUrl))
-                {
-                    <input type="hidden" asp-for="ImgUrl" />
-
-                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-2"
-                        onclick="removeCourseImage(this)">
-                        <i class="bi bi-x"></i>
-                    </button>
-                }
             </div>
             <div class="flex-grow-1">
-                <input type="file" asp-for="@Model.ImageFile" id="courseImageInput" class="form-control">
+                <input type="file" asp-for="@Model.ImageFile" id="courseImageInput" class="form-control"
+                    onchange="previewCourseImage(event)">
                 <small class="text-muted d-block mt-2">
                     Recommended size: 1280x720 pixels (16:9 ratio)<br>
                     Maximum file size: 2MB<br>
@@ -82,3 +73,18 @@
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 </div>
+
+<script>
+    function previewCourseImage(event) {
+        const input = event.target;
+        const file = input.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('courseImagePreview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+</script>

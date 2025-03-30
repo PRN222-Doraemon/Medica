@@ -1,0 +1,31 @@
+@using MedicaWeb_MVC.ViewModels.News
+@model NewsUpsertVM
+
+@{
+    bool IsUpdate = false;
+
+    if (ViewBag.Title == "Update News")
+    {
+        IsUpdate = true;
+    }
+}
+
+<!-- Header with gradient background -->
+<div class="bg-yellow p-4 rounded-3 mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h1 class="h3 mb-0 text-orange">@ViewBag.Title</h1>
+
+        @if (IsUpdate)
+        {
+            <a asp-action="Details" asp-controller="News" asp-route-id="@Model.Id" class="btn btn-light">
+                <i class="bi bi-arrow-left"></i> Back to News
+            </a>
+        }
+        else
+        {
+            <a asp-action="Index" asp-controller="News" class="btn btn-light">
+                <i class="bi bi-arrow-left"></i> Back to News
+            </a>
+        }
+    </div>
+</div>

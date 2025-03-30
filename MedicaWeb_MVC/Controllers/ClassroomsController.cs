@@ -163,15 +163,6 @@ namespace MedicaWeb_MVC.Controllers
         [Authorize(Roles = AppCts.Roles.Employee)]
         public async Task<IActionResult> Upsert(ClassUpsertVM classUpsertVM)
         {
-            //if (classUpsertVM.StartDate <= DateOnly.FromDateTime(DateTime.Today))
-            //{
-            //    ModelState.AddModelError(nameof(classUpsertVM.StartDate), "Start date must be greater than today.");
-            //}
-
-            //if (classUpsertVM.EndDate <= classUpsertVM.StartDate)
-            //{
-            //    ModelState.AddModelError(nameof(classUpsertVM.EndDate), "End date must be greater than start date.");
-            //}
             if (ModelState.IsValid)
             {
                 try
@@ -218,7 +209,7 @@ namespace MedicaWeb_MVC.Controllers
             }
             catch (InvalidOperationException e)
             {
-                TempData["error"] = "Unable to delete this class due to invalid state.";
+                TempData["error"] = e.Message ?? "Unable to delete this class due to invalid state.";
                 Console.WriteLine(e);
 
             }
