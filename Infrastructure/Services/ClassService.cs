@@ -3,8 +3,6 @@ using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications;
 using Core.Specifications.Classes;
-using Microsoft.AspNetCore.Http.HttpResults;
-using System.Net.WebSockets;
 
 namespace Infrastructure.Services
 {

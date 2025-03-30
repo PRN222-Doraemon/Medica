@@ -2,15 +2,7 @@
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Courses;
-using Infrastructure.Persistence;
-using Microsoft.Extensions.Configuration;
-using Stripe;
 using Stripe.Checkout;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {

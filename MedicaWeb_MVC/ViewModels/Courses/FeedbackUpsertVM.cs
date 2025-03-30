@@ -1,7 +1,4 @@
-﻿using Core.Entities.Identity;
-using Core.Entities;
-
-namespace MedicaWeb_MVC.ViewModels.Courses
+﻿namespace MedicaWeb_MVC.ViewModels.Courses
 {
     public class FeedbackUpsertVM
     {

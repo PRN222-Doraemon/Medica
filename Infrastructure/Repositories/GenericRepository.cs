@@ -1,5 +1,4 @@
-﻿using Core.Entities;
-using Core.Interfaces.Repos;
+﻿using Core.Interfaces.Repos;
 using Core.Specifications;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;

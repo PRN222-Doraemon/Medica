@@ -1,8 +1,5 @@
 ﻿using Core.Interfaces.Services;
-using Core.Specifications.Feedbacks;
-using Infrastructure.Services;
 using MedicaWeb_MVC.ViewModels.Charts;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicaWeb_MVC.Controllers

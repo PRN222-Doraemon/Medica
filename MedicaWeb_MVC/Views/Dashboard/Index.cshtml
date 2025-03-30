@@ -122,7 +122,7 @@
 						<p class="text-muted mb-0">Orders Status</p>
 					</div>
 
-					<div id="ordersStatusPieChart"></div>
+					<canvas id="ordersStatusPieChart"></canvas>
 
 					<div>
 						<h4 class="my-1">
@@ -147,13 +147,18 @@
 
 @section Scripts {
 	<script src="~/js/charts/loadRadialChart.js"></script>
-	<script src="~/js/charts/getTotalFeedbacksRadialChart.js"></script>
-	<script src="~/js/charts/getTotalCoursesRadialChart.js"></script>
-	<script src="~/js/charts/getTotalUsersRadialChart.js"></script>
-	<script src="~/js/charts/getOrderGrowthLineChart.js"></script>
-	<script src="~/js/charts/getOrderStatusPieChart.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+	<script src="~/js/charts/getTotalFeedbacksRadialChart.js"
+			asp-append-version="true"></script>
+	<script src="~/js/charts/getTotalCoursesRadialChart.js"
+			asp-append-version="true"></script>
+	<script src="~/js/charts/getTotalUsersRadialChart.js"
+			asp-append-version="true"></script>
+	<script src="~/js/charts/getOrderGrowthLineChart.js"
+			asp-append-version="true"></script>
+	<script src="~/js/charts/getOrderStatusPieChart.js"
+			asp-append-version="true"></script>
+
+
 
 	<script>
 		// Function to show/hide loading spinner
@@ -183,7 +188,7 @@
 		document.addEventListener('DOMContentLoaded', function() {
 			// Initialize date range controls
 			window.initOrderGrowthDateRangeControls();
-			
+
 			// Initial load
 			updateCharts();
 		});

@@ -2,7 +2,11 @@ let pieChart;
 
 // Initialize Pie Chart
 function initPieChart(data) {
-  const ctx = document.getElementById("ordersStatusPieChart").getContext("2d");
+  const canvas = document.getElementById("ordersStatusPieChart");
+  const ctx = canvas.getContext("2d");
+
+  // Calculate total once at the beginning
+  const total = data.series.reduce((a, b) => a + b, 0);
 
   // Destroy existing chart if it exists
   if (pieChart) {
@@ -19,7 +23,7 @@ function initPieChart(data) {
   failedGradient.addColorStop(0, "#FF4560");
   failedGradient.addColorStop(1, "#FF6B6B");
 
-  pieChart = new Chart(ctx, {
+  pieChart = new Chart(canvas, {
     type: "doughnut",
     data: {
       labels: data.labels,
@@ -116,32 +120,38 @@ function initPieChart(data) {
         },
       },
     },
+    plugins: [
+      {
+        id: "centerText",
+        afterDraw: function (chart) {
+          const ctx = chart.ctx;
+          const total = chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+          const centerX = chart.width / 2;
+          const centerY = chart.height / 2;
+
+          // Draw center text
+          ctx.save();
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+
+          // Draw total orders with gradient color
+          const numberGradient = ctx.createLinearGradient(0, centerY - 30, 0, centerY);
+          numberGradient.addColorStop(0, "#00E396"); // Paid order color
+          numberGradient.addColorStop(1, "#008FFB"); // Blue gradient
+          ctx.font = "bold 28px Arial";
+          ctx.fillStyle = numberGradient;
+          ctx.fillText(total, centerX, centerY - 15);
+
+          // Draw "Total Orders" text with different color
+          ctx.font = "14px Arial";
+          ctx.fillStyle = "#666";
+          ctx.fillText("Total Orders", centerX, centerY + 15);
+
+          ctx.restore();
+        },
+      },
+    ],
   });
-
-  // Add center text
-  const total = data.series.reduce((a, b) => a + b, 0);
-  const centerX = pieChart.chart.width / 2;
-  const centerY = pieChart.chart.height / 2;
-
-  // Draw center text
-  ctx.save();
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-
-  // Draw total orders with gradient color
-  const numberGradient = ctx.createLinearGradient(0, centerY - 30, 0, centerY);
-  numberGradient.addColorStop(0, "#00E396"); // Paid order color
-  numberGradient.addColorStop(1, "#008FFB"); // Blue gradient
-  ctx.font = "bold 28px Arial";
-  ctx.fillStyle = numberGradient;
-  ctx.fillText(total, centerX, centerY - 15);
-
-  // Draw "Total Orders" text with different color
-  ctx.font = "14px Arial";
-  ctx.fillStyle = "#666";
-  ctx.fillText("Total Orders", centerX, centerY + 15);
-
-  ctx.restore();
 
   // Update summary text with animations
   const totalElement = document.getElementById("spanTotalOrdersCount");
@@ -161,26 +171,6 @@ function initPieChart(data) {
       clearInterval(totalInterval);
     }
     totalElement.textContent = Math.round(currentTotal);
-
-    // Update center text with gradient
-    ctx.save();
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.clearRect(centerX - 50, centerY - 30, 100, 60);
-
-    // Draw number with gradient
-    const numberGradient = ctx.createLinearGradient(0, centerY - 30, 0, centerY);
-    numberGradient.addColorStop(0, "#00E396");
-    numberGradient.addColorStop(1, "#008FFB");
-    ctx.font = "bold 28px Arial";
-    ctx.fillStyle = numberGradient;
-    ctx.fillText(Math.round(currentTotal), centerX, centerY - 15);
-
-    // Draw label
-    ctx.font = "14px Arial";
-    ctx.fillStyle = "#666";
-    ctx.fillText("Total Orders", centerX, centerY + 15);
-    ctx.restore();
   }, interval);
 
   // Update summary with percentage

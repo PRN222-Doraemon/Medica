@@ -1,5 +1,4 @@
-﻿using Core.Entities;
-using Core.Interfaces.Repos;
+﻿using Core.Interfaces.Repos;
 using Infrastructure.Persistence;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
