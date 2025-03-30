@@ -1,4 +1,5 @@
 using Core.Entities.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace MedicaWeb_MVC.ViewModels.User
@@ -47,7 +48,11 @@ namespace MedicaWeb_MVC.ViewModels.User
         [Display(Name = "Last Updated")]
         public DateTime UpdatedAt { get; set; }
 
+        [ValidateNever]
         [Display(Name = "Image URL")]
-        public string ImageUrl { get; set; }
+        public IFormFile? ImageFile { get; set; }
+
+        [Display(Name = "Current Image")]
+        public string ImageUrl { get; set; } = string.Empty;
     }
 }

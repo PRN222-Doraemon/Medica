@@ -1,3 +1,4 @@
+using AutoMapper;
 using Core.Entities.Identity;
 using Core.Interfaces.Services;
 using Core.Specifications.Users;
@@ -19,7 +20,9 @@ namespace MedicaWeb_MVC.Controllers
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IMapper _mapper;
         private readonly IAccountService _accountService;
+        private readonly ICloudinaryService _cloudinaryService;
         private const int PageSize = 10;
 
         // ==============================
@@ -29,11 +32,15 @@ namespace MedicaWeb_MVC.Controllers
         public AccountsManagementController(
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager,
-            IAccountService accountService)
+            IMapper mapper,
+            IAccountService accountService,
+            ICloudinaryService cloudinaryService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _accountService = accountService;
+            _cloudinaryService = cloudinaryService;
+            _mapper = mapper;
         }
 
         // ==============================
@@ -58,22 +65,12 @@ namespace MedicaWeb_MVC.Controllers
             {
                 var roles = await _userManager.GetRolesAsync(user);
                 var roleName = roles.FirstOrDefault() ?? "No Role";
-                var role = await _roleManager.FindByNameAsync(roleName);
 
-                accounts.Add(new AccountVM
-                {
-                    Id = user.Id,
-                    Username = user.UserName,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    PhoneNumber = user.PhoneNumber,
-                    RoleName = roleName,
-                    Status = user.Status,
-                    DateOfBirth = user.DateOfBirth,
-                    CreatedAt = user.CreatedAt,
-                    UpdatedAt = user.UpdatedAt
-                });
+                // Create accountVM
+                var accountVm = _mapper.Map<ApplicationUser, AccountVM>(user);
+                accountVm.RoleName = roleName;
+
+                accounts.Add(accountVm);
             }
 
             var model = new ListVM<AccountVM>
@@ -96,27 +93,6 @@ namespace MedicaWeb_MVC.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> ToggleStatus(int id)
-        {
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user == null)
-            {
-                return Json(new { success = false });
-            }
-
-            user.Status = user.Status == UserStatus.Enabled ? UserStatus.Disabled : UserStatus.Enabled;
-            user.UpdatedAt = DateTime.Now;
-            var result = await _userManager.UpdateAsync(user);
-
-            if (result.Succeeded)
-            {
-                return Json(new { success = true });
-            }
-
-            return Json(new { success = false });
-        }
-
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -129,29 +105,20 @@ namespace MedicaWeb_MVC.Controllers
             var roles = await _userManager.GetRolesAsync(user);
             var roleName = roles.FirstOrDefault() ?? "No Role";
 
-            var accountVM = new AccountVM
-            {
-                Id = user.Id,
-                Username = user.UserName,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                PhoneNumber = user.PhoneNumber,
-                RoleName = roleName,
-                Status = user.Status,
-                DateOfBirth = user.DateOfBirth,
-                ImageUrl = user.ImageUrl
-            };
+            var accountVM = _mapper.Map<ApplicationUser, AccountVM>(user);
+            accountVM.RoleName = roleName;
 
             ViewBag.Roles = await _roleManager.Roles.ToListAsync();
             return View(accountVM);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, AccountVM model)
         {
             if (id != model.Id)
             {
+                TempData["error"] = "Invalid account ID.";
                 return NotFound();
             }
 
@@ -160,37 +127,72 @@ namespace MedicaWeb_MVC.Controllers
                 var user = await _userManager.FindByIdAsync(id.ToString());
                 if (user == null)
                 {
+                    TempData["error"] = "Account not found.";
                     return NotFound();
                 }
 
-                user.UserName = model.Username;
-                user.Email = model.Email;
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.PhoneNumber = model.PhoneNumber;
-                user.Status = model.Status;
-                user.DateOfBirth = model.DateOfBirth;
-                user.ImageUrl = model.ImageUrl;
-                user.UpdatedAt = DateTime.Now;
+                // Update basic user information
+                _mapper.Map(model, user);
 
-                var result = await _userManager.UpdateAsync(user);
-                if (result.Succeeded)
+                // Handle image upload if a new image is provided
+                if (model.ImageFile != null && model.ImageFile.Length > 0)
                 {
-                    // Update role if changed
-                    var currentRoles = await _userManager.GetRolesAsync(user);
-                    if (currentRoles.FirstOrDefault() != model.RoleName)
+                    // Validate file size (5MB max)
+                    if (model.ImageFile.Length > 5 * 1024 * 1024)
                     {
-                        await _userManager.RemoveFromRolesAsync(user, currentRoles);
-                        await _userManager.AddToRoleAsync(user, model.RoleName);
+                        TempData["error"] = "Image size must be less than 5MB.";
+                        return RedirectToAction(nameof(Index), "AccountsManagement");
                     }
 
-                    return RedirectToAction(nameof(Index));
+                    // Validate file type
+                    var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif" };
+                    var fileExtension = Path.GetExtension(model.ImageFile.FileName).ToLowerInvariant();
+                    if (!allowedExtensions.Contains(fileExtension))
+                    {
+                        TempData["error"] = "Only JPG, PNG, and GIF files are allowed.";
+                        return RedirectToAction(nameof(Index), "AccountsManagement");
+                    }
+
+                    try
+                    {
+                        // Upload new image to Cloudinary
+                        user.ImageUrl = await _cloudinaryService.UploadAsync(model.ImageFile);
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["error"] = $"Failed to upload image: {ex.InnerException?.Message ?? ex.Message}";
+                        return RedirectToAction(nameof(Index), "AccountsManagement");
+                    }
                 }
 
-                foreach (var error in result.Errors)
+                var result = await _userManager.UpdateAsync(user);
+
+                // Checking if result successfull
+                if (result.Succeeded)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    try
+                    {
+                        // Update role if changed
+                        var currentRoles = await _userManager.GetRolesAsync(user);
+                        if (currentRoles.FirstOrDefault() != model.RoleName)
+                        {
+                            await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                            await _userManager.AddToRoleAsync(user, model.RoleName);
+                        }
+
+                        TempData["success"] = "Account updated successfully";
+                        return RedirectToAction(nameof(Index), "AccountsManagement");
+                    }
+                    catch (Exception ex)
+                    {
+                        TempData["error"] = $"Failed to update role: {ex.InnerException?.Message ?? ex.Message}";
+                        return RedirectToAction(nameof(Index), "AccountsManagement");
+                    }
                 }
+            }
+            else
+            {
+                TempData["error"] = "Please correct the validation errors.";
             }
 
             ViewBag.Roles = await _roleManager.Roles.ToListAsync();
@@ -218,12 +220,9 @@ namespace MedicaWeb_MVC.Controllers
                     PhoneNumber = model.PhoneNumber,
                     Status = model.Status,
                     DateOfBirth = model.DateOfBirth,
-                    ImageUrl = model.ImageUrl,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
                 };
 
-                var result = await _userManager.CreateAsync(user, "DefaultPassword123!"); // You might want to generate a random password or let the admin set it
+                var result = await _userManager.CreateAsync(user, "Password123!"); // You might want to generate a random password or let the admin set it
 
                 if (result.Succeeded)
                 {

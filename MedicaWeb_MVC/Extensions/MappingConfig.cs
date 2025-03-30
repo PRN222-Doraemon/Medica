@@ -63,6 +63,9 @@ namespace MedicaWeb_MVC.Extensions
                 config.CreateMap<RegisterVM, ApplicationUser>();
                 config.CreateMap<Lecturer, LecturerVM>();
                 config.CreateMap<Student, StudentVM>();
+                config.CreateMap<ApplicationUser, AccountVM>()
+                    .ForMember(dest => dest.RoleName, opt => opt.Ignore())
+                    .ReverseMap();
 
                 // ==============================
                 // === Classrooms
