@@ -5,12 +5,6 @@ using Core.Interfaces.Services;
 using Core.Specifications.Courses;
 using Core.Specifications.Feedbacks;
 using Core.Specifications.Orders;
-using Microsoft.Identity.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Infrastructure.Services
 {

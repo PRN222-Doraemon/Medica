@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using Core.Constants;
 using Core.Entities;
-using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
 using Core.Specifications.Courses;
 using MedicaWeb_MVC.Hubs;
-using MedicaWeb_MVC.ViewModels;
 using MedicaWeb_MVC.ViewModels.Courses;
 using MedicaWeb_MVC.ViewModels.Shared;
 using Microsoft.AspNetCore.Authorization;
@@ -177,7 +175,7 @@ namespace MedicaWeb_MVC.Controllers
             ViewData["Categories"] = new SelectList(await _categoryService.GetAllCategories(), "Id", "Name");
             ViewData["ResourceTypes"] = new SelectList(new List<string> { ResourceType.Slide.ToString(), ResourceType.Video.ToString() }
             );
-            return RedirectToAction(nameof(Details), new {Id = id});
+            return RedirectToAction(nameof(Details), new { Id = id });
         }
 
         public async Task<IActionResult> Enable(int id)

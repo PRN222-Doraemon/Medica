@@ -1,0 +1,97 @@
+@model IEnumerable<MedicaWeb_MVC.ViewModels.User.AccountVM>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Accounts Management</h4>
+            <div class="page-title-right">
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Add New Account
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            @await Html.PartialAsync("_GenericTable", new
+            {
+                Controller = "AccountsManagement",
+                Items = Model.Select(a => new Dictionary<string, object>
+                {
+                    { "Id", a.Id },
+                    { "Username", a.Username },
+                    { "Email", a.Email },
+                    { "FirstName", a.FirstName },
+                    { "LastName", a.LastName },
+                    { "FullName", a.FullName },
+                    { "PhoneNumber", a.PhoneNumber },
+                    { "RoleName", a.RoleName },
+                    { "Status", a.Status },
+                    { "DateOfBirth", a.DateOfBirth.ToString("MM/dd/yyyy") },
+                    { "CreatedAt", a.CreatedAt.ToString("MM/dd/yyyy") },
+                    { "UpdatedAt", a.UpdatedAt.ToString("MM/dd/yyyy") }
+                }),
+                Columns = new Dictionary<string, string>
+                {
+                    { "Id", "ID" },
+                    { "Username", "Username" },
+                    { "Email", "Email" },
+                    { "FirstName", "First Name" },
+                    { "LastName", "Last Name" },
+                    { "FullName", "Full Name" },
+                    { "PhoneNumber", "Phone" },
+                    { "RoleName", "Role" },
+                    { "Status", "Status" },
+                    { "DateOfBirth", "Date of Birth" },
+                    { "CreatedAt", "Created At" },
+                    { "UpdatedAt", "Last Updated" }
+                }
+            })
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Customize the table for accounts
+            const table = $('#tableBody').DataTable({
+                pageLength: 10,
+                order: [[0, 'asc']],
+                columnDefs: [
+                    {
+                        targets: 8, // Status column
+                        render: function(data, type, row) {
+                            return data === 'Enabled' ? 
+                                '<span class="badge bg-success">Enabled</span>' : 
+                                '<span class="badge bg-danger">Disabled</span>';
+                        }
+                    }
+                ],
+                language: {
+                    search: "",
+                    searchPlaceholder: "Search accounts...",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ accounts",
+                    paginate: {
+                        previous: "Previous",
+                        next: "Next"
+                    }
+                }
+            });
+
+            // Customize the toggle status button appearance
+            $('.toggle-status').each(function() {
+                const status = $(this).data('status');
+                $(this).find('i')
+                    .removeClass('fa-ban fa-check')
+                    .addClass(status === 'Enabled' ? 'fa-ban' : 'fa-check');
+            });
+
+            // Add custom styling for action buttons
+            $('.btn-group .btn').each(function() {
+                $(this).addClass('me-1');
+            });
+        });
+    </script>
+} 

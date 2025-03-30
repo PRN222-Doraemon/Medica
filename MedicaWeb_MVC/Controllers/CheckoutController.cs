@@ -5,7 +5,6 @@ using Core.Interfaces.Services;
 using Core.Specifications.Classes;
 using Core.Specifications.Courses;
 using MedicaWeb_MVC.ViewModels.Orders;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MedicaWeb_MVC.Controllers
