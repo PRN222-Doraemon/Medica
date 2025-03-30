@@ -15,14 +15,16 @@ namespace MedicaWeb_MVC.Controllers
 
         private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
+        private readonly ICloudinaryService _cloudinaryService;
 
         // ==============================
         // === Constructors
         // ==============================
-        public AccountsController(IAccountService accountService, IMapper mapper)
+        public AccountsController(IAccountService accountService, IMapper mapper, ICloudinaryService cloudinaryService)
         {
             _accountService = accountService;
             _mapper = mapper;
+            _cloudinaryService = cloudinaryService;
         }
 
         // ==============================
@@ -122,6 +124,87 @@ namespace MedicaWeb_MVC.Controllers
         {
             await _accountService.LogoutAsync();
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _accountService.GetUserByClaimsAsync(User);
+
+            var viewModel = new ProfilePageVM
+            {
+                ProfileData = new ProfileVM
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PhoneNumber = user.PhoneNumber,
+                    UserName = user.UserName,
+                    Email = user.Email,
+                    ProfileImageUrl = user.ImageUrl,
+                    DateOfBirth = user.DateOfBirth,
+                }
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfileImage(IFormFile profileImage)
+        {
+            try
+            {
+                if (profileImage == null || profileImage.Length == 0)
+                {
+                    TempData["error"] = "Please select an image to upload.";
+                    return RedirectToAction(nameof(Profile));
+                }
+
+                var user = await _accountService.GetUserByClaimsAsync(User);
+                if (user == null)
+                {
+                    TempData["error"] = "User not found";
+                    return RedirectToAction(nameof(Profile));
+                }
+
+
+                var imageUrl = await _cloudinaryService.UploadAsync(profileImage);
+
+                if (user.ImageUrl != null)
+                {
+                    await _cloudinaryService.DeleteImageAsync(user.ImageUrl);
+                }
+
+                user.ImageUrl = imageUrl;
+                await _accountService.UpdateUserAsync(user);
+
+                return RedirectToAction(nameof(Profile));
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = "Failed to upload image. Please try again.";
+                return RedirectToAction(nameof(Profile));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ProfilePageVM model)
+        {
+            var user = await _accountService.GetUserByClaimsAsync(User);
+            if (user == null)
+            {
+                TempData["error"] = "User not found.";
+                return RedirectToAction(nameof(Profile));
+            }
+
+            var result = await _accountService.ChangePasswordAsync(user, model.PasswordData.CurrentPassword, model.PasswordData.NewPassword);
+            if (result)
+            {
+                TempData["success"] = "Password changed successfully!";
+                return RedirectToAction(nameof(Profile));
+            }
+
+            TempData["error"] = "Invalid current password.";
+            return RedirectToAction(nameof(Profile));
         }
     }
 }

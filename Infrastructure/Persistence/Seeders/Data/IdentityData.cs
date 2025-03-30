@@ -17,6 +17,7 @@ internal static class IdentityData
                 NormalizedEmail = "STUDENT1@EXAMPLE.COM",
                 FirstName = "Student",
                 LastName = "One",
+                PhoneNumber = "123-456-7890", // Added phone number
                 Status = UserStatus.Enabled,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
@@ -30,6 +31,7 @@ internal static class IdentityData
                 NormalizedEmail = "STUDENT2@EXAMPLE.COM",
                 FirstName = "Student",
                 LastName = "Two",
+                PhoneNumber = "123-456-7891", // Added phone number
                 Status = UserStatus.Enabled,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
@@ -43,6 +45,7 @@ internal static class IdentityData
                 NormalizedEmail = "STUDENT3@EXAMPLE.COM",
                 FirstName = "Student",
                 LastName = "Three",
+                PhoneNumber = "123-456-7892", // Added phone number
                 Status = UserStatus.Enabled,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
@@ -56,6 +59,7 @@ internal static class IdentityData
                 NormalizedEmail = "STUDENT4@EXAMPLE.COM",
                 FirstName = "Student",
                 LastName = "Four",
+                PhoneNumber = "123-456-7893", // Added phone number
                 Status = UserStatus.Enabled,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
@@ -69,6 +73,7 @@ internal static class IdentityData
                 NormalizedEmail = "ADMIN1@EXAMPLE.COM",
                 FirstName = "Admin",
                 LastName = "One",
+                PhoneNumber = "123-456-7894", // Added phone number
                 Status = UserStatus.Enabled,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
@@ -81,6 +86,7 @@ internal static class IdentityData
                 NormalizedEmail = "LECTURER1@EXAMPLE.COM",
                 FirstName = "Lecturer",
                 LastName = "One",
+                PhoneNumber = "123-456-7895", // Added phone number
                 Status = UserStatus.Enabled,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
@@ -91,9 +97,10 @@ internal static class IdentityData
                 UserName = "lecturer2",
                 NormalizedUserName = "LECTURER2",
                 Email = "lecturer2@example.com",
-                NormalizedEmail = "lecturer2@EXAMPLE.COM",
+                NormalizedEmail = "LECTURER2@EXAMPLE.COM",
                 FirstName = "Lecturer",
                 LastName = "Two",
+                PhoneNumber = "123-456-7896", // Added phone number
                 Status = UserStatus.Enabled,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
@@ -107,6 +114,7 @@ internal static class IdentityData
                 NormalizedEmail = "Manager1@EXAMPLE.COM",
                 FirstName = "Employee",
                 LastName = "One",
+                PhoneNumber = "123-456-7897", // Added phone number
                 Status = UserStatus.Enabled,
                 CreatedAt = DateTime.UtcNow,
                 DepartmentId = 1,
@@ -120,6 +128,7 @@ internal static class IdentityData
                 NormalizedEmail = "EMPLOYEE@EXAMPLE.COM",
                 FirstName = "Employee",
                 LastName = "Two",
+                PhoneNumber = "123-456-7898", // Added phone number
                 Status = UserStatus.Enabled,
                 DepartmentId = 2,
                 CreatedAt = DateTime.UtcNow,

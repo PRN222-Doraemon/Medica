@@ -29,24 +29,10 @@
 			</a>
 		</li>
 		<li>
-			<a asp-controller="Courses" asp-action="Index"
-			   class="nav-link d-flex align-items-center p-3 rounded-3 @IsActive("Courses")" style="color: #555555;">
-				<i class="bi bi-people-fill me-3 fs-5 @IsActive("Courses")" style="color: #FF9955;"></i>
-				<span>Courses Management</span>
-			</a>
-		</li>
-		<li>
 			<a asp-controller="AccountsManagement" asp-action="Index"
 			   class="nav-link d-flex align-items-center p-3 rounded-3 @IsActive("AccountsManagement")" style="color: #555555;">
 				<i class="bi bi-people-fill me-3 fs-5 @IsActive("AccountsManagement")" style="color: #FF9955;"></i>
 				<span>Accounts Management</span>
-			</a>
-		</li>
-		<li>
-			<a asp-controller="Classrooms" asp-action="Index"
-			   class="nav-link d-flex align-items-center p-3 rounded-3 @IsActive("Classrooms")" style="color: #555555;">
-				<i class="bi bi-people-fill me-3 fs-5 @IsActive("Classrooms")" style="color: #FF9955;"></i>
-				<span>Classrooms Management</span>
 			</a>
 		</li>
 		<li>
@@ -64,9 +50,8 @@
 			<li class="nav-item mb-2">
 				<a asp-controller="Accounts" asp-action="Profile"
 				   class="nav-link d-flex align-items-center p-2 rounded-3 text-decoration-none user-profile">
-					<div>
-						View Profile
-					</div>
+					<i class="bi bi-person-circle me-2"></i>
+					<span>View Profile</span>
 				</a>
 			</li>
 			<li class="nav-item">

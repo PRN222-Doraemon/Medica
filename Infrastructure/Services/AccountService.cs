@@ -1,5 +1,6 @@
 ﻿using Core.Entities.Identity;
 using Core.Interfaces.Services;
+using Core.Specifications;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -19,6 +20,7 @@ namespace Infrastructure.Services
         // =========================
         // === Constructors
         // =========================
+
         public AccountService(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
@@ -29,6 +31,18 @@ namespace Infrastructure.Services
         // =========================
         // === Methods
         // =========================
+
+        public async Task<List<ApplicationUser>> GetAllRegisteredUserAsync(ISpecification<ApplicationUser> userSpecification)
+        {
+            var query = _userManager.Users.AsQueryable();
+            return await SpecificationEvaluator<ApplicationUser>.GetQuery(query, userSpecification).ToListAsync();
+        }
+
+        public async Task<int> GetTotalUsersCountAsync(ISpecification<ApplicationUser> userSpecification)
+        {
+            var query = _userManager.Users.AsQueryable();
+            return await SpecificationEvaluator<ApplicationUser>.GetQuery(query, userSpecification).CountAsync();
+        }
 
         public async Task<ApplicationUser?> GetUserByClaimsAsync(ClaimsPrincipal principal)
         {
@@ -106,6 +120,18 @@ namespace Infrastructure.Services
             return await _userManager.Users
                 .OrderByDescending(s => s.Id)
                 .ToListAsync();
+        }
+
+        public async Task<bool> UpdateUserAsync(ApplicationUser user)
+        {
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded;
+        }
+
+        public async Task<bool> ChangePasswordAsync(ApplicationUser user, string currentPassword, string newPassword)
+        {
+            var result = await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
+            return result.Succeeded;
         }
     }
 }

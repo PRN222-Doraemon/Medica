@@ -1,23 +1,23 @@
 ﻿.search-container {
-    position: relative;
+  position: relative;
 }
 
 .search-input {
-    height: 50px;
-    width: 100%;
-    border-radius: 10px;
-    padding-left: 35px;
-    border: none;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  height: 50px;
+  width: 100%;
+  border-radius: 10px;
+  padding-left: 35px;
+  border: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .search-icon {
-    position: absolute;
-    top: 50%;
-    left: 15px;
-    transform: translateY(-50%);
-    color: #888;
+  position: absolute;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%);
+  color: #888;
 }
 .search-input:focus {
-    box-shadow: 0 0 8px rgba(255, 140, 0, 0.534); 
+  box-shadow: 0 0 8px rgba(255, 140, 0, 0.534);
 }
