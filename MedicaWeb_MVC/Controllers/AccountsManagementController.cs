@@ -284,9 +284,8 @@ namespace MedicaWeb_MVC.Controllers
             }
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        [HttpGet]
+        public async Task<IActionResult> Delete([FromQuery] int id)
         {
             try
             {
