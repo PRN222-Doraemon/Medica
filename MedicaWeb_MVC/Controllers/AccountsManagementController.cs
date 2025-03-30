@@ -33,6 +33,7 @@ namespace MedicaWeb_MVC.Controllers
         // === Methods
         // ==============================
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var users = await _userManager.Users.ToListAsync();
@@ -84,36 +85,7 @@ namespace MedicaWeb_MVC.Controllers
             return Json(new { success = false });
         }
 
-        public async Task<IActionResult> Details(int id)
-        {
-            var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            var roles = await _userManager.GetRolesAsync(user);
-            var roleName = roles.FirstOrDefault() ?? "No Role";
-
-            var accountVM = new AccountVM
-            {
-                Id = user.Id,
-                Username = user.UserName,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                PhoneNumber = user.PhoneNumber,
-                RoleName = roleName,
-                Status = user.Status,
-                DateOfBirth = user.DateOfBirth,
-                CreatedAt = user.CreatedAt,
-                UpdatedAt = user.UpdatedAt,
-                ImageUrl = user.ImageUrl
-            };
-
-            return View(accountVM);
-        }
-
+        [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -193,6 +165,7 @@ namespace MedicaWeb_MVC.Controllers
             return View(model);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             ViewBag.Roles = _roleManager.Roles.ToList();
