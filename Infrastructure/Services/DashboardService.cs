@@ -5,6 +5,7 @@ using Core.Interfaces.Services;
 using Core.Specifications.Courses;
 using Core.Specifications.Feedbacks;
 using Core.Specifications.Orders;
+using Core.Specifications.Users;
 
 namespace Infrastructure.Services
 {
@@ -42,7 +43,8 @@ namespace Infrastructure.Services
         // Return the radial bar chart data comparing from current month and previous month of Registered Users
         public async Task<RadialBarChartDto> GetRegisteredUserChartData()
         {
-            var totalRegisteredUser = await _accountService.GetAllRegisteredUserAsync();
+            var spec = new UserSpecification();
+            var totalRegisteredUser = await _accountService.GetAllRegisteredUserAsync(spec);
             var countTotal = totalRegisteredUser.Count();
             var countByCurrentMonth = totalRegisteredUser.Count(u => currentMonthStartDate <= u.CreatedAt && u.CreatedAt <= DateTime.Now);
             var countByPreviousMonth = totalRegisteredUser.Count(f => previousMonthStartDate <= f.CreatedAt && f.CreatedAt <= currentMonthStartDate);

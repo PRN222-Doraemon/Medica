@@ -1,13 +1,13 @@
+using AutoMapper;
+using Core.Constants;
 using Core.Entities;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Core.Interfaces.Services;
+using Core.Specifications.News;
 using MedicaWeb_MVC.ViewModels.News;
 using MedicaWeb_MVC.ViewModels.Shared;
-using Core.Specifications.News;
-using AutoMapper;
-using Core.Interfaces.Services;
 using Microsoft.AspNetCore.Authorization;
-using Core.Constants;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MedicaWeb_MVC.Controllers
 {

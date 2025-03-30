@@ -1,4 +1,7 @@
 using Core.Entities.Identity;
+using Core.Interfaces.Services;
+using Core.Specifications.Users;
+using MedicaWeb_MVC.ViewModels.Shared;
 using MedicaWeb_MVC.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +19,8 @@ namespace MedicaWeb_MVC.Controllers
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly IAccountService _accountService;
+        private const int PageSize = 10;
 
         // ==============================
         // === Constructors
@@ -23,10 +28,12 @@ namespace MedicaWeb_MVC.Controllers
 
         public AccountsManagementController(
             UserManager<ApplicationUser> userManager,
-            RoleManager<ApplicationRole> roleManager)
+            RoleManager<ApplicationRole> roleManager,
+            IAccountService accountService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _accountService = accountService;
         }
 
         // ==============================
@@ -34,17 +41,26 @@ namespace MedicaWeb_MVC.Controllers
         // ==============================
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromQuery] int page = 1, [FromQuery] string search = "")
         {
-            var users = await _userManager.Users.ToListAsync();
-            var accountVMs = new List<AccountVM>();
+            var userParams = new UserParams
+            {
+                Page = page,
+                PageSize = PageSize,
+                Search = search
+            };
+
+            var users = await _accountService.GetAllRegisteredUserAsync(new UserSpecification(userParams, true));
+            var totalItems = await _accountService.GetTotalUsersCountAsync(new UserSpecification(userParams, false));
+            var accounts = new List<AccountVM>();
 
             foreach (var user in users)
             {
                 var roles = await _userManager.GetRolesAsync(user);
                 var roleName = roles.FirstOrDefault() ?? "No Role";
+                var role = await _roleManager.FindByNameAsync(roleName);
 
-                accountVMs.Add(new AccountVM
+                accounts.Add(new AccountVM
                 {
                     Id = user.Id,
                     Username = user.UserName,
@@ -56,12 +72,28 @@ namespace MedicaWeb_MVC.Controllers
                     Status = user.Status,
                     DateOfBirth = user.DateOfBirth,
                     CreatedAt = user.CreatedAt,
-                    UpdatedAt = user.UpdatedAt,
-                    ImageUrl = user.ImageUrl
+                    UpdatedAt = user.UpdatedAt
                 });
             }
 
-            return View(accountVMs);
+            var model = new ListVM<AccountVM>
+            {
+                Items = accounts,
+                PagingInfo = new PagingVM
+                {
+                    CurrentPage = page,
+                    TotalItems = totalItems,
+                    ItemsPerPage = PageSize
+                },
+                SearchValue = new SearchbarVM
+                {
+                    Controller = "AccountsManagement",
+                    Action = "Index",
+                    SearchText = search
+                }
+            };
+
+            return View(model);
         }
 
         [HttpPost]
