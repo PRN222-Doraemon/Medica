@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Core.Constants;
 using Core.Entities;
 using Core.Entities.Identity;
 using MedicaWeb_MVC.ViewModels.Classes;
@@ -63,6 +64,10 @@ namespace MedicaWeb_MVC.Extensions
                 config.CreateMap<RegisterVM, ApplicationUser>();
                 config.CreateMap<Lecturer, LecturerVM>();
                 config.CreateMap<Student, StudentVM>();
+                config.CreateMap<ApplicationUser, AccountVM>()
+                    .ForMember(dest => dest.RoleName, opt => opt.Ignore())
+                    .ForMember(dest => dest.DefaultPassword, u => u.MapFrom(s => AppCts.Accounts.DefaultPassword))
+                    .ReverseMap();
 
                 // ==============================
                 // === Classrooms

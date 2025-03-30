@@ -1,4 +1,5 @@
-﻿using Core.Entities.Identity;
+﻿using Core.Constants;
+using Core.Entities.Identity;
 using Infrastructure.Persistence.Seeders.FakeData;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,6 @@ namespace Infrastructure.Persistence
 
         private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
-        private const string PASSWORD = "Password123!";
 
         // =====================================
         // === Constructors
@@ -52,7 +52,7 @@ namespace Infrastructure.Persistence
                 {
                     foreach (ApplicationUser user in users)
                     {
-                        await _userManager.CreateAsync(user, PASSWORD);
+                        await _userManager.CreateAsync(user, AppCts.Accounts.DefaultPassword);
                     }
                 }
 
