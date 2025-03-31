@@ -1,6 +1,7 @@
 ﻿using Core.Entities;
 using Core.Interfaces.Repos;
 using Core.Interfaces.Services;
+using Core.Specifications;
 using Core.Specifications.Orders;
 
 namespace Infrastructure.Services
@@ -103,6 +104,11 @@ namespace Infrastructure.Services
                 _unitOfWork.Repository<Order>().Update(order);
                 await _unitOfWork.CompleteAsync();
             }
+        }
+
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync(ISpecification<Order> specification)
+        {
+            return await _unitOfWork.Repository<Order>().ListAsync(specification);
         }
     }
 }
