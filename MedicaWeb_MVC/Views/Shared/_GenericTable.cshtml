@@ -31,10 +31,39 @@
 								<td>
 									@if (column.Key == "IsActive" || column.Key == "Status")
 									{
-										var status = item.ContainsKey("Status") ? item["Status"] : item["IsActive"];
-										var isEnabled = status is bool ? (bool)status : status.ToString() == "Enabled";
-										<span class="badge bg-@(isEnabled ? "success" : "danger")">
-											@item["Status"]
+										var status = item[column.Key];
+										string badgeClass = "secondary";
+										string statusText = status.ToString();
+
+										if (controller.Equals("AccountsManagement"))
+										{
+											var isEnabled = status is bool ? (bool)status : status.ToString() == "Enabled";
+											badgeClass = isEnabled ? "success" : "danger";
+										}
+										else if (controller.Equals("OrdersManagement"))
+										{
+											switch (status.ToString())
+											{
+												case "Pending":
+													badgeClass = "warning";
+													break;
+												case "Paid":
+													badgeClass = "success";
+													break;
+												case "Failed":
+													badgeClass = "danger";
+													break;
+												case "Refunded":
+													badgeClass = "info";
+													break;
+												default:
+													badgeClass = "secondary";
+													break;
+											}
+										}
+
+										<span class="badge bg-@badgeClass">
+											@statusText
 										</span>
 									}
 									else
@@ -46,7 +75,6 @@
 							@if (!controller.Equals("OrdersManagement"))
 							{
 								<td>
-
 									<div class="btn-group">
 										<a href="@Url.Action("Edit", controller, new { id = item["Id"] })" class="btn btn-warning">
 											Edit <i class="fas fa-edit"></i>
@@ -57,7 +85,6 @@
 												Delete <i class="fas fa-trash"></i>
 											</button>
 										</form>
-
 									</div>
 								</td>
 							}
