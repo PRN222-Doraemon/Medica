@@ -16,7 +16,10 @@
 						{
 							<th class="text-nowrap">@column.Value</th>
 						}
-						<th class="text-nowrap">Actions</th>
+						@if (!controller.Equals("OrdersManagement"))
+						{
+							<th class="text-nowrap">Actions</th>
+						}
 					</tr>
 				</thead>
 				<tbody>
@@ -31,7 +34,7 @@
 										var status = item.ContainsKey("Status") ? item["Status"] : item["IsActive"];
 										var isEnabled = status is bool ? (bool)status : status.ToString() == "Enabled";
 										<span class="badge bg-@(isEnabled ? "success" : "danger")">
-											@(isEnabled ? "Enabled" : "Disabled")
+											@item["Status"]
 										</span>
 									}
 									else
@@ -40,20 +43,24 @@
 									}
 								</td>
 							}
-							<td>
-								<div class="btn-group">
-									<a href="@Url.Action("Edit", controller, new { id = item["Id"] })" class="btn btn-warning">
-										Edit <i class="fas fa-edit"></i>
-									</a>
-									<form asp-action="Delete" asp-controller="@controller" method="get">
-										<input name="Id" value='@item["Id"]' hidden />
-										<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">
-											Delete <i class="fas fa-trash"></i>
-										</button>
-									</form>
+							@if (!controller.Equals("OrdersManagement"))
+							{
+								<td>
 
-								</div>
-							</td>
+									<div class="btn-group">
+										<a href="@Url.Action("Edit", controller, new { id = item["Id"] })" class="btn btn-warning">
+											Edit <i class="fas fa-edit"></i>
+										</a>
+										<form asp-action="Delete" asp-controller="@controller" method="get">
+											<input name="Id" value='@item["Id"]' hidden />
+											<button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">
+												Delete <i class="fas fa-trash"></i>
+											</button>
+										</form>
+
+									</div>
+								</td>
+							}
 						</tr>
 					}
 				</tbody>
