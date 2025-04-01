@@ -1,7 +1,9 @@
-﻿using Core.Entities;
+﻿using Core.Constants;
+using Core.Entities;
 using Core.Interfaces.Services;
 using Core.Specifications.Classes;
-using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
+using System.Globalization;
 using System.Text.Json;
 
 namespace Infrastructure.Services
@@ -12,16 +14,16 @@ namespace Infrastructure.Services
         // === Props & Fields
         // ==============================
 
-        private readonly IDistributedCache _cache;
+        private readonly IDatabase _redisDb;
         private readonly IClassService _classService;
 
         // ==============================
         // === Constructors
         // ==============================
 
-        public CartService(IDistributedCache cache, IClassService classService)
+        public CartService(IConnectionMultiplexer connectionMultiplexer, IClassService classService)
         {
-            _cache = cache;
+            _redisDb = connectionMultiplexer.GetDatabase(AppCts.RedisDatabase.Cart); // Database 0 for Redis
             _classService = classService;
         }
 
@@ -29,6 +31,14 @@ namespace Infrastructure.Services
         // === Methods
         // ==============================
 
+        /// <summary>
+        /// Add or Update to the Cart
+        /// </summary>
+        /// <param name="classRoomId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <exception cref="KeyNotFoundException"></exception>
+        /// <exception cref="Exception"></exception>
         public async Task AddOrUpdateToCartAsync(int classRoomId, int userId)
         {
             var spec = new ClassSpecification(classRoomId);
@@ -40,7 +50,7 @@ namespace Infrastructure.Services
             }
 
             // Retrieve the cartItems from the Redis
-            var cartKey = $"cart_{userId}";
+            var cartKey = string.Format(AppCts.RedisDatabase.CartKeyTemplate, userId);
             var cartItems = await GetCartItemsAsync(userId);
             if (cartItems.Any(ci => ci.ClassRoomId == classRoomId))
             {
@@ -57,21 +67,32 @@ namespace Infrastructure.Services
                 Price = classRoom.Course.Price,
             });
 
-            await _cache.SetStringAsync(cartKey, JsonSerializer.Serialize(cartItems), new DistributedCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24) // Valid only 24 hours
-            });
+            await _redisDb.StringSetAsync(
+                new RedisKey(cartKey),
+                new RedisValue(JsonSerializer.Serialize(cartItems)),
+                TimeSpan.FromMinutes(30));
         }
 
+        /// <summary>
+        /// Delete the Cart 
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task DeleteCartAsync(int userId)
         {
-            await _cache.RemoveAsync($"cart_{userId}");
+            var key = string.Format(AppCts.RedisDatabase.CartKeyTemplate, userId);
+            await _redisDb.KeyDeleteAsync(key);
         }
 
+        /// <summary>
+        /// Get the Cart Items
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<List<CartItem>> GetCartItemsAsync(int userId)
         {
-            var cartKey = $"cart_{userId}";
-            var cartList = await _cache.GetStringAsync(cartKey);
+            var key = string.Format(AppCts.RedisDatabase.CartKeyTemplate, userId);
+            var cartList = await _redisDb.StringGetAsync(key);
             return string.IsNullOrEmpty(cartList)
                 ? []
                 : JsonSerializer.Deserialize<List<CartItem>>(cartList) ?? [];

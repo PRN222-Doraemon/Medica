@@ -32,13 +32,16 @@ namespace MedicaWeb_MVC.Extensions
             services.AddScoped<IStudentService, StudentService>();
             services.AddScoped<INewsService, NewsService>();
 
-
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<IPaymentService, StripePaymentService>();
+            services.AddScoped<IChatService, ChatService>();
 
             // config cloudinary
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
+
+            // Add SignalR
+            services.AddSignalR();
 
             return services;
         }

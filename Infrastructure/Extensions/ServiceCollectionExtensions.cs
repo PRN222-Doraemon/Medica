@@ -7,13 +7,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using Stripe;
 
 namespace Infrastructure.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+        public static void AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
             try
             {
@@ -24,9 +25,9 @@ namespace Infrastructure.Extensions
                 });
 
                 // Register the Redis with IDistributed API
-                services.AddStackExchangeRedisCache(opt =>
+                services.AddSingleton<IConnectionMultiplexer>(sp =>
                 {
-                    opt.Configuration = configuration["Redis:ConnectionString"];
+                    return ConnectionMultiplexer.Connect(configuration["Redis:ConnectionString"]);
                 });
 
                 // Configure Stripe API key

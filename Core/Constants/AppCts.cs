@@ -57,5 +57,14 @@ namespace Core.Constants
         {
             public const string DefaultPassword = "Password123!";
         }
+
+
+        public static class RedisDatabase
+        {
+            public const int Cart = 0;
+            public const int Chat = 1;
+            public const string ChatKeyTemplate = "chat_{0}-{1}";
+            public const string CartKeyTemplate = "cart_{0}";
+        }
     }
 }
