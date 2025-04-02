@@ -1,5 +1,4 @@
 ﻿using Core.Entities;
-
 namespace Core.Specifications.Courses
 {
     public class TopCoursesByFeedbacksSpecification : BaseSpecification<Course>
