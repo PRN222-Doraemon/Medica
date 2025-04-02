@@ -29,13 +29,12 @@ namespace Infrastructure.Services
 
         public async Task CreateClassAsync(Classroom classroom)
         {
+            if (classroom.Mode == ClassroomMode.Online)
+            {
+                classroom.RoomId = Guid.NewGuid().ToString();
+            }
             _unitOfWork.Repository<Classroom>().Add(classroom);
             await _unitOfWork.CompleteAsync();
-        }
-
-        public Task CreateRoomAsync(string roomId)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task DeleteClassAsync(int id)

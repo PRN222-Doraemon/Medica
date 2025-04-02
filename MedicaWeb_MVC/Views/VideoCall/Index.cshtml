@@ -17,6 +17,7 @@
 <input type="hidden" id="userName" value="@Model.UserName" />
 <input type="hidden" id="fullName" value="@Model.FullName" />
 <input type="hidden" id="userRole" value="@Model.RoleName" />
+<input type="hidden" id="roomId" value="@Model.RoomId" />
 <div class="video-meeting-container">
     <div class="main-video-section">
         <div class="video-item" id="localVideoContainer">
@@ -52,20 +53,23 @@
         <div class="control-panel">
             <button class="control-btn" onclick="toggleAudio()" id="audioBtn">
                 <i class="bi bi-mic-fill"></i>
-        </button>
-        <button class="control-btn" onclick="toggleVideo()" id="videoBtn">
-            <i class="bi bi-camera-video-fill"></i>
-        </button>
-        <button class="control-btn leave-btn" onclick="leaveRoom()">
+            </button>
+            <button class="control-btn" onclick="toggleVideo()" id="videoBtn">
+                <i class="bi bi-camera-video-fill"></i>
+            </button>
+            <button class="control-btn" onclick="toggleScreenShare()" id="screenShareBtn">
+                <i class="bi bi-display"></i>
+            </button>
+            <button class="control-btn leave-btn" onclick="leaveRoom()">
                 <i class="bi bi-telephone-x-fill"></i>
             </button>
         </div>
     } else {
         <div class="control-panel">
-        <button class="control-btn" onclick="toggleAudio()" id="audioBtn">
+            <button class="control-btn" onclick="toggleAudio()" id="audioBtn">
                 <i class="bi bi-mic-fill"></i>
-        </button>
-        <button class="control-btn leave-btn" onclick="leaveRoom()">
+            </button>
+            <button class="control-btn leave-btn" onclick="leaveRoom()">
                 <i class="bi bi-telephone-x-fill"></i>
             </button>
         </div>

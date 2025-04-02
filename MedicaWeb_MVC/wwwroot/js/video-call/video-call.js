@@ -5,7 +5,7 @@ const userName = document.getElementById("userName");
 const fullName = document.getElementById("fullName");
 const participantItems = document.getElementById("participantItems");
 const videoCallService = new VideoCallService(userRole.value, userName.value);
-const roomId = "123";
+const roomId = document.getElementById("roomId").value;
 
 // if userRole is lecturer, then this is considered as local video
 const lecturerVideoRef = document.getElementById("lecturer-video");
@@ -24,6 +24,7 @@ const state = window.videoCallState || {
   isAudioEnabled: true,
   isSignalRConnected: true,
   isWebcamActive: false,
+  isScreenSharing: false,
 };
 
 // Create state management functions
@@ -38,6 +39,7 @@ const updateUI = () => {
   // Update UI based on state
   const videoBtn = document.getElementById("videoBtn");
   const audioBtn = document.getElementById("audioBtn");
+  const screenShareBtn = document.getElementById("screenShareBtn");
 
   if (videoBtn) {
     videoBtn.classList.toggle("video-off", !state.isVideoEnabled);
@@ -51,6 +53,13 @@ const updateUI = () => {
     audioBtn.innerHTML = state.isAudioEnabled
       ? '<i class="bi bi-mic-fill"></i>'
       : '<i class="bi bi-mic-mute-fill"></i>';
+  }
+
+  if (screenShareBtn && userRole.value === "Lecturer") {
+    screenShareBtn.classList.toggle("active", state.isScreenSharing);
+    screenShareBtn.innerHTML = state.isScreenSharing
+      ? '<i class="bi bi-display-fill"></i>'
+      : '<i class="bi bi-display"></i>';
   }
 };
 
@@ -107,7 +116,6 @@ function addParticipantVideo(userName, remoteUserRole, stream) {
     participantVideoRefs.set(userName, video);
   }
 
-  // Create participant list item if not lecturer viewing student
   const participantItem = document.createElement("div");
   participantItem.className = "participant-item active";
   participantItem.id = `participant-${userName}`;
@@ -160,8 +168,6 @@ function removeParticipantVideo(username) {
   if (video) {
     video.remove();
   }
-
-  participantCount--;
 }
 
 function updateParticipantSpeakingState(username, isSpeaking) {
@@ -242,8 +248,10 @@ document.addEventListener(
               .map((t) => ({ kind: t.kind, enabled: t.enabled })),
           });
 
-          // Always add the participant video, the function will handle the role-specific logic
-          addParticipantVideo(remoteUsername, remoteUserRole, remoteStream);
+          var element = document.getElementById(`participant-${remoteUsername}`);
+          if(!element) {
+              addParticipantVideo(remoteUsername, remoteUserRole, remoteStream);
+          }
         },
         onConnectionIdCallback: (connectionId) => {
           console.log("Connection ID callback", connectionId);
@@ -301,6 +309,14 @@ document.addEventListener(
 window.onbeforeunload = async () => {
   console.log("Page unloading, cleaning up video call...");
   if (userRole.value === "Lecturer") {
+    // Stop screen sharing if active
+    if (state.isScreenSharing) {
+      try {
+        await videoCallService.stopScreenShare();
+      } catch (error) {
+        console.error("Error stopping screen share on unload:", error);
+      }
+    }
     stopWebcam();
   }
   if (videoCallService) {
@@ -430,3 +446,32 @@ const leaveRoom = async () => {
 };
 
 window.leaveRoom = leaveRoom;
+
+async function toggleScreenShare() {
+  if (userRole.value !== "Lecturer") return;
+
+  try {
+    if (!state.isScreenSharing) {
+      const screenStream = await videoCallService.startScreenShare();
+
+      if (screenStream && lecturerVideoRef) {
+        lecturerVideoRef.srcObject = screenStream;
+      }
+
+      updateState({ isScreenSharing: true });
+    } else {
+      await videoCallService.stopScreenShare();
+
+      if (localVideoRef && localVideoRef.srcObject) {
+        lecturerVideoRef.srcObject = localVideoRef.srcObject;
+      }
+
+      updateState({ isScreenSharing: false });
+    }
+  } catch (error) {
+    console.error("Error toggling screen share:", error);
+    updateState({ isScreenSharing: false });
+  }
+}
+
+window.toggleScreenShare = toggleScreenShare;

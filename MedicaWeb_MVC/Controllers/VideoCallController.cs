@@ -15,7 +15,8 @@ namespace MedicaWeb_MVC.Controllers
             _accountService = accountService;
         }
 
-        public async Task<IActionResult> IndexAsync()
+        [HttpGet("/VideoCall/{id}")]
+        public async Task<IActionResult> IndexAsync(string? id)
         {
             var user = await _accountService.GetUserByClaimsAsync(User);
             var fullName = user?.FullName;
@@ -25,9 +26,11 @@ namespace MedicaWeb_MVC.Controllers
             {
                 FullName = fullName,
                 RoleName = roleName,
-                UserName = userName
+                UserName = userName,
+                RoomId = id
             };
             return View(vm);
         }
+
     }
 }

@@ -10,29 +10,29 @@
     { urls: "stun:stun3.l.google.com:5349" },
     { urls: "stun:stun4.l.google.com:19302" },
     { urls: "stun:stun4.l.google.com:5349" },
-    //  {
-    //    urls: "stun:stun.relay.metered.ca:80",
-    //  },
-    //  {
-    //    urls: "turn:global.relay.metered.ca:80",
-    //    username: "c25b233a28eae1c1638e1e1a",
-    //    credential: "TJEsJh/jX/7rgRFB",
-    //  },
-    //  {
-    //    urls: "turn:global.relay.metered.ca:80?transport=tcp",
-    //    username: "c25b233a28eae1c1638e1e1a",
-    //    credential: "TJEsJh/jX/7rgRFB",
-    //  },
-    //  {
-    //    urls: "turn:global.relay.metered.ca:443",
-    //    username: "c25b233a28eae1c1638e1e1a",
-    //    credential: "TJEsJh/jX/7rgRFB",
-    //  },
-    //  {
-    //    urls: "turns:global.relay.metered.ca:443?transport=tcp",
-    //    username: "c25b233a28eae1c1638e1e1a",
-    //    credential: "TJEsJh/jX/7rgRFB",
-    //  },
+      {
+        urls: "stun:stun.relay.metered.ca:80",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:80",
+        username: "c25b233a28eae1c1638e1e1a",
+        credential: "TJEsJh/jX/7rgRFB",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:80?transport=tcp",
+        username: "c25b233a28eae1c1638e1e1a",
+        credential: "TJEsJh/jX/7rgRFB",
+      },
+      {
+        urls: "turn:global.relay.metered.ca:443",
+        username: "c25b233a28eae1c1638e1e1a",
+        credential: "TJEsJh/jX/7rgRFB",
+      },
+      {
+        urls: "turns:global.relay.metered.ca:443?transport=tcp",
+        username: "c25b233a28eae1c1638e1e1a",
+        credential: "TJEsJh/jX/7rgRFB",
+      },
   ],
 };
 export class VideoCallService {
@@ -44,7 +44,9 @@ export class VideoCallService {
       .withAutomaticReconnect()
       .build();
     this.localStream = null;
-    this.remoteStreams = new Map(); // Store multiple remote streams
+    this.screenShareStream = null;
+    this.isScreenSharing = false;
+    this.remoteStreams = new Map();
     this.connectionId = null;
     this.peerConnections = new Map();
     this.onRemoteStreamCallback = null;
@@ -548,7 +550,6 @@ export class VideoCallService {
   }
 
   createPeerConnection(connectionId, username, userRole) {
-    // Only close connection if it exists for the same peer
     const existingConnection = this.peerConnections.get(connectionId);
     if (existingConnection) {
       console.log(
@@ -557,7 +558,6 @@ export class VideoCallService {
       existingConnection.close();
       this.peerConnections.delete(connectionId);
 
-      // Cleanup only the specific remote stream for this peer
       const existingStream = this.remoteStreams.get(connectionId);
       if (existingStream) {
         existingStream.getTracks().forEach((track) => track.stop());
@@ -565,11 +565,9 @@ export class VideoCallService {
       }
     }
 
-    // Create new connection
     const peerConnection = new RTCPeerConnection(servers);
     this.peerConnections.set(connectionId, peerConnection);
 
-    // Create new MediaStream for this peer
     const newStream = new MediaStream();
     this.remoteStreams.set(connectionId, newStream);
 
@@ -790,6 +788,89 @@ export class VideoCallService {
     if (shouldSendOffer) {
       await this.sendOfferToUser(connectionId, username, userRole);
     }
+  }
+
+  // Add methods for screen sharing
+  async startScreenShare() {
+    if (this.isScreenSharing) return;
+
+    try {
+      const screenStream = await navigator.mediaDevices.getDisplayMedia({
+        video: {
+          cursor: "always",
+          displaySurface: "monitor",
+        },
+        audio: false,
+      });
+
+      this.screenShareStream = screenStream;
+      this.isScreenSharing = true;
+
+      this.peerConnections.forEach((peerConnection, connectionId) => {
+        const videoTrack = screenStream.getVideoTracks()[0];
+
+        // Replace existing video track if any
+        const senders = peerConnection.getSenders();
+        const videoSender = senders.find(
+          (sender) => sender.track && sender.track.kind === "video"
+        );
+
+        if (videoSender) {
+          videoSender.replaceTrack(videoTrack);
+        } else {
+          // If no video sender exists, add the track
+          peerConnection.addTrack(videoTrack, screenStream);
+        }
+      });
+
+      // Listen for when user stops sharing screen
+      screenStream.getVideoTracks()[0].addEventListener("ended", () => {
+        this.stopScreenShare();
+      });
+
+      return screenStream;
+    } catch (error) {
+      console.error("Error starting screen share:", error);
+      this.isScreenSharing = false;
+      throw error;
+    }
+  }
+
+  async stopScreenShare() {
+    if (!this.isScreenSharing || !this.screenShareStream) return;
+
+    try {
+      // Stop all tracks in the screen share stream
+      this.screenShareStream.getTracks().forEach((track) => track.stop());
+
+      // Revert to camera video for all peer connections
+      if (this.localStream) {
+        const videoTrack = this.localStream.getVideoTracks()[0];
+
+        if (videoTrack) {
+          this.peerConnections.forEach((peerConnection, connectionId) => {
+            const senders = peerConnection.getSenders();
+            const videoSender = senders.find(
+              (sender) => sender.track && sender.track.kind === "video"
+            );
+
+            if (videoSender) {
+              videoSender.replaceTrack(videoTrack);
+            }
+          });
+        }
+      }
+
+      this.screenShareStream = null;
+      this.isScreenSharing = false;
+    } catch (error) {
+      console.error("Error stopping screen share:", error);
+      throw error;
+    }
+  }
+
+  isScreenShareActive() {
+    return this.isScreenSharing;
   }
 }
 
