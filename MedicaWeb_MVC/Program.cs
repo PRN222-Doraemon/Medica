@@ -47,6 +47,7 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapHub<MedicaHubs>("/MedicaHubs");
+app.MapHub<WebRTCHub>("/WebRTCHub");
 
 // ===================================================
 // === Create a scope and call the service manually
