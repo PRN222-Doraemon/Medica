@@ -1,0 +1,148 @@
+@using Core.Entities.Chat
+@model List<ChatRoom>
+
+@{
+	ViewData["Title"] = "Chat Management";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-4">
+			<div class="card">
+				<div class="card-header">
+					<h5 class="card-title mb-0">Active Chats</h5>
+				</div>
+				<div class="card-body p-0">
+					<div class="list-group list-group-flush" id="chatList">
+						@foreach (var chat in Model)
+						{
+							<a href="#" class="list-group-item list-group-item-action"
+							   onclick="loadChat('@chat.ChatRoomId')">
+								<div class="d-flex justify-content-between align-items-center">
+									<div>
+										<h6 class="mb-0">@(chat.Messages.FirstOrDefault()?.SenderId.ToString() ?? "Unknown Student")</h6>
+										<small class="text-muted">@(chat.Messages.LastOrDefault()?.TimeStamp.ToString("dd/MM/yyyy HH:mm") ?? "No messages")</small>
+									</div>
+									@if (chat.Messages.Any(m => m.SenderId != 1))
+									{
+										<span class="badge bg-danger">@chat.Messages.Count(m => m.SenderId != 1)</span>
+									}
+								</div>
+							</a>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-8">
+			<div class="card">
+				<div class="card-header">
+					<h5 class="card-title mb-0">Chat Messages</h5>
+				</div>
+				<div class="card-body">
+					<div id="chatMessages" class="chat-messages" style="height: 400px; overflow-y: auto;"></div>
+					<div class="chat-input mt-3">
+						<div class="input-group">
+							<input type="text" id="messageInput" class="form-control" placeholder="Type your message...">
+							<button class="btn btn-primary" onclick="sendMessage()">Send</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+	<script>
+		const connection = new signalR.HubConnectionBuilder()
+			.withUrl("/chatHub")
+			.withAutomaticReconnect()
+			.build();
+
+		let currentChatId = null;
+
+		connection.start().catch(err => console.error(err));
+
+		connection.on("ReceiveMessage", function (chatRoom) {
+			if (chatRoom.chatRoomId === currentChatId) {
+				updateChatMessages(chatRoom);
+			}
+		});
+
+		function loadChat(chatId) {
+			currentChatId = chatId;
+			fetch(`/ChatManagement/GetChat/${chatId}`)
+				.then(response => response.json())
+				.then(chatRoom => {
+					updateChatMessages(chatRoom);
+				});
+		}
+
+		function sendMessage() {
+			if (!currentChatId) return;
+
+			const messageInput = document.getElementById("messageInput");
+			const message = messageInput.value.trim();
+
+			if (message) {
+				// Extract student ID from chat room ID (format: "studentId:adminId")
+				const studentId = currentChatId.split(':')[0];
+				connection.invoke("SendMessage", 1, studentId, message);
+				messageInput.value = "";
+			}
+		}
+
+		function updateChatMessages(chatRoom) {
+			const messagesDiv = document.getElementById("chatMessages");
+			messagesDiv.innerHTML = "";
+
+			chatRoom.messages.forEach(message => {
+				const messageDiv = document.createElement("div");
+				messageDiv.className = `message ${message.senderId === 1 ? "sent" : "received"}`;
+				messageDiv.textContent = message.message;
+				messagesDiv.appendChild(messageDiv);
+			});
+
+			messagesDiv.scrollTop = messagesDiv.scrollHeight;
+		}
+
+		document.getElementById("messageInput").addEventListener("keypress", function (e) {
+			if (e.key === "Enter") {
+				sendMessage();
+			}
+		});
+	</script>
+}
+
+<style>
+	.chat-messages {
+		padding: 15px;
+		background: #f8f9fa;
+		border-radius: 5px;
+	}
+
+	.message {
+		margin-bottom: 10px;
+		padding: 10px;
+		border-radius: 10px;
+		max-width: 80%;
+	}
+
+		.message.sent {
+			background: #007bff;
+			color: white;
+			margin-left: auto;
+		}
+
+		.message.received {
+			background: #e9ecef;
+			color: black;
+		}
+
+	.list-group-item.active {
+		background-color: #007bff;
+		border-color: #007bff;
+	}
+</style> 

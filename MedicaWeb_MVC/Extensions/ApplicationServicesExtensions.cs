@@ -40,9 +40,6 @@ namespace MedicaWeb_MVC.Extensions
             // config cloudinary
             services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
 
-            // Add SignalR
-            services.AddSignalR();
-
             return services;
         }
     }

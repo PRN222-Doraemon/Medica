@@ -14,6 +14,9 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddInfrastructureServices(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
 
+// Add SignalR
+builder.Services.AddSignalR();
+
 // ====================================
 // === Build the application
 // ====================================
@@ -41,11 +44,13 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// Add SignalR hub endpoints
+app.MapHub<MedicaHubs>("/MedicaHubs");
+app.MapHub<ChatHub>("/ChatHub");
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.MapHub<MedicaHubs>("/MedicaHubs");
 
 // ===================================================
 // === Create a scope and call the service manually
