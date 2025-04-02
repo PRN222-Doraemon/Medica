@@ -108,25 +108,44 @@ function addParticipantVideo(userName, remoteUserRole, stream) {
   }
 
   // Create participant list item if not lecturer viewing student
-  if (userRole.value === "Lecturer" || remoteUserRole === "Lecturer") {
-    const participantItem = document.createElement("div");
-    participantItem.className = "participant-item";
-    participantItem.id = `participant-${userName}`;
+  const participantItem = document.createElement("div");
+  participantItem.className = "participant-item active";
+  participantItem.id = `participant-${userName}`;
 
-    const participantInfo = document.createElement("div");
-    participantInfo.className = "participant-info";
+  // Add CSS styling
+  participantItem.style.background = "rgba(255, 255, 255, 0.2)";
+  participantItem.style.borderRadius = "8px";
+  participantItem.style.padding = "0.8rem";
+  participantItem.style.marginBottom = "0.8rem";
+  participantItem.style.transition = "all 0.3s ease";
+  participantItem.style.border = "2px solid transparent"; // Add transparent border by default
 
-    const nameSpan = document.createElement("span");
-    nameSpan.className = "name";
-    nameSpan.textContent =
-      remoteUserRole === "Lecturer" ? "Lecturer" : `Student ${userName}`;
+  const participantInfo = document.createElement("div");
+  participantInfo.className = "participant-info";
+  participantInfo.style.display = "flex";
+  participantInfo.style.justifyContent = "space-between";
+  participantInfo.style.alignItems = "center";
+  participantInfo.style.color = "white";
 
-    participantInfo.appendChild(nameSpan);
-    participantItem.appendChild(participantInfo);
-    participantItems.appendChild(participantItem);
+  const nameSpan = document.createElement("span");
+  nameSpan.className = "name";
+  nameSpan.textContent =
+    remoteUserRole === "Lecturer" ? "Lecturer" : `Student ${userName}`;
+  nameSpan.style.fontSize = "0.9rem";
 
-    participantCount++;
-  }
+  const statusSpan = document.createElement("span");
+  statusSpan.className = "status";
+  statusSpan.textContent = "Connected";
+  statusSpan.style.fontSize = "0.8rem";
+  statusSpan.style.color = "rgba(255, 255, 255, 0.7)";
+
+  participantInfo.appendChild(nameSpan);
+  participantInfo.appendChild(statusSpan);
+  participantItem.appendChild(participantInfo);
+  participantItems.appendChild(participantItem);
+
+  // Add audio monitoring for the stream
+  monitorAudioLevel(stream, userName);
 }
 
 function removeParticipantVideo(username) {
@@ -143,6 +162,60 @@ function removeParticipantVideo(username) {
   }
 
   participantCount--;
+}
+
+function updateParticipantSpeakingState(username, isSpeaking) {
+  const participantItem = document.getElementById(`participant-${username}`);
+  if (participantItem) {
+    if (isSpeaking) {
+      participantItem.style.border = "2px solid rgba(255, 255, 255, 0.8)";
+      const statusSpan = participantItem.querySelector(".status");
+      if (statusSpan) {
+        statusSpan.textContent = "Speaking";
+        statusSpan.style.color = "rgba(255, 255, 255, 0.9)";
+      }
+    } else {
+      participantItem.style.border = "2px solid transparent";
+      const statusSpan = participantItem.querySelector(".status");
+      if (statusSpan) {
+        statusSpan.textContent = "Connected";
+        statusSpan.style.color = "rgba(255, 255, 255, 0.7)";
+      }
+    }
+  }
+}
+
+// Add audio level monitoring for each participant's stream
+function monitorAudioLevel(stream, username) {
+  if (!stream.getAudioTracks().length) return;
+
+  const audioContext = new window.AudioContext();
+  const audioSource = audioContext.createMediaStreamSource(stream);
+  const analyser = audioContext.createAnalyser();
+  analyser.fftSize = 512;
+  analyser.smoothingTimeConstant = 0.1;
+  audioSource.connect(analyser);
+
+  const dataArray = new Uint8Array(analyser.frequencyBinCount);
+  let speakingTimeout;
+
+  function checkAudioLevel() {
+    analyser.getByteFrequencyData(dataArray);
+    const average = dataArray.reduce((a, b) => a + b) / dataArray.length;
+
+    if (average > 35) {
+      // Adjust this threshold as needed
+      clearTimeout(speakingTimeout);
+      updateParticipantSpeakingState(username, true);
+      speakingTimeout = setTimeout(() => {
+        updateParticipantSpeakingState(username, false);
+      }, 500);
+    }
+
+    requestAnimationFrame(checkAudioLevel);
+  }
+
+  checkAudioLevel();
 }
 
 document.addEventListener(

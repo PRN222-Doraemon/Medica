@@ -50,6 +50,8 @@ export class VideoCallService {
     this.onRemoteStreamCallback = null;
     this.onConnectionIdCallback = null;
     this.onUserLeftCallback = null;
+    this.processingOffer = false;
+    this.pendingOffers = [];
   }
 
   async setCallbacks(callbacks) {
@@ -189,7 +191,6 @@ export class VideoCallService {
       if (!this.peerConnections.has(connectionId)) {
         console.log("Creating peer connection for:", connectionId);
         this.createPeerConnection(connectionId, username, userRole);
-
       }
       console.log("User joined:", connectionId, username);
     });
@@ -363,168 +364,128 @@ export class VideoCallService {
     this.connection.on(
       "ReceiveOffer",
       async (offer, fromConnectionId, offerUsername, offerRole) => {
-        try {
-          console.log(`Received offer from ${fromConnectionId}`);
+        this.pendingOffers.push({
+          offer,
+          fromConnectionId,
+          offerUsername,
+          offerRole,
+        });
 
-          // Parse the offer
-          let parsedOffer;
-          try {
-            parsedOffer = JSON.parse(offer);
-            console.log("Parsed offer:", parsedOffer);
-          } catch (error) {
-            console.error("Error parsing offer:", error);
-            return;
-          }
-
-          // Get or create peer connection
-          let peerConnection = this.peerConnections.get(fromConnectionId);
-          if (!peerConnection) {
-            console.log(`Creating new peer connection for ${fromConnectionId}`);
-            this.createPeerConnection(
-              fromConnectionId,
-              offerUsername,
-              offerRole
-            );
-            peerConnection = this.peerConnections.get(fromConnectionId);
-          }
-
-          // Handle different signaling states properly
-          if (peerConnection.signalingState !== "stable") {
-            console.log(
-              `Peer connection not in stable state (${peerConnection.signalingState}), rolling back...`
-            );
-
-            // If we have a pending local offer, roll it back
-            if (peerConnection.signalingState === "have-local-offer") {
-              await peerConnection.setLocalDescription({ type: "rollback" });
-              console.log("Rolled back local description");
-            }
-
-            // Wait for rollback to complete
-            await new Promise((resolve) => {
-              const checkState = () => {
-                if (
-                  !peerConnection ||
-                  peerConnection.signalingState === "stable"
-                ) {
-                  resolve();
-                } else {
-                  setTimeout(checkState, 100);
-                }
-              };
-              checkState();
-            });
-
-            console.log(
-              "Signaling state is now stable, continuing with offer processing"
-            );
-          }
-
-          // Set the remote description
-          await peerConnection.setRemoteDescription(
-            new RTCSessionDescription(parsedOffer)
-          );
-          console.log(`Remote description set for ${fromConnectionId}`);
-
-          // Create and set local answer
-          const answer = await peerConnection.createAnswer();
-
-          // Check signaling state before setting local description
-          if (peerConnection.signalingState === "have-remote-offer") {
-            await peerConnection.setLocalDescription(answer);
-            console.log(
-              `Local description (answer) set for ${fromConnectionId}`
-            );
-
-            // Send the answer
-            if (this.connection.state === "Connected") {
-              await this.connection.invoke(
-                "SendAnswer",
-                fromConnectionId,
-                JSON.stringify(answer)
-              );
-              console.log(`Answer sent to ${fromConnectionId}`);
-            } else {
-              console.error(
-                `Cannot send answer: connection state is ${this.connection.state}`
-              );
-            }
-          } else {
-            console.warn(
-              `Cannot set local description: Signaling state is ${peerConnection.signalingState}, expected 'have-remote-offer'`
-            );
-          }
-        } catch (error) {
-          console.error("Error handling offer:", error);
-
-          // If we have an SDP-related error, recreate the connection
-          if (
-            error instanceof Error &&
-            (error.message.includes(
-              "The order of m-lines in subsequent offer doesn't match"
-            ) ||
-              error.message.includes("Called in wrong state") ||
-              error.message.includes("Failed to set remote offer sdp"))
-          ) {
-            console.log("SDP error detected. Recreating peer connection...");
-
-            // Get the existing connection
-            const peerConnection = this.peerConnections.get(fromConnectionId);
-            if (peerConnection) {
-              peerConnection.close();
-              this.peerConnections.delete(fromConnectionId);
-            }
-
-            // Create a new connection
-            this.createPeerConnection(
-              fromConnectionId,
-              offerUsername,
-              offerRole
-            );
-
-            // Try processing the offer again after a short delay
-            //  setTimeout(() => {
-            //    if (this.connection.state === "Connected") {
-            //      this.handleProcessOffer(offer, fromConnectionId);
-            //    }
-            //  }, 1000);
-          }
+        if (!this.processingOffer) {
+          this.processNextOffer();
         }
       }
     );
   }
 
-  async handleProcessOffer(offer, fromConnectionId) {
+  async processNextOffer() {
+    if (this.pendingOffers.length === 0 || this.processingOffer) {
+      return;
+    }
+
+    this.processingOffer = true;
+    const { offer, fromConnectionId, offerUsername, offerRole } =
+      this.pendingOffers.shift();
+
     try {
-      console.log(`Reprocessing offer from ${fromConnectionId}`);
+      console.log(`Processing offer from ${fromConnectionId}`);
 
-      const parsedOffer = JSON.parse(offer);
-      const peerConnection = this.peerConnections.get(fromConnectionId);
-
-      if (!peerConnection) {
-        console.warn(`No peer connection found for ${fromConnectionId}`);
+      let parsedOffer;
+      try {
+        parsedOffer = JSON.parse(offer);
+        console.log("Parsed offer:", parsedOffer);
+      } catch (error) {
+        console.error("Error parsing offer:", error);
+        this.processingOffer = false;
+        this.processNextOffer();
         return;
       }
 
-      // Set the remote description
+      let peerConnection = this.peerConnections.get(fromConnectionId);
+      if (!peerConnection) {
+        console.log(`Creating new peer connection for ${fromConnectionId}`);
+        this.createPeerConnection(fromConnectionId, offerUsername, offerRole);
+        peerConnection = this.peerConnections.get(fromConnectionId);
+      }
+
+      if (peerConnection.signalingState !== "stable") {
+        console.log(
+          `Peer connection not in stable state (${peerConnection.signalingState}), rolling back...`
+        );
+
+        if (peerConnection.signalingState === "have-local-offer") {
+          await peerConnection.setLocalDescription({ type: "rollback" });
+          console.log("Rolled back local description");
+        }
+
+        await new Promise((resolve) => {
+          const checkState = () => {
+            if (!peerConnection || peerConnection.signalingState === "stable") {
+              resolve();
+            } else {
+              setTimeout(checkState, 100);
+            }
+          };
+          checkState();
+        });
+
+        console.log(
+          "Signaling state is now stable, continuing with offer processing"
+        );
+      }
+
       await peerConnection.setRemoteDescription(
         new RTCSessionDescription(parsedOffer)
       );
+      console.log(`Remote description set for ${fromConnectionId}`);
 
-      // Create and set local answer
       const answer = await peerConnection.createAnswer();
-      await peerConnection.setLocalDescription(answer);
 
-      // Send the answer
-      if (this.connection.state === "Connected") {
-        await this.connection.invoke(
-          "SendAnswer",
-          fromConnectionId,
-          JSON.stringify(answer)
+      if (peerConnection.signalingState === "have-remote-offer") {
+        await peerConnection.setLocalDescription(answer);
+        console.log(`Local description (answer) set for ${fromConnectionId}`);
+
+        if (this.connection.state === "Connected") {
+          await this.connection.invoke(
+            "SendAnswer",
+            fromConnectionId,
+            JSON.stringify(answer)
+          );
+          console.log(`Answer sent to ${fromConnectionId}`);
+        } else {
+          console.error(
+            `Cannot send answer: connection state is ${this.connection.state}`
+          );
+        }
+      } else {
+        console.warn(
+          `Cannot set local description: Signaling state is ${peerConnection.signalingState}, expected 'have-remote-offer'`
         );
       }
     } catch (error) {
-      console.error("Error reprocessing offer:", error);
+      console.error("Error handling offer:", error);
+
+      if (
+        error instanceof Error &&
+        (error.message.includes(
+          "The order of m-lines in subsequent offer doesn't match"
+        ) ||
+          error.message.includes("Called in wrong state") ||
+          error.message.includes("Failed to set remote offer sdp"))
+      ) {
+        console.log("SDP error detected. Recreating peer connection...");
+
+        const peerConnection = this.peerConnections.get(fromConnectionId);
+        if (peerConnection) {
+          peerConnection.close();
+          this.peerConnections.delete(fromConnectionId);
+        }
+
+        this.createPeerConnection(fromConnectionId, offerUsername, offerRole);
+      }
+    } finally {
+      this.processingOffer = false;
+      this.processNextOffer();
     }
   }
 
@@ -587,16 +548,16 @@ export class VideoCallService {
   }
 
   createPeerConnection(connectionId, username, userRole) {
-    // Close any existing connection for this peer
-    if (this.peerConnections.has(connectionId)) {
+    // Only close connection if it exists for the same peer
+    const existingConnection = this.peerConnections.get(connectionId);
+    if (existingConnection) {
       console.log(
-        `Closing existing connection for ${connectionId} before creating a new one`
+        `Closing existing connection for peer ${connectionId} before creating a new one`
       );
-      const existing = this.peerConnections.get(connectionId);
-      existing?.close();
+      existingConnection.close();
       this.peerConnections.delete(connectionId);
 
-      // Properly cleanup the existing remote stream
+      // Cleanup only the specific remote stream for this peer
       const existingStream = this.remoteStreams.get(connectionId);
       if (existingStream) {
         existingStream.getTracks().forEach((track) => track.stop());
@@ -698,19 +659,18 @@ export class VideoCallService {
       try {
         // Don't send an offer if we're in the middle of setting a remote description
         if (peerConnection.signalingState === "stable") {
-        if (this.connectionId && this.connectionId > connectionId) {
-          await this.sendOfferToUser(connectionId, username, userRole);
-        }
+          // Use a more sophisticated way to determine who sends the offer
+          // This prevents race conditions when multiple peers are connecting
+          const shouldSendOffer = await this.shouldInitiateOffer(connectionId);
+          if (shouldSendOffer) {
+            await this.sendOfferToUser(connectionId, username, userRole);
+          }
         } else {
           console.log(
             `Delaying offer until signaling state is stable. Current state: ${peerConnection.signalingState}`
           );
-          // Queue the negotiation until signaling state is stable
-          setTimeout(() => {
-            if (peerConnection.signalingState === "stable") {
-              this.sendOfferToUser(connectionId);
-            }
-          }, 1000);
+          // Use a more reliable way to queue negotiations
+          await this.queueNegotiation(connectionId, username, userRole);
         }
       } catch (error) {
         console.error("Error during negotiation:", error);
@@ -801,6 +761,35 @@ export class VideoCallService {
 
   getConnectionId() {
     return this.connectionId;
+  }
+
+  async shouldInitiateOffer(remoteConnectionId) {
+    // Use a deterministic way to decide who initiates
+    // This ensures only one peer tries to send an offer
+    return this.connectionId > remoteConnectionId;
+  }
+
+  async queueNegotiation(connectionId, username, userRole) {
+    const peerConnection = this.peerConnections.get(connectionId);
+    if (!peerConnection) return;
+
+    // Wait for signaling state to stabilize
+    await new Promise((resolve) => {
+      const checkState = () => {
+        if (peerConnection.signalingState === "stable") {
+          resolve();
+        } else {
+          setTimeout(checkState, 100);
+        }
+      };
+      setTimeout(checkState, 100);
+    });
+
+    // Check again if we should initiate after state is stable
+    const shouldSendOffer = await this.shouldInitiateOffer(connectionId);
+    if (shouldSendOffer) {
+      await this.sendOfferToUser(connectionId, username, userRole);
+    }
   }
 }
 

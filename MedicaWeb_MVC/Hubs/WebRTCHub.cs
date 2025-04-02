@@ -100,7 +100,7 @@ public class WebRTCHub(
     /// <returns>A task representing the asynchronous operation</returns>
     public async Task SendOffer(string roomId, string offer, string usernameOffer, string roleOffer)
     {
-        _logger.LogInformation("Sending offer to {RoomId}", roomId);
+        _logger.LogInformation("{fromConnectionId} sending offer to {RoomId}", Context.ConnectionId, roomId);
 
         var connectionId = Context.ConnectionId;
 
@@ -115,7 +115,7 @@ public class WebRTCHub(
     /// <returns>A task representing the asynchronous operation</returns>
     public async Task SendAnswer(string toConnectionId, string answer)
     {
-        _logger.LogInformation("Sending answer to {ConnectionId}", toConnectionId);
+        _logger.LogInformation("{fromId} sending answer to {ConnectionId}", Context.ConnectionId, toConnectionId);
 
         var connectionId = Context.ConnectionId;
 
