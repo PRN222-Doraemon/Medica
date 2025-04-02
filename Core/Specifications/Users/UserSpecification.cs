@@ -17,7 +17,7 @@ namespace Core.Specifications.Users
                        u.LastName.ToLower().Contains(userParams.Search.ToLower()) ||
                        u.PhoneNumber.ToLower().Contains(userParams.Search.ToLower()))
         {
-            AddOrderByDescending(u => u.CreatedAt);
+            AddOrderByDescending(u => u.Id);
 
             if (applyPaging)
             {

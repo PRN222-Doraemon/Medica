@@ -1,0 +1,54 @@
+@using MedicaWeb_MVC.ViewModels.Shared
+@model ListVM<MedicaWeb_MVC.ViewModels.Orders.OrderVM>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="page-title-box d-flex align-items-center justify-content-between">
+			<h4 class="mb-0">Orders Management</h4>
+		</div>
+	</div>
+	<div class="row">
+
+		@* Table of Content *@
+		<div class="col-12 mt-4">
+			@await Html.PartialAsync("_GenericTable", new
+				{
+					Controller = "OrdersManagement",
+					Items = Model.Items.Select(o => new Dictionary<string, object>
+					{
+					{ "Id", o.Id },
+					{ "StudentName", o.StudentName },
+					{ "OrderTime", o.OrderTime.ToString("MM/dd/yyyy") },
+					{ "TotalPrice", o.TotalPrice.ToString("C") },
+					{ "PaymentIntentId", o.PaymentIntentId },
+					{ "Status", o.Status },
+					}),
+							Columns = new Dictionary<string, string>
+					{
+					{ "Id", "Order ID" },
+					{ "StudentName", "Student Name" },
+					{ "OrderTime", "Order Date" },
+					{ "TotalPrice", "Total Amount" },
+					{ "PaymentIntentId", "Payment ID" },
+					{ "Status", "Status" },
+					}
+				})
+
+			@* Paging *@
+			<div>
+				@await Html.PartialAsync("~/Views/Shared/ReusableViews/_Paging.cshtml", Model.PagingInfo)
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		$(document).ready(function() {
+			// Add custom styling for action buttons
+			$('.btn-group .btn').each(function() {
+				$(this).addClass('me-1');
+			});
+		});
+	</script>
+} 

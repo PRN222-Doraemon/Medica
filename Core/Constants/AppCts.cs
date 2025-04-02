@@ -49,5 +49,13 @@ namespace Core.Constants
             public const string Lecturer = "Lecturer";
             public const string Admin = "Admin";
         }
+
+        /// <summary>
+        /// Const for accounts
+        /// </summary>
+        public static class Accounts
+        {
+            public const string DefaultPassword = "Password123!";
+        }
     }
 }
