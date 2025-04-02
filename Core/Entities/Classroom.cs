@@ -26,6 +26,8 @@ namespace Core.Entities
         public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
 
+        public string RoomId { get; set; }
+
     }
 
     public enum ClassroomMode

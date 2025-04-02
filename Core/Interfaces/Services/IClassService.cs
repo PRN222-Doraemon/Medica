@@ -11,5 +11,6 @@ namespace Core.Interfaces.Services
         Task CreateClassAsync(Classroom classroom);
         Task UpdateClassAsync(Classroom classroom);
         Task DeleteClassAsync(int id);
+        Task CreateRoomAsync(string roomId);
     }
 }

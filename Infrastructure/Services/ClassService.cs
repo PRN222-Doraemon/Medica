@@ -33,6 +33,11 @@ namespace Infrastructure.Services
             await _unitOfWork.CompleteAsync();
         }
 
+        public Task CreateRoomAsync(string roomId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task DeleteClassAsync(int id)
         {
             var classroom = await GetClassByIdAsync(id);

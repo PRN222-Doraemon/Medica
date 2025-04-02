@@ -140,6 +140,19 @@ export class VideoCallService {
 
   setLocalStream(stream) {
     this.localStream = stream;
+
+    this.peerConnections.forEach((peerConnection) => {
+      try {
+        stream.getTracks().forEach((track) => {
+          peerConnection.addTrack(track, stream);
+        });
+      } catch (error) {
+        console.error(
+          "Error adding local stream to existing peer connection:",
+          error
+        );
+      }
+    });
   }
 
   async leaveRoom() {
@@ -176,6 +189,7 @@ export class VideoCallService {
       if (!this.peerConnections.has(connectionId)) {
         console.log("Creating peer connection for:", connectionId);
         this.createPeerConnection(connectionId, username, userRole);
+
       }
       console.log("User joined:", connectionId, username);
     });
@@ -189,353 +203,110 @@ export class VideoCallService {
       return;
     }
 
-    try {
-      // 1. Verify signaling state
-      if (peerConnection.signalingState !== "stable") {
-        console.log(
-          `Waiting for stable state. Current state: ${peerConnection.signalingState}`
-        );
-        await new Promise((resolve) => {
-          const checkState = () => {
-            if (!peerConnection || peerConnection.signalingState === "stable") {
-              resolve();
-            } else {
-              setTimeout(checkState, 500);
-            }
-          };
-          checkState();
-        });
-      }
-
-      // 2. Skip if we already have a local offer
-      if (peerConnection.localDescription?.type === "offer") {
-        console.log(`Already have local offer for ${connectionId}, skipping`);
-        return;
-      }
-
-      // 3. Create offer based on role
-      const offerOptions = {
-        offerToReceiveAudio: true,
-        offerToReceiveVideo: this.userRole === "Student",
-      };
-
-      console.log(`Creating offer with options:`, offerOptions);
-      const offer = await peerConnection.createOffer(offerOptions);
-
-      // 4. Set local description
-      await peerConnection.setLocalDescription(offer);
-      console.log(`Local description set for ${connectionId}`);
-
-      // 5. Send offer if connection is active
-      if (
-        this.connection.state === "Connected" &&
-        peerConnection.localDescription
-      ) {
-        await this.connection.invoke(
-          "SendOffer",
-          this.roomId,
-          JSON.stringify(peerConnection.localDescription),
-          this.userRole,
-          this.userName
-        );
-        console.log(`Offer sent to ${connectionId}`);
-      }
-    } catch (error) {
-      console.error("Error in sendOfferToUser:", error);
-
-      if (
-        error.message.includes("m-lines") ||
-        error.message.includes("Failed to set")
-      ) {
-        await this.handleNegotiationError(connectionId, username, userRole);
-      }
-    }
-  }
-
-  async handleNegotiationError(connectionId, username, userRole) {
-    console.log("Handling negotiation error for", connectionId);
-
-    // 1. Close existing connection
-    const oldConnection = this.peerConnections.get(connectionId);
-    if (oldConnection) {
-      oldConnection.close();
-      this.peerConnections.delete(connectionId);
+    // Check if we're in a state where we can create an offer
+    if (peerConnection.signalingState !== "stable") {
+      console.log(
+        `Cannot create offer: signaling state is ${peerConnection.signalingState}, waiting...`
+      );
+      // Wait for the signaling state to stabilize before creating offer
+      await new Promise((resolve) => {
+        const checkState = () => {
+          if (!peerConnection || peerConnection.signalingState === "stable") {
+            resolve();
+          } else {
+            setTimeout(checkState, 500);
+          }
+        };
+        checkState();
+      });
     }
 
-    // 2. Clean up existing streams
-    const oldStream = this.remoteStreams.get(connectionId);
-    if (oldStream) {
-      oldStream.getTracks().forEach((track) => track.stop());
-      this.remoteStreams.delete(connectionId);
-    }
-
-    // 3. Create new connection with proper configuration
-    await this.createPeerConnection(connectionId, username, userRole);
-  }
-
-  createPeerConnection(connectionId, username, userRole) {
-    // Close existing connection if any
-    if (this.peerConnections.has(connectionId)) {
-      const existing = this.peerConnections.get(connectionId);
-      existing?.close();
-      this.peerConnections.delete(connectionId);
-
-      const existingStream = this.remoteStreams.get(connectionId);
-      if (existingStream) {
-        existingStream.getTracks().forEach((track) => track.stop());
-        this.remoteStreams.delete(connectionId);
-      }
-    }
-
-    // Create new connection
-    const peerConnection = new RTCPeerConnection(servers);
-    this.peerConnections.set(connectionId, peerConnection);
-
-    // Create new MediaStream
-    const newStream = new MediaStream();
-    this.remoteStreams.set(connectionId, newStream);
-
-    // Set up transceivers with consistent ordering
-    this.setupTransceivers(peerConnection, userRole);
-
-    // Add tracks if we have a local stream
-    if (this.localStream) {
-      this.addLocalTracks(peerConnection);
-    }
-
-    // Set up event handlers
-    this.setupPeerConnectionHandlers(
-      peerConnection,
-      connectionId,
-      username,
-      userRole
-    );
-
-    return peerConnection;
-  }
-
-  setupTransceivers(peerConnection, userRole) {
-    console.log(
-      `Setting up transceivers for local role: ${this.userRole}, peer role: ${userRole}`
-    );
-
-    // 1. Video transceiver - handle based on roles
-    let videoDirection;
-    if (this.userRole === "Lecturer") {
-      videoDirection = "sendonly"; // Lecturer sends video
-    } else if (userRole === "Lecturer") {
-      videoDirection = "recvonly"; // Students receive lecturer's video
-    } else {
-      videoDirection = "inactive"; // No video between students
-    }
-
-    const videoTransceiver = peerConnection.addTransceiver("video", {
-      direction: videoDirection,
-    });
-
-    // 2. Audio transceiver - everyone can talk
-    const audioTransceiver = peerConnection.addTransceiver("audio", {
-      direction: "sendrecv",
-    });
-
-    console.log(`Transceivers created:`, {
-      video: videoDirection,
-      audio: "sendrecv",
-      videoTrack: videoTransceiver.sender.track?.id || "none",
-      audioTrack: audioTransceiver.sender.track?.id || "none",
-    });
-  }
-
-  async addLocalTracks(peerConnection) {
-    if (!this.localStream) {
-      console.warn("No local stream available for adding tracks");
+    // If we already have a local offer, don't create another one
+    if (
+      peerConnection.localDescription &&
+      peerConnection.localDescription.type === "offer"
+    ) {
+      console.log(
+        `Already have local description for ${connectionId}, skipping offer creation`
+      );
       return;
     }
 
     try {
-      const videoTracks = this.localStream.getVideoTracks();
-      const audioTracks = this.localStream.getAudioTracks();
-
-      console.log("Available local tracks:", {
-        video: videoTracks.length,
-        audio: audioTracks.length,
-      });
-      if (videoTracks.length > 0) {
-        videoTracks.forEach((track) => {
-          console.log(`Adding video track: ${track.id} to peer connection`);
-          peerConnection.addTrack(track, this.localStream);
-        });
-      }
-
-      if (audioTracks.length > 0) {
-        audioTracks.forEach((track) => {
-          console.log(`Adding audio track: ${track.id} to peer connection`);
-          peerConnection.addTrack(track, this.localStream);
-        });
-      }
-
-    //   // Get existing transceivers
-    //   const transceivers = peerConnection.getTransceivers();
-    //   const videoTransceiver = transceivers.find(
-    //     (t) => t.sender.track?.kind === "video" || t.mid === "0"
-    //   );
-    //   const audioTransceiver = transceivers.find(
-    //     (t) => t.sender.track?.kind === "audio" || t.mid === "1"
-    //   );
-
-    //   // Add video tracks if we're a lecturer
-    //   if (
-    //     this.userRole === "Lecturer" &&
-    //     videoTracks.length > 0 &&
-    //     videoTransceiver
-    //   ) {
-    //     console.log("Adding video track for lecturer");
-    //     try {
-    //       await videoTransceiver.sender.replaceTrack(videoTracks[0]);
-    //       console.log("Video track added successfully");
-    //     } catch (error) {
-    //       console.error("Failed to add video track:", error);
-    //     }
-    //   }
-
-    //   // Add audio tracks for everyone
-    //   if (audioTracks.length > 0 && audioTransceiver) {
-    //     console.log("Adding audio track");
-    //     try {
-    //       await audioTransceiver.sender.replaceTrack(audioTracks[0]);
-    //       console.log("Audio track added successfully");
-    //     } catch (error) {
-    //       console.error("Failed to add audio track:", error);
-    //     }
-    //   }
-
-    //   // Verify track attachment
-    //   this.verifyTrackAttachment(peerConnection);
-    } catch (error) {
-      console.error("Error in addLocalTracks:", error);
-    }
-  }
-
-  verifyTrackAttachment(peerConnection) {
-    const senders = peerConnection.getSenders();
-    const videoSender = senders.find((s) => s.track?.kind === "video");
-    const audioSender = senders.find((s) => s.track?.kind === "audio");
-
-    console.log("Track attachment verification:", {
-      video: videoSender
-        ? {
-            track: videoSender.track?.id || "none",
-            enabled: videoSender.track?.enabled || false,
-            muted: videoSender.track?.muted || true,
-          }
-        : "no sender",
-      audio: audioSender
-        ? {
-            track: audioSender.track?.id || "none",
-            enabled: audioSender.track?.enabled || false,
-            muted: audioSender.track?.muted || true,
-          }
-        : "no sender",
-    });
-  }
-
-  setupPeerConnectionHandlers(
-    peerConnection,
-    connectionId,
-    username,
-    userRole
-  ) {
-    peerConnection.ontrack = (event) => {
-      console.log(`Track received from ${username}:`, {
-        kind: event.track.kind,
-        id: event.track.id,
-        enabled: event.track.enabled,
-      });
-
-      if (event.streams && event.streams[0]) {
-        const stream = event.streams[0];
-        this.remoteStreams.set(connectionId, stream);
-
-        // Monitor track states
-        event.track.onmute = () => console.log(`Track ${event.track.id} muted`);
-        event.track.onunmute = () =>
-          console.log(`Track ${event.track.id} unmuted`);
-        event.track.onended = () =>
-          console.log(`Track ${event.track.id} ended`);
-
-        this.handleUpdateRemoteDisplay(connectionId, username, userRole);
-      } else {
-        console.warn(`Received track without stream from ${username}`);
-      }
-    };
-
-    peerConnection.onicecandidate = (event) => {
-      if (event.candidate && this.connection.state === "Connected") {
-        this.connection
-          .invoke(
-            "SendIceCandidate",
-            connectionId,
-            JSON.stringify(event.candidate)
-          )
-          .catch((error) => {
-            console.error("Error sending ICE candidate:", error);
-          });
-      }
-    };
-
-    peerConnection.onnegotiationneeded = async () => {
-      console.log(`Negotiation needed for ${connectionId}`);
-      if (peerConnection.signalingState === "stable") {
-        if (this.connectionId && this.connectionId > connectionId) {
-          this.sendOfferToUser(connectionId, username, userRole);
+      // Create offer with explicit transceivers to maintain consistent m-line order
+      // First, check if we need to create transceivers
+      const transceivers = peerConnection.getTransceivers();
+      if (transceivers.length === 0 && this.localStream) {
+        // Create transceivers in consistent order - video first, then audio
+        if (this.localStream.getVideoTracks().length > 0) {
+          peerConnection.addTransceiver("video", { direction: "sendrecv" });
+        }
+        if (this.localStream.getAudioTracks().length > 0) {
+          peerConnection.addTransceiver("audio", { direction: "sendrecv" });
         }
       }
-    };
 
-    // Add connection state monitoring
-    this.setupConnectionStateMonitoring(peerConnection, connectionId);
-  }
+      // Create offer with consistent m-line order
+      const offer = await peerConnection.createOffer({
+        offerToReceiveAudio: true,
+        offerToReceiveVideo: true,
+      });
 
-  setupConnectionStateMonitoring(peerConnection, connectionId) {
-    peerConnection.onconnectionstatechange = () => {
-      console.log(
-        `Connection state for ${connectionId}:`,
-        peerConnection.connectionState
-      );
+      // Set local description
+      await peerConnection.setLocalDescription(offer);
 
-      switch (peerConnection.connectionState) {
-        case "failed":
-          this.handleConnectionFailure(connectionId);
-          break;
-        case "disconnected":
-          setTimeout(() => this.handleDisconnection(connectionId), 2000);
-          break;
+      if (
+        peerConnection.localDescription &&
+        peerConnection.localDescription.type
+      ) {
+        console.log("Sending offer to user:", connectionId);
+        console.log(
+          "Offer being sent:",
+          JSON.stringify(peerConnection.localDescription)
+        );
+
+        if (this.connection.state === "Connected") {
+          await this.connection.invoke(
+            "SendOffer",
+            this.roomId,
+            JSON.stringify(peerConnection.localDescription),
+            this.userRole,
+            this.userName
+          );
+          console.log("Offer sent to user:", connectionId);
+        } else {
+          console.error(
+            `Cannot send offer: connection state is ${this.connection.state}`
+          );
+        }
+      } else {
+        console.warn(`No local description found for ${connectionId}`);
       }
-    };
-  }
+    } catch (error) {
+      console.error("Error creating or sending offer:", error);
 
-  async handleConnectionFailure(connectionId) {
-    console.log(`Handling connection failure for ${connectionId}`);
+      //   // If there was an error with the order of m-lines, recreate the peer connection
+      if (
+        error instanceof Error &&
+        (error.message.includes(
+          "The order of m-lines in subsequent offer doesn't match"
+        ) ||
+          error.message.includes("Failed to set local offer sdp"))
+      ) {
+        console.log("SDP error detected. Recreating peer connection...");
 
-    const peerConnection = this.peerConnections.get(connectionId);
-    if (peerConnection?.restartIce) {
-      try {
-        await peerConnection.restartIce();
-        console.log(`ICE restart initiated for ${connectionId}`);
-      } catch (error) {
-        console.error("Error restarting ICE:", error);
-        await this.handleNegotiationError(connectionId);
+        // Close the existing connection
+        peerConnection.close();
+        this.peerConnections.delete(connectionId);
+
+        // Create a new connection
+        this.createPeerConnection(connectionId, username, userRole);
+
+        //  // Try sending offer again after a short delay
+        //  setTimeout(() => {
+        //    this.sendOfferToUser(connectionId, username, userRole);
+        //  }, 1000);
       }
-    }
-  }
-
-  async handleDisconnection(connectionId) {
-    const peerConnection = this.peerConnections.get(connectionId);
-    if (peerConnection?.connectionState === "disconnected") {
-      console.log(
-        `Attempting to recover disconnected connection: ${connectionId}`
-      );
-      await this.handleConnectionFailure(connectionId);
     }
   }
 
@@ -796,29 +567,228 @@ export class VideoCallService {
 
   handleUpdateRemoteDisplay(connectionId, username, userRole) {
     const remoteStream = this.remoteStreams.get(connectionId);
-    if (!remoteStream) {
-      console.warn(`No remote stream found for ${connectionId}`);
-      return;
-    }
-
-    console.log(`Updating remote display for ${username}:`, {
-      videoTracks: remoteStream.getVideoTracks().length,
-      audioTracks: remoteStream.getAudioTracks().length,
-    });
-
-    // Log track states
-    remoteStream.getTracks().forEach((track) => {
-      console.log(`Remote track: ${track.kind}`, {
-        id: track.id,
-        enabled: track.enabled,
-        muted: track.muted,
-        readyState: track.readyState,
+    const audioTracks = remoteStream?.getAudioTracks();
+    // now the local knows whose stream is it from, we can reliably attach the stream to html element
+    if (audioTracks && audioTracks.length > 0) {
+      console.log("Remote audio track added");
+      console.log(`Audio track info:`, {
+        enabled: audioTracks[0].enabled,
+        muted: audioTracks[0].muted,
+        readyState: audioTracks[0].readyState,
+        id: audioTracks[0].id,
       });
-    });
+    } else {
+      console.warn("No remote audio track found");
+    }
 
     if (this.onRemoteStreamCallback) {
       this.onRemoteStreamCallback(remoteStream, username, userRole);
     }
+  }
+
+  createPeerConnection(connectionId, username, userRole) {
+    // Close any existing connection for this peer
+    if (this.peerConnections.has(connectionId)) {
+      console.log(
+        `Closing existing connection for ${connectionId} before creating a new one`
+      );
+      const existing = this.peerConnections.get(connectionId);
+      existing?.close();
+      this.peerConnections.delete(connectionId);
+
+      // Properly cleanup the existing remote stream
+      const existingStream = this.remoteStreams.get(connectionId);
+      if (existingStream) {
+        existingStream.getTracks().forEach((track) => track.stop());
+        this.remoteStreams.delete(connectionId);
+      }
+    }
+
+    // Create new connection
+    const peerConnection = new RTCPeerConnection(servers);
+    this.peerConnections.set(connectionId, peerConnection);
+
+    // Create new MediaStream for this peer
+    const newStream = new MediaStream();
+    this.remoteStreams.set(connectionId, newStream);
+
+    if (this.localStream) {
+      try {
+        console.log("Adding local stream tracks to peer connection");
+        // Add tracks in a consistent order - first video, then audio
+        // If userRole is lecturer, then add video tracks
+
+        if (this.userRole === "Lecturer") {
+          const videoTracks = this.localStream.getVideoTracks();
+          if (videoTracks.length > 0) {
+            videoTracks.forEach((track) => {
+              console.log(`Adding video track: ${track.id} to peer connection`);
+              peerConnection.addTrack(track, this.localStream);
+            });
+          }
+        }
+
+        // Add audio tracks
+        const audioTracks = this.localStream.getAudioTracks();
+        if (audioTracks.length > 0) {
+          audioTracks.forEach((track) => {
+            console.log(`Adding audio track: ${track.id} to peer connection`);
+            peerConnection.addTrack(track, this.localStream);
+          });
+        }
+      } catch (error) {
+        console.error(
+          "Error adding local stream tracks to peer connection:",
+          error
+        );
+      }
+    } else {
+      console.warn("No local stream found when creating peer connection");
+    }
+
+    peerConnection.ontrack = (event) => {
+      console.log(`Received remote track from ${username}`, event.streams);
+      console.log(
+        `Track kind: ${event.track.kind}, enabled: ${event.track.enabled}, readyState: ${event.track.readyState}`
+      );
+
+      if (event.streams && event.streams[0]) {
+        // Store the remote stream for this connection
+        this.remoteStreams.set(connectionId, event.streams[0]);
+        this.handleUpdateRemoteDisplay(connectionId, username, userRole);
+
+        const audioTracks = event.streams[0].getAudioTracks();
+        if (audioTracks.length > 0) {
+          console.log("Remote audio track added");
+        } else {
+          console.warn("No remote audio track found");
+        }
+      } else {
+        console.warn(`Received event with no streams from ${connectionId}`);
+      }
+    };
+
+    // Handle ICE candidates
+    peerConnection.onicecandidate = (event) => {
+      if (event.candidate) {
+        try {
+          //console.log(
+          //  `ICE candidate for ${connectionId}:`,
+          //  event.candidate.candidate
+          //);
+          if (this.connection.state === "Connected") {
+            this.connection.invoke(
+              "SendIceCandidate",
+              connectionId,
+              JSON.stringify(event.candidate)
+            );
+          } else {
+            console.warn(
+              `Cannot send ICE candidate: connection state is ${this.connection.state}`
+            );
+          }
+        } catch (error) {
+          console.error("Error sending ice candidate:", error);
+        }
+      }
+    };
+
+    peerConnection.onnegotiationneeded = async () => {
+      console.log(`Negotiation needed for ${connectionId}`);
+      try {
+        // Don't send an offer if we're in the middle of setting a remote description
+        if (peerConnection.signalingState === "stable") {
+        if (this.connectionId && this.connectionId > connectionId) {
+          await this.sendOfferToUser(connectionId, username, userRole);
+        }
+        } else {
+          console.log(
+            `Delaying offer until signaling state is stable. Current state: ${peerConnection.signalingState}`
+          );
+          // Queue the negotiation until signaling state is stable
+          setTimeout(() => {
+            if (peerConnection.signalingState === "stable") {
+              this.sendOfferToUser(connectionId);
+            }
+          }, 1000);
+        }
+      } catch (error) {
+        console.error("Error during negotiation:", error);
+      }
+    };
+
+    peerConnection.onconnectionstatechange = () => {
+      if (peerConnection.connectionState === "connected") {
+        console.log(`Successfully connected to ${connectionId}`);
+      } else if (peerConnection.connectionState === "failed") {
+        console.log(`Connection to ${connectionId} failed`);
+
+        // Try to restart ICE
+        if (peerConnection.restartIce) {
+          console.log(`Attempting to restart ICE for ${connectionId}`);
+          try {
+            peerConnection.restartIce();
+          } catch (err) {
+            console.error(`Error restarting ICE:`, err);
+          }
+        }
+      } else if (peerConnection.connectionState === "disconnected") {
+        console.log(`Connection to ${connectionId} was disconnected`);
+
+        // Try to recover from disconnection after a short delay
+        setTimeout(() => {
+          if (peerConnection.connectionState === "disconnected") {
+            console.log(
+              `Attempting to recover disconnected connection with ${connectionId}`
+            );
+            // Try to restart ICE if available
+            if (peerConnection.restartIce) {
+              try {
+                peerConnection.restartIce();
+              } catch (err) {
+                console.error(`Error restarting ICE:`, err);
+              }
+            }
+          }
+        }, 2000);
+      } else if (peerConnection.connectionState === "closed") {
+        console.log(`Connection to ${connectionId} was closed`);
+      }
+    };
+
+    peerConnection.oniceconnectionstatechange = () => {
+      console.log(
+        `ICE connection state changed for ${connectionId}: ${peerConnection.iceConnectionState}`
+      );
+
+      // If ICE fails, try to reconnect
+      if (peerConnection.iceConnectionState === "failed") {
+        console.log(
+          `ICE connection failed for ${connectionId}, attempting to restart`
+        );
+
+        // Try to restart ICE
+        if (peerConnection.restartIce) {
+          try {
+            peerConnection.restartIce();
+            console.log(`ICE restart initiated for ${connectionId}`);
+          } catch (err) {
+            console.error(`Error restarting ICE:`, err);
+          }
+        } else {
+          console.log(`restartIce() not available, attempting to renegotiate`);
+          // If restartIce is not available, try to renegotiate
+          setTimeout(() => this.sendOfferToUser(connectionId), 1000);
+        }
+      }
+    };
+
+    peerConnection.onicegatheringstatechange = () => {
+      console.log(
+        "ICE gathering state changed:",
+        peerConnection.iceGatheringState
+      );
+    };
   }
 
   getConnectionState() {
