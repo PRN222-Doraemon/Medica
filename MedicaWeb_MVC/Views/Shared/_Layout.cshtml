@@ -20,17 +20,7 @@
 		  href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap" />
 
 	@* Load SignalR and chat.js in head to ensure functions are available *@
-	<script src="~/js/chat.js"></script>
-
-	@if (User.Identity.IsAuthenticated && User.IsInRole(AppCts.Roles.Student))
-	{
-		<script>
-			// Initialize chat immediately
-			window.addEventListener('load', function() {
-				initializeChat(@User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-			});
-		</script>
-	}
+	
 
 </head>
 
@@ -64,6 +54,17 @@
 	<script src="~/lib/datatables.net-bs5/datatables.bootstrap5.min.js" asp-append-version="true"></script>
 	<script src="~/lib/signalr/dist/browser/signalr.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="~/js/chat.js"></script>
+
+	@if (User.Identity.IsAuthenticated)
+	{
+		<script>
+			// Initialize chat immediately
+			window.addEventListener('load', function() {
+				initializeChat(@User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+			});
+		</script>
+	}
 
 	@* Applied All Page Partial Views *@
 	<partial name="ReusableViews/_Notification" />
