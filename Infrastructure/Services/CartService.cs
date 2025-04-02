@@ -23,7 +23,7 @@ namespace Infrastructure.Services
 
         public CartService(IConnectionMultiplexer connectionMultiplexer, IClassService classService)
         {
-            _redisDb = connectionMultiplexer.GetDatabase(AppCts.RedisDatabase.Cart); // Database 0 for Redis
+            _redisDb = connectionMultiplexer.GetDatabase(AppCts.RedisDatabase.Cart.Database); // Database 0 for Redis
             _classService = classService;
         }
 
@@ -32,7 +32,7 @@ namespace Infrastructure.Services
         // ==============================
 
         /// <summary>
-        /// Add or Update to the Cart
+        /// Add or Update to the CartDatabase
         /// </summary>
         /// <param name="classRoomId"></param>
         /// <param name="userId"></param>
@@ -50,7 +50,7 @@ namespace Infrastructure.Services
             }
 
             // Retrieve the cartItems from the Redis
-            var cartKey = string.Format(AppCts.RedisDatabase.CartKeyTemplate, userId);
+            var key = string.Format(AppCts.RedisDatabase.Cart.KeyTemplate, userId);
             var cartItems = await GetCartItemsAsync(userId);
             if (cartItems.Any(ci => ci.ClassRoomId == classRoomId))
             {
@@ -68,30 +68,30 @@ namespace Infrastructure.Services
             });
 
             await _redisDb.StringSetAsync(
-                new RedisKey(cartKey),
+                new RedisKey(key),
                 new RedisValue(JsonSerializer.Serialize(cartItems)),
                 TimeSpan.FromMinutes(30));
         }
 
         /// <summary>
-        /// Delete the Cart 
+        /// Delete the CartDatabase 
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
         public async Task DeleteCartAsync(int userId)
         {
-            var key = string.Format(AppCts.RedisDatabase.CartKeyTemplate, userId);
+            var key = string.Format(AppCts.RedisDatabase.Cart.KeyTemplate, userId);
             await _redisDb.KeyDeleteAsync(key);
         }
 
         /// <summary>
-        /// Get the Cart Items
+        /// Get the CartDatabase Items
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
         public async Task<List<CartItem>> GetCartItemsAsync(int userId)
         {
-            var key = string.Format(AppCts.RedisDatabase.CartKeyTemplate, userId);
+            var key = string.Format(AppCts.RedisDatabase.Cart.KeyTemplate, userId);
             var cartList = await _redisDb.StringGetAsync(key);
             return string.IsNullOrEmpty(cartList)
                 ? []
