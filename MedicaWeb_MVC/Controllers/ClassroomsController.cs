@@ -1,4 +1,5 @@
 using AutoMapper;
+using CloudinaryDotNet;
 using Core.Constants;
 using Core.Entities;
 using Core.Interfaces.Services;
@@ -21,12 +22,13 @@ namespace MedicaWeb_MVC.Controllers
         private readonly ILecturerService _lecturerService;
         private readonly IAccountService _accountService;
         private readonly IOrderService _orderService;
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
         public ClassroomsController(
             ILogger<ClassroomsController> logger,
             ICourseService courseService, IClassService classService, IMapper mapper,
-            ILecturerService lecturerService, IAccountService accountService, IOrderService orderService)
+            ILecturerService lecturerService, IAccountService accountService, IOrderService orderService, IConfiguration configuration)
         {
             _logger = logger;
             _classService = classService;
@@ -35,6 +37,7 @@ namespace MedicaWeb_MVC.Controllers
             _lecturerService = lecturerService;
             _accountService = accountService;
             _orderService = orderService;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -233,6 +236,8 @@ namespace MedicaWeb_MVC.Controllers
                 return NotFound();
             }
             var classVM = _mapper.Map<ClassVM>(classroom);
+            var url = _configuration["VideoCall:HostUrl"];
+            classVM.MeetUrl = $"{url}/VideoCall/{classVM.RoomId}";
             //classVM.Students = (IEnumerable<StudentVM>)classroom.OrderDetails.Select(od => od.Order.Student).ToList();
 
             return View(classVM);
