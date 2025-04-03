@@ -1,0 +1,83 @@
+﻿@using MedicaWeb_MVC.ViewModels.VideoCall
+@model VideoCallVM
+@{
+    bool isVideoEnabled = true, isAudioEnabled = true, isSignalRConnected = true, isWebcamActive = false;
+}
+
+<script>
+    // Initialize state object
+    window.videoCallState = {
+        isVideoEnabled: @Json.Serialize(isVideoEnabled),
+        isAudioEnabled: @Json.Serialize(isAudioEnabled),
+        isSignalRConnected: @Json.Serialize(isSignalRConnected),
+        isWebcamActive: @Json.Serialize(isWebcamActive),
+    };
+</script>
+
+<input type="hidden" id="userName" value="@Model.UserName" />
+<input type="hidden" id="fullName" value="@Model.FullName" />
+<input type="hidden" id="userRole" value="@Model.RoleName" />
+<input type="hidden" id="roomId" value="@Model.RoomId" />
+<div class="video-meeting-container">
+    <div class="main-video-section">
+        <div class="video-item" id="localVideoContainer">
+            <video id="lecturer-video" autoplay playsinline muted></video>
+            <video hidden id="participant-video" autoplay playsinline muted></video>
+            @if (Model.RoleName == "Lecturer")
+            {
+                <div class="participant-name" id="lecturer-name">You</div>
+            }
+            else
+            {
+                <div class="participant-name" id="lecturer-name">Lecturer</div>
+            }
+        </div>
+    </div>
+
+    <div class="participant-list">
+        <div class="participant-header">
+            <h3>Participants</h3>
+        </div>
+        <div class="participant-items" id="participantItems">
+            <div class="participant-item active">
+                <div class="participant-info">
+                    <span class="name">@Model.FullName</span>
+                    <span class="status">Speaking</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    @if (Model.RoleName == "Lecturer")
+    {
+        <div class="control-panel">
+            <button class="control-btn" onclick="toggleAudio()" id="audioBtn">
+                <i class="bi bi-mic-fill"></i>
+            </button>
+            <button class="control-btn" onclick="toggleVideo()" id="videoBtn">
+                <i class="bi bi-camera-video-fill"></i>
+            </button>
+            <button class="control-btn" onclick="toggleScreenShare()" id="screenShareBtn">
+                <i class="bi bi-display"></i>
+            </button>
+            <button class="control-btn leave-btn" onclick="leaveRoom()">
+                <i class="bi bi-telephone-x-fill"></i>
+            </button>
+        </div>
+    } else {
+        <div class="control-panel">
+            <button class="control-btn" onclick="toggleAudio()" id="audioBtn">
+                <i class="bi bi-mic-fill"></i>
+            </button>
+            <button class="control-btn leave-btn" onclick="leaveRoom()">
+                <i class="bi bi-telephone-x-fill"></i>
+            </button>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/signalr/dist/browser/signalr.js"></script>
+    <script type="module" src="~/js/video-call/video-call-service.js"></script>
+    <script type="module" src="~/js/video-call/video-call.js"></script>
+}

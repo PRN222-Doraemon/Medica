@@ -47,6 +47,7 @@ app.UseAuthorization();
 // Add SignalR hub endpoints
 app.MapHub<MedicaHubs>("/MedicaHubs");
 app.MapHub<ChatHub>("/ChatHub");
+app.MapHub<WebRTCHub>("/WebRTCHub");
 
 app.MapControllerRoute(
     name: "default",

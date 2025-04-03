@@ -7,7 +7,8 @@
     "Description": "Advanced Mathematics Course",
     "MaxParticipant": 30,
     "CourseId": 2,
-    "LecturerId": 6
+    "LecturerId": 6,
+    "RoomId": "98u3jawoeiafwpf01"
   },
   {
     "Mode": "Offline",
@@ -27,7 +28,8 @@
     "Description": "Data Structures and Algorithms",
     "MaxParticipant": 40,
     "CourseId": 2,
-    "LecturerId": 7
+    "LecturerId": 7,
+    "RoomId": "aoiwjfpoweiu798231"
   },
   {
     "Mode": "Offline",

@@ -22,6 +22,7 @@ namespace MedicaWeb_MVC.ViewModels.Classes
         public int TotalEnrolls => OrderDetails.Count();
         public ClassroomStatus Status { get; set; }
         public bool IsEnrolled { get; set; } = false;
+        public string RoomId { get; set; }
 
         public ClassroomStatus ComputedStatus
         {

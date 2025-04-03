@@ -23,6 +23,7 @@
     </div>
     <p class="text-grey">Total students: @Model.Students.Count() / @Model.MaxParticipant</p>
     <p>@("Start Date: " + Model.StartDate + " - End Date: " + Model.EndDate)</p>
+    <a class="btn btn-primary btn-lg rounded-pill shadow" href="https://localhost:7114/videocall/@Model.RoomId" role="button">Join Classroom</a>
 
     <!-- nav bar >-->
     <div class="nav-tabs">
