@@ -1,5 +1,6 @@
 # Doreamon - Online Learning Platform
 <div align="center">
+    <img src="./readme/images/Doreamon.png" alt="Doreamon-Logo" width=120 height=120/>
     <p>Doreamon is an online learning platform providing healthcare related courses to study online and offline.</p>
 </div>
 <div align='center'>
