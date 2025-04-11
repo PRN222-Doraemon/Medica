@@ -83,7 +83,7 @@ Additional services and third-party APIs that enhance functionality, such as AI,
 
 <a id="uc-diagram"></a>
 ## 2. Entity Relational Diagram
-<img src="./profile/readme/images/MindSpace-UsecaseDiagram.png" alt="MindSpace-UsecaseDiagram" />
+<img src="./readme/images/PRN222_ERD.jpeg" alt="Doreamon-EntityRelationDiagram" />
 
 <a id="team-members"></a>
 ## 3. Team members
